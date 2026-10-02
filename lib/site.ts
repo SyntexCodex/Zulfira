@@ -14,7 +14,7 @@ export function whatsappOrderLink(message: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-export const BASE_PATH = "/Zulfira";
+export const BASE_PATH = "";
 export const img = (p: string) => `${BASE_PATH}${p}`;
 
 export interface Product {

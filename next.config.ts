@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Static export so the site can be hosted on GitHub Pages
+  // Static export so the site can be hosted anywhere (GitHub Pages, Vercel, …)
   output: "export",
-  // Project site lives at https://<user>.github.io/Zulfira/
-  basePath: "/Zulfira",
   images: {
     // next/image optimization needs a server; serve originals instead
     unoptimized: true,
