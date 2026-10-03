@@ -1,46 +1,49 @@
 import type { Metadata } from "next";
-import { Syne, Space_Grotesk } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
-import Nav from "@/components/Nav";
+import { CartProvider } from "@/lib/cart";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CartDrawer from "@/components/CartDrawer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
-import ScrollProgress from "@/components/ScrollProgress";
 
-const syne = Syne({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-display",
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-body",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "ZULFIRA — Futuristic Hair Care | Hair Oil & Shampoo",
+  title: "Zulfira — Natural Hair Care | Hair Oil & Sulphate-Free Shampoo",
   description:
-    "Zulfira is next-generation hair care. Signature Hair Oil and Shampoo crafted for the future — order online with Cash on Delivery or online payment, delivered across Pakistan.",
-  keywords: ["Zulfira", "hair oil", "shampoo", "hair care", "Pakistan", "cash on delivery"],
+    "Zulfira crafts honest, botanical hair care in Pakistan. Shop the Revitalizing Hair Oil and Sulphate-Free Shampoo with Cash on Delivery nationwide.",
+  keywords: ["Zulfira", "hair oil", "sulphate free shampoo", "hair care Pakistan", "cash on delivery"],
   openGraph: {
-    title: "ZULFIRA — Futuristic Hair Care",
-    description: "Signature Hair Oil & Shampoo. Order with Cash on Delivery or online payment.",
+    title: "Zulfira — Natural Hair Care",
+    description: "Revitalizing Hair Oil & Sulphate-Free Shampoo. Cash on Delivery across Pakistan.",
     type: "website",
   },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${syne.variable} ${spaceGrotesk.variable}`}>
-      <body className="bg-void text-cream font-body">
-        <ScrollProgress />
-        <Nav />
-        <main>{children}</main>
-        <Footer />
-        <WhatsAppFloat />
+    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+      <body className="bg-ivory text-ink font-body">
+        <CartProvider>
+          <Header />
+          <main className="min-h-[60vh]">{children}</main>
+          <Footer />
+          <CartDrawer />
+          <WhatsAppFloat />
+        </CartProvider>
       </body>
     </html>
   );
