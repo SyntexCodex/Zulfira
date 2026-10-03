@@ -31,6 +31,9 @@ export const metadata: Metadata = {
     description: "Revitalizing Hair Oil & Sulphate-Free Shampoo. Cash on Delivery across Pakistan.",
     type: "website",
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
