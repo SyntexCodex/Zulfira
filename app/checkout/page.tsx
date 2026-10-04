@@ -6,7 +6,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ShoppingBag, Truck, Banknote, CreditCard, MessageCircle,
-  CheckCircle2, ArrowLeft, Lock,
+  CheckCircle2, ArrowLeft, Lock, AlertTriangle,
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import {
@@ -18,11 +18,16 @@ import Reveal, { SectionHeading } from "@/components/Reveal";
 const FREE_SHIP_THRESHOLD = 2500;
 const SHIP_FEE = 200;
 
+export const dynamic = "force-dynamic";
+
 export default function CheckoutPage() {
   const { items, subtotal, count, clear } = useCart();
   const [form, setForm] = useState({ name: "", phone: "", address: "", city: "", notes: "" });
   const [payMethod, setPayMethod] = useState<"cod" | "online">("cod");
-  const [placed, setPlaced] = useState(false);
+  const [orderState, setOrderState] = useState<"idle" | "submitting" | "error">("idle");
+  const [orderNo, setOrderNo] = useState<string | null>(null);
+  const [apiError, setApiError] = useState("");
+  const [whatsappPlaced, setWhatsappPlaced] = useState(false);
 
   const shipping = subtotal >= FREE_SHIP_THRESHOLD || subtotal === 0 ? 0 : SHIP_FEE;
   const total = subtotal + shipping;
@@ -60,28 +65,88 @@ export default function CheckoutPage() {
 
   const valid = form.name.trim() && /^0?3\d{9}$/.test(form.phone.replace(/[\s-]/g, "")) && form.address.trim() && form.city.trim();
 
-  const placeOrder = () => {
+  const submitOrder = async () => {
+    if (!valid || orderState === "submitting") return;
+    setOrderState("submitting");
+    setApiError("");
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customer: {
+            name: form.name.trim(),
+            phone: form.phone.trim(),
+            address: form.address.trim(),
+            city: form.city.trim(),
+            ...(form.notes.trim() ? { notes: form.notes.trim() } : {}),
+          },
+          items: items.map(({ slug, qty }) => ({ slug, qty })),
+          payment: payMethod,
+        }),
+      });
+      const json = (await res.json().catch(() => null)) as
+        | { ok?: boolean; data?: { orderNo?: string }; error?: string }
+        | null;
+      if (res.status === 503) throw new Error("SERVICE_UNAVAILABLE");
+      if (!res.ok || !json?.ok || !json?.data?.orderNo) {
+        throw new Error(json?.error || `Server responded ${res.status}`);
+      }
+      setOrderNo(json.data.orderNo);
+      setOrderState("idle");
+      clear();
+    } catch (e) {
+      setOrderState("error");
+      setApiError(
+        e instanceof Error && e.message === "SERVICE_UNAVAILABLE"
+          ? "Online ordering is temporarily unavailable. You can still place this exact order via WhatsApp below — your details are already filled in."
+          : "We couldn't place your order online just now. Please try again, or use the WhatsApp button below — nothing you entered is lost."
+      );
+    }
+  };
+
+  const placeOrderWhatsApp = () => {
     if (!valid) return;
-    setPlaced(true);
+    setWhatsappPlaced(true);
     window.open(whatsappOrderLink(message), "_blank");
     clear();
   };
 
-  if (placed) {
+  if (orderNo || whatsappPlaced) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
         <Reveal>
           <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-maroon/10">
             <CheckCircle2 className="h-10 w-10 text-maroon" />
           </span>
-          <h1 className="font-display mt-7 text-3xl font-semibold sm:text-4xl">Order sent!</h1>
-          <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-muted">
-            Your order details were opened in WhatsApp. Just press <b>send</b> there to confirm —
-            we'll message you back shortly to finalize {payMethod === "cod" ? "your Cash on Delivery" : "payment details"}.
-          </p>
-          <Link href="/shop" className="btn-primary mt-8 inline-block rounded-full px-8 py-3.5 text-sm font-semibold">
-            Continue Shopping
-          </Link>
+          {orderNo ? (
+            <>
+              <h1 className="font-display mt-7 text-3xl font-semibold sm:text-4xl">Order placed!</h1>
+              <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-muted">
+                Thank you! Your order <b className="text-ink">{orderNo}</b> has been received.
+                We'll message you back shortly to finalize {payMethod === "cod" ? "your Cash on Delivery" : "payment details"}.
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link href="/track-order" className="btn-primary rounded-full px-8 py-3.5 text-sm font-semibold">
+                  Track Your Order
+                </Link>
+                <Link href="/shop" className="btn-outline-dark rounded-full px-8 py-3.5 text-sm font-semibold">
+                  Continue Shopping
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1 className="font-display mt-7 text-3xl font-semibold sm:text-4xl">Order sent!</h1>
+              <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-muted">
+                Your order details were opened in WhatsApp. Just press <b>send</b> there to confirm —
+                we'll message you back shortly to finalize {payMethod === "cod" ? "your Cash on Delivery" : "payment details"}.
+              </p>
+              <Link href="/shop" className="btn-primary mt-8 inline-block rounded-full px-8 py-3.5 text-sm font-semibold">
+                Continue Shopping
+              </Link>
+            </>
+          )}
         </Reveal>
       </div>
     );
@@ -170,16 +235,31 @@ export default function CheckoutPage() {
             </Reveal>
 
             <Reveal delay={0.12}>
+              {orderState === "error" && (
+                <div className="mb-4 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-left">
+                  <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
+                  <p className="text-[13.5px] leading-relaxed text-red-900">{apiError}</p>
+                </div>
+              )}
               <button
-                onClick={placeOrder}
-                disabled={!valid}
-                className={`flex w-full items-center justify-center gap-2 rounded-full py-4 text-[16px] font-bold transition-all ${valid ? "btn-primary" : "cursor-not-allowed bg-ink/10 text-muted"}`}
+                onClick={submitOrder}
+                disabled={!valid || orderState === "submitting"}
+                className={`flex w-full items-center justify-center gap-2 rounded-full py-4 text-[16px] font-bold transition-all ${valid && orderState !== "submitting" ? "btn-primary" : "cursor-not-allowed bg-ink/10 text-muted"}`}
               >
-                <MessageCircle className="h-5 w-5" />
-                Place Order via WhatsApp · {formatPKR(total)}
+                {orderState === "submitting" ? "Placing your order…" : <>Place Order · {formatPKR(total)}</>}
               </button>
+              {orderState === "error" && (
+                <button
+                  onClick={placeOrderWhatsApp}
+                  disabled={!valid}
+                  className={`mt-3 flex w-full items-center justify-center gap-2 rounded-full py-4 text-[16px] font-bold text-white transition-all ${valid ? "bg-[#25D366] hover:brightness-95" : "cursor-not-allowed bg-ink/10 !text-muted"}`}
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  Place Order via WhatsApp · {formatPKR(total)}
+                </button>
+              )}
               <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
-                <Lock className="h-3.5 w-3.5" /> Your details are only shared with Zulfira via WhatsApp.
+                <Lock className="h-3.5 w-3.5" /> Your details are only shared with Zulfira.
               </p>
               <Link href="/shop" className="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-muted hover:text-ink">
                 <ArrowLeft className="h-4 w-4" /> Back to shop

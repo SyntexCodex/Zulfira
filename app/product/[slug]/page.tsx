@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PRODUCTS, productBySlug, formatPKR } from "@/lib/site";
+import { getPublicProduct, getPublicProducts } from "@/lib/products";
 import ProductView from "./ProductView";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
@@ -9,7 +12,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const p = productBySlug(slug);
+  const p = (await getPublicProduct(slug)) ?? productBySlug(slug);
   if (!p) return {};
   return {
     title: `${p.name} — Zulfira`,
@@ -19,9 +22,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = productBySlug(slug);
+  const product = (await getPublicProduct(slug)) ?? productBySlug(slug);
   if (!product) notFound();
-  const related = PRODUCTS.filter((p) => p.slug !== slug);
+  const related = (await getPublicProducts()).filter((p) => p.slug !== slug);
 
   const jsonLd = {
     "@context": "https://schema.org",

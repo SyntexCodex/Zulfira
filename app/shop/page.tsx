@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import ProductCard from "@/components/ProductCard";
-import { PRODUCTS } from "@/lib/site";
+import { getPublicProducts } from "@/lib/products";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shop All Products — Zulfira",
   description: "Shop Zulfira's complete range: Revitalizing Hair Oil, Sulphate-Free Shampoo and the Complete Ritual Bundle.",
 };
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const products = await getPublicProducts();
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
       <div className="text-center">
@@ -18,7 +22,7 @@ export default function ShopPage() {
         </p>
       </div>
       <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-3">
-        {PRODUCTS.map((p, i) => (
+        {products.map((p, i) => (
           <ProductCard key={p.slug} product={p} index={i} />
         ))}
       </div>

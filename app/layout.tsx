@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import { FlashSaleBar, AnnouncementBar } from "@/components/layout/TopBars";
 import CartDrawer from "@/components/CartDrawer";
+import VisitorPing from "@/components/VisitorPing";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
       <body className="bg-paper text-ink font-body">
         <CartProvider>
+          <VisitorPing />
           <FlashSaleBar />
           <AnnouncementBar />
           <Header />
