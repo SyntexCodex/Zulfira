@@ -231,7 +231,7 @@ model Review {
   rating     Int      // 1..5
   title      String?
   comment    String
-  isApproved Boolean  @default(true)
+  isApproved Boolean  @default(false)
   createdAt  DateTime @default(now())
 
   @@index([productId])

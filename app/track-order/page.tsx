@@ -91,7 +91,7 @@ function ReviewPrompt({ orderId, items }: { orderId: string; items: TrackItem[] 
         <Check className="mx-auto h-8 w-8 text-emerald-600" />
         <p className="mt-2 font-bold text-emerald-900">Thank you for your review!</p>
         <p className="mt-1 text-[13.5px] text-emerald-800">
-          It now appears under this product's reviews.
+          It's waiting for approval and will appear under this product's reviews soon.
         </p>
       </div>
     );
