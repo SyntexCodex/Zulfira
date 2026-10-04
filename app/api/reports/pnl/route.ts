@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { ok, err, dbRequired } from "@/lib/api";
 import { computeProductPnl, computeGlobalPnl } from "@/lib/pnl";
-import type { ProductPnl } from "@/lib/pnl";
+import type { GlobalPnl, ProductPnl } from "@/lib/pnl";
 
 function parseDate(v: string | null): Date | undefined {
   if (!v) return undefined;
@@ -80,6 +80,7 @@ export async function GET(req: NextRequest) {
   const filter = { from, to };
 
   let products: ProductPnl[];
+  let totals: GlobalPnl["totals"] | undefined;
   if (productId) {
     const p = await computeProductPnl(productId, filter);
     if (!p) return err("Product not found", 404);
@@ -87,6 +88,18 @@ export async function GET(req: NextRequest) {
   } else {
     const g = await computeGlobalPnl(filter);
     products = g?.products ?? [];
+    totals =
+      g?.totals ?? {
+        invested: 0,
+        expenses: 0,
+        revenue: 0,
+        collected: 0,
+        returnsLoss: 0,
+        net: 0,
+        deliveredOrders: 0,
+        pipelineValue: 0,
+        pipelineOrders: 0,
+      };
   }
 
   if (sp.get("format") === "csv") {
@@ -101,5 +114,5 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  return ok({ products });
+  return ok({ products, totals });
 }
