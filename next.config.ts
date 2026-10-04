@@ -1,10 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Static export so the site can be hosted anywhere (GitHub Pages, Vercel, …)
-  output: "export",
+  // Dynamic app: storefront + API routes + admin panel, hosted on Vercel.
   images: {
-    // next/image optimization needs a server; serve originals instead
+    // next/image optimization needs a server; Vercel provides it, but keep
+    // unoptimized:true for zero-risk deploys (originals served as-is).
     unoptimized: true,
   },
 };
