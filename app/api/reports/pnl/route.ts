@@ -78,31 +78,8 @@ export async function GET(req: NextRequest) {
   const from = parseDate(sp.get("from"));
   const to = parseDate(sp.get("to"));
   const filter = { from, to };
-
-  let products: ProductPnl[];
-  let totals: GlobalPnl["totals"] | undefined;
-  if (productId) {
-    const p = await computeProductPnl(productId, filter);
-    if (!p) return err("Product not found", 404);
-    products = [p];
-  } else {
-    const g = await computeGlobalPnl(filter);
-    products = g?.products ?? [];
-    totals =
-      g?.totals ?? {
-        invested: 0,
-        expenses: 0,
-        revenue: 0,
-        collected: 0,
-        returnsLoss: 0,
-        net: 0,
-        deliveredOrders: 0,
-        pipelineValue: 0,
-        pipelineOrders: 0,
-      };
-  }
-
-  if (sp.get("format") === "csv") {
+  const asCsv = sp.get("format") === "csv";
+  const csvResponse = (products: ProductPnl[]) => {
     const csv = toCsv(products);
     const stamp = new Date().toISOString().slice(0, 10);
     return new Response(csv, {
@@ -112,7 +89,33 @@ export async function GET(req: NextRequest) {
         "Content-Disposition": `attachment; filename="zulfira-pnl-${stamp}.csv"`,
       },
     });
+  };
+
+  if (productId) {
+    const p = await computeProductPnl(productId, filter);
+    if (!p) return err("Product not found", 404);
+    if (asCsv) return csvResponse([p]);
+    // Raw ProductPnl (no `products` wrapper) so the page renders the
+    // detailed single-product view with investor payouts.
+    return ok(p);
   }
+
+  const g = await computeGlobalPnl(filter);
+  const products = g?.products ?? [];
+  const totals: GlobalPnl["totals"] =
+    g?.totals ?? {
+      invested: 0,
+      expenses: 0,
+      revenue: 0,
+      collected: 0,
+      returnsLoss: 0,
+      net: 0,
+      deliveredOrders: 0,
+      pipelineValue: 0,
+      pipelineOrders: 0,
+    };
+
+  if (asCsv) return csvResponse(products);
 
   return ok({ products, totals });
 }
