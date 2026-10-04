@@ -5,19 +5,17 @@ import type { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { ok, err, dbRequired } from "@/lib/api";
 
-// PUBLIC — customers track their order with orderNo + phone. Returns no PII
-// beyond what's needed to identify the order's contents.
+// PUBLIC — customers track their order with the order number alone. Returns
+// no PII beyond what's needed to identify the order's contents.
 export async function GET(req: NextRequest) {
   const db = getDb();
   if (!db) return dbRequired();
   const sp = req.nextUrl.searchParams;
   const orderNo = sp.get("orderNo")?.trim();
-  const phone = sp.get("phone")?.trim();
-  if (!orderNo || !phone)
-    return err("orderNo and phone are required", 400);
+  if (!orderNo) return err("orderNo is required", 400);
 
   const order = await db.order.findFirst({
-    where: { orderNo, phone },
+    where: { orderNo },
     include: {
       items: {
         include: { product: { select: { name: true } } },

@@ -45,19 +45,18 @@ function fmtDate(d?: string | null): string | null {
 
 export default function TrackOrderPage() {
   const [orderNo, setOrderNo] = useState("");
-  const [phone, setPhone] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "found" | "error">("idle");
   const [data, setData] = useState<TrackData | null>(null);
   const [error, setError] = useState("");
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!orderNo.trim() || !phone.trim() || state === "loading") return;
+    if (!orderNo.trim() || state === "loading") return;
     setState("loading");
     setData(null);
     setError("");
     try {
-      const qs = new URLSearchParams({ orderNo: orderNo.trim(), phone: phone.trim() });
+      const qs = new URLSearchParams({ orderNo: orderNo.trim() });
       const res = await fetch(`/api/orders/track?${qs.toString()}`, { cache: "no-store" });
       const json = (await res.json().catch(() => null)) as
         | { ok?: boolean; data?: TrackData; error?: string }
@@ -67,7 +66,7 @@ export default function TrackOrderPage() {
           res.status === 503
             ? "Our tracking service is unreachable right now. Please try again in a moment — or ask us on WhatsApp and we'll check for you."
             : json?.error ||
-              "We couldn't find an order with those details. Please check the order number and phone number and try again."
+              "We couldn't find an order with that order number. Please check it and try again."
         );
         setState("error");
         return;
@@ -102,7 +101,7 @@ export default function TrackOrderPage() {
         <p className="mx-auto mt-3 max-w-md text-[14.5px] text-muted">
           {state === "found"
             ? `Here's the latest on order ${data!.orderNo}.`
-            : "Enter the order number you received at checkout and the phone number you ordered with."}
+            : "Enter the order number you received at checkout."}
         </p>
       </div>
 
@@ -234,17 +233,6 @@ export default function TrackOrderPage() {
                   value={orderNo}
                   onChange={(e) => setOrderNo(e.target.value)}
                   placeholder="e.g. ZF-1234"
-                  className="input-clean w-full rounded-xl px-5 py-3.5 text-[15px]"
-                  required
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-[13px] font-bold">Phone Number</label>
-                <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="03xx-xxxxxxx"
-                  inputMode="tel"
                   className="input-clean w-full rounded-xl px-5 py-3.5 text-[15px]"
                   required
                 />
