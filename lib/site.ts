@@ -29,6 +29,7 @@ export interface Product {
   rating: number;
   reviewCount: number;
   badge?: string;
+  categories: string[];
   short: string;
   description: string[];
   benefits: string[];
@@ -48,6 +49,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 212,
     badge: "Bestseller",
+    categories: ["hair-oils", "bestsellers"],
     short:
       "A luxurious pre-wash elixir of cold-pressed argan, coconut and castor oils that repairs damage, calms frizz and wakes up healthy growth.",
     description: [
@@ -85,6 +87,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 167,
     badge: "New",
+    categories: ["shampoos", "bestsellers", "new-arrivals"],
     short:
       "A sulphate-free, paraben-free cleanser with keratin, aloe vera and silk proteins — lifts buildup without stripping, for a balanced scalp and soft, shiny hair.",
     description: [
@@ -122,6 +125,7 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 98,
     badge: "Save Rs 399",
+    categories: ["bundles", "bestsellers", "gift-sets", "new-arrivals"],
     short:
       "The complete Zulfira ritual in one box: Revitalizing Hair Oil for deep nourishment plus Sulphate-Free Shampoo for a gentle cleanse. Everything your hair needs, nothing it doesn't.",
     description: [
@@ -176,24 +180,6 @@ export const ONLINE_PAYMENT_DETAILS = [
   { label: "Bank transfer", value: "PK00 XXXX 0000 0000 0000 0000", title: "Zulfira (placeholder)" },
 ];
 
-export const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Shop", href: "/shop" },
-  { label: "About", href: "/about" },
-  { label: "Reviews", href: "/#reviews" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
-];
-
-export const TRUST_BADGES = [
-  "Sulfate Free",
-  "Paraben Free",
-  "Natural Ingredients",
-  "Cruelty Free",
-  "Dermatologist Tested",
-  "Cash on Delivery",
-];
-
 export const REVIEWS = [
   { name: "Sana K.", city: "Lahore", product: "Hair Oil", text: "I struggled with hair fall for months, but this oil really helped. My scalp feels nourished, shedding reduced noticeably within weeks." },
   { name: "Ahsan R.", city: "Karachi", product: "Shampoo", text: "Finally, a shampoo that doesn't strip my hair — gentle, nourishing, and leaves my hair soft, shiny and fall-free." },
@@ -229,3 +215,119 @@ export const FAQS = [
     a: "If you receive a damaged or incorrect product, message us on WhatsApp with a photo within 7 days of delivery and we'll replace it free of charge.",
   },
 ];
+
+/* ------------------------------------------------------------------ */
+/* v3 — storefront structure                                            */
+/* ------------------------------------------------------------------ */
+
+export interface Category {
+  slug: string;
+  name: string;
+  tagline: string;
+  image: string;
+}
+
+export const CATEGORIES: Category[] = [
+  { slug: "hair-oils", name: "Hair Oils", tagline: "Deep nourishment", image: "/products/oil-front.webp" },
+  { slug: "shampoos", name: "Shampoos", tagline: "Gentle cleanse", image: "/products/shampoo-front.webp" },
+  { slug: "bundles", name: "Bundles", tagline: "Complete rituals", image: "/products/bundle-ritual.webp" },
+  { slug: "bestsellers", name: "Bestsellers", tagline: "Customer favourites", image: "/banners/banner-oil.webp" },
+  { slug: "new-arrivals", name: "New Arrivals", tagline: "Fresh in store", image: "/banners/banner-shampoo.webp" },
+  { slug: "gift-sets", name: "Gift Sets", tagline: "Ready to gift", image: "/categories/cat-gifts.webp" },
+];
+
+export const categoryBySlug = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
+export const productsInCategory = (slug: string) => PRODUCTS.filter((p) => p.categories.includes(slug));
+
+export const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Shop", href: "/shop" },
+  { label: "Hair Oil", href: "/product/revitalizing-hair-oil" },
+  { label: "Shampoo", href: "/product/sulphate-free-shampoo" },
+  { label: "Bundles", href: "/collections/bundles" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+export const DRAWER_GROUPS = [
+  {
+    title: "Shop by Concern",
+    links: [
+      { label: "Hair Fall", href: "/collections/bestsellers" },
+      { label: "Frizz & Damage", href: "/collections/hair-oils" },
+      { label: "Dandruff & Scalp Care", href: "/collections/shampoos" },
+    ],
+  },
+  {
+    title: "Shop by Products",
+    links: [
+      { label: "Hair Oil", href: "/product/revitalizing-hair-oil" },
+      { label: "Shampoo", href: "/product/sulphate-free-shampoo" },
+      { label: "Ritual Bundle", href: "/product/complete-ritual-bundle" },
+    ],
+  },
+  {
+    title: "Shop by Categories",
+    links: CATEGORIES.map((c) => ({ label: c.name, href: `/collections/${c.slug}` })),
+  },
+];
+
+export const ANNOUNCEMENT_MESSAGES = [
+  "Free delivery on orders above Rs 1,900",
+  "Cash on Delivery available nationwide",
+  "Flat 15% off bundles — this week only",
+];
+
+export const FLASH_SALE = {
+  title: "Flash Sale",
+  subtitle: "Up to 25% off — hurry, ends in:",
+};
+
+export const INSTAGRAM_POSTS = [
+  { image: "/social/insta-oil.webp", label: "The oil ritual" },
+  { image: "/social/insta-hair.webp", label: "Shine days" },
+  { image: "/banners/lifestyle-pink.webp", label: "Behind the scenes" },
+  { image: "/products/oil-detail.webp", label: "Golden drops" },
+  { image: "/products/shampoo-detail.webp", label: "Fresh lather" },
+];
+
+export const POLICIES: Record<string, { title: string; updated: string; body: string[] }> = {
+  "privacy-policy": {
+    title: "Privacy Policy",
+    updated: "Last updated October 2026",
+    body: [
+      "Zulfira Hair Care collects only the information needed to fulfil your order: your name, phone number, and delivery address. We never sell or share your personal data with third parties for marketing.",
+      "Order details shared over WhatsApp are used solely to process, ship, and support your purchase. Payment receipts you share are used only to verify online payments.",
+      "You may ask us at any time what data we hold about you, or ask us to delete it, by messaging us on WhatsApp or emailing hello@zulfira.pk.",
+    ],
+  },
+  "refund-policy": {
+    title: "Refund Policy",
+    updated: "Last updated October 2026",
+    body: [
+      "If your order arrives damaged or incorrect, message us on WhatsApp with a photo within 7 days of delivery and we will replace it free of charge — no return shipping needed.",
+      "For Cash on Delivery orders, replacements are shipped after we confirm the issue. For online payments, refunds are issued to the original payment method within 7 working days once the returned item reaches us.",
+      "Change-of-mind returns are accepted within 7 days for unopened products in original packaging; delivery charges are non-refundable.",
+    ],
+  },
+  "terms-and-conditions": {
+    title: "Terms & Conditions",
+    updated: "Last updated October 2026",
+    body: [
+      "By placing an order with Zulfira Hair Care you agree to provide accurate contact and delivery details. Orders are confirmed over WhatsApp before dispatch.",
+      "Product results vary by hair type and routine; our descriptions reflect typical customer experience, not guaranteed outcomes. Always patch-test new products.",
+      "Prices are in Pakistani Rupees and include all taxes. We may update prices and offers without notice; confirmed orders keep the price agreed at checkout.",
+    ],
+  },
+  "shipping-policy": {
+    title: "Shipping Policy",
+    updated: "Last updated October 2026",
+    body: [
+      "Orders are dispatched within 24 hours, Monday to Saturday. Delivery takes 2–4 working days anywhere in Pakistan.",
+      "Delivery is Rs 200 per order, and FREE on orders above Rs 1,900. Cash on Delivery is available nationwide.",
+      "You will receive a WhatsApp confirmation with tracking details as soon as your parcel ships. If your parcel is delayed beyond 5 working days, contact us and we will trace it for you.",
+    ],
+  },
+};
+
+export const policyBySlug = (slug: string) => POLICIES[slug];

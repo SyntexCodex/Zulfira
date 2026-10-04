@@ -30,29 +30,23 @@ export function SectionHeading({
   title,
   copy,
   align = "center",
-  dark = false,
 }: {
   eyebrow: string;
   title: ReactNode;
   copy?: string;
   align?: "center" | "left";
-  dark?: boolean;
 }) {
   return (
     <div className={`max-w-2xl ${align === "center" ? "mx-auto text-center" : "text-left"}`}>
       <Reveal>
-        <p className="eyebrow" style={dark ? { color: "#e8d5a3" } : undefined}>{eyebrow}</p>
+        <p className="eyebrow-red">{eyebrow}</p>
       </Reveal>
       <Reveal delay={0.08}>
-        <h2 className={`font-display mt-3 text-3xl font-semibold leading-[1.12] sm:text-4xl lg:text-[2.75rem] ${dark ? "text-white" : "text-ink"}`}>
-          {title}
-        </h2>
+        <h2 className="section-title mt-3 text-3xl sm:text-4xl lg:text-[2.75rem]">{title}</h2>
       </Reveal>
       {copy && (
         <Reveal delay={0.16}>
-          <p className={`mt-4 text-[15.5px] leading-relaxed sm:text-base ${dark ? "text-ivory/70" : "text-muted"}`}>
-            {copy}
-          </p>
+          <p className="mt-4 text-[15.5px] leading-relaxed text-muted sm:text-base">{copy}</p>
         </Reveal>
       )}
     </div>
