@@ -62,6 +62,8 @@ export interface Order {
   status: OrderStatus;
   timeline?: OrderEvent[];
   history?: OrderEvent[];
+  courierName?: string | null;
+  trackingNumber?: string | null;
 }
 
 export interface Investor {

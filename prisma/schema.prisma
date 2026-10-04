@@ -70,6 +70,7 @@ model Product {
   expenses    Expense[]
   orderItems  OrderItem[]
   movements   StockMovement[]
+  reviews     Review[]
 }
 
 model Investor {
@@ -151,6 +152,8 @@ model Order {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   deliveredAt    DateTime?
+  courierName    String?
+  trackingNumber String?
 
   items OrderItem[]
 
@@ -215,4 +218,22 @@ model Setting {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt
+}
+
+// Customer product reviews. Submitted from the track-order page after an
+// order is delivered; shown on the product page's reviews section.
+model Review {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderId    String?
+  customerName String
+  rating     Int      // 1..5
+  title      String?
+  comment    String
+  isApproved Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  @@index([productId])
+  @@index([isApproved])
 }

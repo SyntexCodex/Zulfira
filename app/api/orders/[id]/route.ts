@@ -56,7 +56,7 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
   const session = await getSessionFromRequest(req);
   const { id } = await params;
 
-  let body: { status?: string; reason?: string };
+  let body: { status?: string; reason?: string; courierName?: string; trackingNumber?: string };
   try {
     body = await req.json();
   } catch {
@@ -67,6 +67,14 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
   const reason =
     typeof body.reason === "string" && body.reason.trim()
       ? body.reason.trim()
+      : undefined;
+  const courierName =
+    typeof body.courierName === "string" && body.courierName.trim()
+      ? body.courierName.trim()
+      : undefined;
+  const trackingNumber =
+    typeof body.trackingNumber === "string" && body.trackingNumber.trim()
+      ? body.trackingNumber.trim()
       : undefined;
 
   const order = await db.order.findUnique({
@@ -89,6 +97,9 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
         statusReason: reason !== undefined ? reason : order.statusReason,
         // deliveredAt marks the revenue-recognition moment for P&L.
         deliveredAt: status === "DELIVERED" ? new Date() : null,
+        // Courier details supplied when shipping (kept on later updates too).
+        ...(courierName !== undefined ? { courierName } : {}),
+        ...(trackingNumber !== undefined ? { trackingNumber } : {}),
       },
     });
     if (shouldRestock) {

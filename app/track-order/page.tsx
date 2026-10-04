@@ -11,18 +11,22 @@ import { WHATSAPP_LINK, formatPKR } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 interface TrackItem {
+  productId: string;
   name: string;
   qty: number;
   unitPrice: number;
 }
 
 interface TrackData {
+  id: string;
   orderNo: string;
   status: string;
   items: TrackItem[];
   total: number;
   createdAt?: string | null;
   deliveredAt?: string | null;
+  courierName?: string | null;
+  trackingNumber?: string | null;
 }
 
 const STEPS = ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED"] as const;
@@ -41,6 +45,131 @@ function fmtDate(d?: string | null): string | null {
   return isNaN(t.getTime())
     ? null
     : t.toLocaleDateString("en-PK", { day: "numeric", month: "short", year: "numeric" });
+}
+
+function ReviewPrompt({ orderId, items }: { orderId: string; items: TrackItem[] }) {
+  const [productId, setProductId] = useState(items[0]?.productId ?? "");
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [error, setError] = useState("");
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (state === "sending" || !productId || !name.trim() || !comment.trim()) return;
+    setState("sending");
+    setError("");
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId,
+          orderId,
+          customerName: name.trim(),
+          rating,
+          comment: comment.trim(),
+        }),
+      });
+      const json = await res.json().catch(() => null);
+      if (!res.ok || !json?.ok) {
+        setError(json?.error || "Couldn't submit your review. Please try again.");
+        setState("error");
+        return;
+      }
+      setState("done");
+    } catch {
+      setError("Couldn't submit your review. Please try again.");
+      setState("error");
+    }
+  };
+
+  if (state === "done") {
+    return (
+      <div className="mt-7 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
+        <Check className="mx-auto h-8 w-8 text-emerald-600" />
+        <p className="mt-2 font-bold text-emerald-900">Thank you for your review!</p>
+        <p className="mt-1 text-[13.5px] text-emerald-800">
+          It now appears under this product's reviews.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-7 rounded-2xl border border-ink/10 bg-white/60 p-6 text-left">
+      <p className="text-[12px] font-extrabold uppercase tracking-[0.2em] text-maroon">
+        Enjoying your products?
+      </p>
+      <h3 className="mt-1 text-xl font-bold">Leave a review</h3>
+      {state === "error" && (
+        <p className="mt-3 rounded-xl bg-red-50 p-3 text-[13.5px] text-red-900">{error}</p>
+      )}
+      <form onSubmit={submit} className="mt-4 space-y-4">
+        {items.length > 1 && (
+          <div>
+            <label className="mb-1.5 block text-[13px] font-bold">Product</label>
+            <select
+              value={productId}
+              onChange={(e) => setProductId(e.target.value)}
+              className="input-clean w-full rounded-xl px-4 py-3 text-[14px]"
+            >
+              {items.map((it) => (
+                <option key={it.productId} value={it.productId}>
+                  {it.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        <div>
+          <label className="mb-1.5 block text-[13px] font-bold">Your rating</label>
+          <div className="flex gap-1.5">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setRating(n)}
+                aria-label={`${n} star${n > 1 ? "s" : ""}`}
+                className={`text-3xl leading-none transition-transform ${n <= rating ? "text-amber-400" : "text-slate-300 hover:text-amber-200"}`}
+              >
+                ★
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-[13px] font-bold">Your name</label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g. Ayesha K."
+            className="input-clean w-full rounded-xl px-4 py-3 text-[14px]"
+            required
+          />
+        </div>
+        <div>
+          <label className="mb-1.5 block text-[13px] font-bold">Your review</label>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="What did you love about it?"
+            rows={3}
+            className="input-clean w-full rounded-xl px-4 py-3 text-[14px]"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={state === "sending"}
+          className={`btn-dark w-full rounded-full py-3.5 text-sm font-bold uppercase tracking-widest ${state === "sending" ? "opacity-60" : ""}`}
+        >
+          {state === "sending" ? "Submitting…" : "Submit review"}
+        </button>
+      </form>
+    </div>
+  );
 }
 
 export default function TrackOrderPage() {
@@ -205,6 +334,30 @@ export default function TrackOrderPage() {
               <p className="mt-3 text-center text-[13px] text-muted">
                 Delivered on {deliveredAt} — enjoy your hair ritual!
               </p>
+            )}
+
+            {(data.courierName || data.trackingNumber) && (
+              <div className="mt-5 rounded-2xl border border-ink/10 bg-white/60 p-5 text-left">
+                <p className="text-[12px] font-extrabold uppercase tracking-[0.2em] text-maroon">
+                  Delivery details
+                </p>
+                <div className="mt-3 space-y-1.5 text-[14px]">
+                  {data.courierName && (
+                    <p>
+                      <span className="font-semibold">Courier:</span> {data.courierName}
+                    </p>
+                  )}
+                  {data.trackingNumber && (
+                    <p>
+                      <span className="font-semibold">Tracking #:</span> {data.trackingNumber}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {status === "DELIVERED" && (
+              <ReviewPrompt orderId={data.id} items={data.items} />
             )}
 
             <div className="mt-7 text-center">

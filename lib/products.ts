@@ -30,6 +30,7 @@ export function toSiteProduct(db: any): SiteProduct {
       : [db?.image].filter(Boolean);
 
   return {
+    dbId: db?.id != null ? String(db.id) : undefined,
     slug: String(db?.slug ?? ""),
     name: String(db?.name ?? "Zulfira product"),
     tagline: db?.tagline ?? "",

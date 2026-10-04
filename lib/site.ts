@@ -28,6 +28,8 @@ export interface Product {
   compareAt?: number;
   rating: number;
   reviewCount: number;
+  /** Prisma Product id, set only for products served from the live DB. */
+  dbId?: string;
   badge?: string;
   categories: string[];
   short: string;

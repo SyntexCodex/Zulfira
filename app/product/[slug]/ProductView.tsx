@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -145,7 +145,29 @@ export default function ProductView({ product, related }: { product: Product; re
   const { add, setOpen } = useCart();
   const [qty, setQty] = useState(1);
   const pct = discountPct(product);
-  const reviews = REVIEWS.slice(0, 3);
+  // Live customer reviews from the DB (submitted after delivery), plus the
+  // static testimonials as fallback while there are no real reviews yet.
+  const [liveReviews, setLiveReviews] = useState<{ customerName: string; rating: number; title: string | null; comment: string; createdAt: string }[]>([]);
+  const [liveStats, setLiveStats] = useState<{ average: number | null; count: number } | null>(null);
+  useEffect(() => {
+    if (!product.dbId) return;
+    (async () => {
+      try {
+        const res = await fetch(`/api/reviews?productId=${encodeURIComponent(product.dbId!)}`);
+        const json = await res.json().catch(() => null);
+        if (res.ok && json?.ok) {
+          setLiveReviews(Array.isArray(json.data.reviews) ? json.data.reviews : []);
+          setLiveStats({ average: json.data.average, count: json.data.count });
+        }
+      } catch {
+        // reviews stay as static fallback
+      }
+    })();
+  }, [product.dbId]);
+
+  const staticReviews = REVIEWS.slice(0, Math.max(0, 3 - liveReviews.length));
+  const rating = liveStats?.average ?? product.rating;
+  const reviewCount = (liveStats?.count ?? 0) + (product.reviewCount || 0);
 
   const buyNow = () => {
     add(product.slug, qty);
@@ -169,8 +191,8 @@ export default function ProductView({ product, related }: { product: Product; re
           <p className="text-[12px] font-extrabold uppercase tracking-[0.24em] text-maroon">{product.tagline}</p>
           <h1 className="section-title mt-3 text-3xl leading-tight sm:text-4xl">{product.name}</h1>
           <div className="mt-3 flex items-center gap-2">
-            <Stars rating={product.rating} className="h-4 w-4" />
-            <span className="text-sm text-muted">{product.rating} · {product.reviewCount} reviews</span>
+            <Stars rating={rating} className="h-4 w-4" />
+            <span className="text-sm text-muted">{rating} · {reviewCount} reviews</span>
           </div>
 
           <div className="mt-5 flex items-center gap-3">
@@ -279,8 +301,24 @@ export default function ProductView({ product, related }: { product: Product; re
           <h2 className="section-title text-2xl sm:text-3xl">What customers say</h2>
         </Reveal>
         <div className="mt-7 grid gap-5 md:grid-cols-3">
-          {reviews.map((r, i) => (
-            <Reveal key={r.name} delay={i * 0.08}>
+          {liveReviews.map((r, i) => (
+            <Reveal key={`live-${i}`} delay={i * 0.08}>
+              <article className="card-soft h-full !rounded-2xl p-6">
+                <Stars rating={r.rating} />
+                {r.title && <p className="mt-3 text-[15px] font-bold">{r.title}</p>}
+                <p className="mt-2 text-[14px] leading-relaxed text-ink/85">“{r.comment}”</p>
+                <p className="mt-4 flex items-center gap-1.5 text-sm font-bold">
+                  {r.customerName} <BadgeCheck className="h-4 w-4 text-maroon" />
+                </p>
+                <p className="text-xs text-muted">
+                  Verified buyer
+                  {r.createdAt && ` · ${new Date(r.createdAt).toLocaleDateString("en-PK", { day: "numeric", month: "short", year: "numeric" })}`}
+                </p>
+              </article>
+            </Reveal>
+          ))}
+          {staticReviews.map((r, i) => (
+            <Reveal key={r.name} delay={(liveReviews.length + i) * 0.08}>
               <article className="card-soft h-full !rounded-2xl p-6">
                 <Stars rating={5} />
                 <p className="mt-3.5 text-[14px] leading-relaxed text-ink/85">“{r.text}”</p>

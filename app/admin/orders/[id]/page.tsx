@@ -15,8 +15,8 @@ import {
   PageHeader,
   StatusPill,
   TextArea,
+  TextInput,
 } from "../../_components/ui";
-
 const TERMINAL: OrderStatus[] = ["DELIVERED", "RETURNED", "CANCELLED"];
 
 function nextActions(status: OrderStatus): { label: string; to: OrderStatus; needsReason: boolean }[] {
@@ -61,6 +61,8 @@ export default function AdminOrderDetailPage({
     needsReason: boolean;
   } | null>(null);
   const [reason, setReason] = useState("");
+  const [courierName, setCourierName] = useState("");
+  const [trackingNumber, setTrackingNumber] = useState("");
 
   async function runStatus() {
     if (!pendingAction || !order) return;
@@ -76,10 +78,18 @@ export default function AdminOrderDetailPage({
         body: JSON.stringify({
           status: pendingAction.to,
           ...(pendingAction.needsReason ? { reason: reason.trim() } : {}),
+          ...(pendingAction.to === "SHIPPED"
+            ? {
+                ...(courierName.trim() ? { courierName: courierName.trim() } : {}),
+                ...(trackingNumber.trim() ? { trackingNumber: trackingNumber.trim() } : {}),
+              }
+            : {}),
         }),
       });
       setPendingAction(null);
       setReason("");
+      setCourierName("");
+      setTrackingNumber("");
       reload();
     } catch (e) {
       setActionErr(e instanceof Error ? e.message : String(e));
@@ -180,6 +190,18 @@ export default function AdminOrderDetailPage({
                     <StatusPill status={order.status} />
                   </dd>
                 </div>
+                {(order.courierName || order.trackingNumber) && (
+                  <>
+                    <div className="flex justify-between border-t border-slate-200 pt-2">
+                      <dt className="text-slate-500">Courier</dt>
+                      <dd className="font-medium text-slate-900">{order.courierName || "—"}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-slate-500">Tracking #</dt>
+                      <dd className="font-medium text-slate-900">{order.trackingNumber || "—"}</dd>
+                    </div>
+                  </>
+                )}
               </dl>
             </Card>
 
@@ -215,6 +237,24 @@ export default function AdminOrderDetailPage({
                     <Field label="Reason (required)">
                       <TextArea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. customer refused delivery" />
                     </Field>
+                  )}
+                  {pendingAction.to === "SHIPPED" && (
+                    <>
+                      <Field label="Delivery partner">
+                        <TextInput
+                          value={courierName}
+                          onChange={(e) => setCourierName(e.target.value)}
+                          placeholder="e.g. TCS, Leopards, PostEx"
+                        />
+                      </Field>
+                      <Field label="Tracking number">
+                        <TextInput
+                          value={trackingNumber}
+                          onChange={(e) => setTrackingNumber(e.target.value)}
+                          placeholder="e.g. 1234567890"
+                        />
+                      </Field>
+                    </>
                   )}
                   <div className="mt-3 flex gap-2">
                     <Btn

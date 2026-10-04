@@ -25,9 +25,11 @@ export async function GET(req: NextRequest) {
   if (!order) return err("Order not found", 404);
 
   return ok({
+    id: order.id,
     orderNo: order.orderNo,
     status: order.status,
     items: order.items.map((it) => ({
+      productId: it.productId,
       name: it.product.name,
       qty: it.qty,
       unitPrice: Number(it.unitPrice),
@@ -35,5 +37,7 @@ export async function GET(req: NextRequest) {
     total: Number(order.total),
     createdAt: order.createdAt,
     deliveredAt: order.deliveredAt,
+    courierName: order.courierName,
+    trackingNumber: order.trackingNumber,
   });
 }
