@@ -15,13 +15,12 @@ export default function ContactPage() {
       />
 
       <div className="mt-12 grid gap-6 lg:grid-cols-3">
-        {/* WhatsApp card */}
         <Reveal>
-          <div className="card flex h-full flex-col items-center p-8 text-center">
+          <div className="card-soft flex h-full flex-col items-center p-8 text-center">
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366]/12">
               <MessageCircle className="h-7 w-7 text-[#1da851]" />
             </span>
-            <h3 className="font-display mt-5 text-xl font-semibold">WhatsApp</h3>
+            <h3 className="section-title mt-5 text-xl">WhatsApp</h3>
             <p className="mt-2 text-sm text-muted">Fastest response — usually within minutes during business hours.</p>
             <a
               href={WHATSAPP_LINK}
@@ -34,46 +33,43 @@ export default function ContactPage() {
           </div>
         </Reveal>
 
-        {/* QR card */}
         <Reveal delay={0.08}>
-          <div className="card flex h-full flex-col items-center p-8 text-center">
-            <div className="relative h-44 w-44 overflow-hidden rounded-2xl border border-ink/10 bg-white p-2">
+          <div className="card-soft flex h-full flex-col items-center p-8 text-center">
+            <div className="relative h-44 w-44 overflow-hidden rounded-2xl border border-line bg-white p-2">
               <Image src="/images/qr-whatsapp.png" alt="Zulfira WhatsApp QR code" fill className="object-contain" />
             </div>
-            <h3 className="font-display mt-5 text-xl font-semibold">Scan to chat</h3>
+            <h3 className="section-title mt-5 text-xl">Scan to chat</h3>
             <p className="mt-2 text-sm text-muted">Point your phone camera at the QR code to open WhatsApp instantly.</p>
           </div>
         </Reveal>
 
-        {/* info card */}
         <Reveal delay={0.16}>
-          <div className="card h-full p-8">
-            <h3 className="font-display text-xl font-semibold">Contact details</h3>
+          <div className="card-soft h-full p-8">
+            <h3 className="section-title text-xl">Contact details</h3>
             <ul className="mt-5 space-y-4 text-[14.5px]">
               <li className="flex items-start gap-3">
-                <Mail className="mt-0.5 h-5 w-5 shrink-0 text-pine" />
+                <Mail className="mt-0.5 h-5 w-5 shrink-0 text-maroon" />
                 <span>{CONTACT.email}</span>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-pine" />
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-maroon" />
                 <span>{CONTACT.address}</span>
               </li>
               <li className="flex items-start gap-3">
-                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-pine" />
+                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-maroon" />
                 <span>{CONTACT.hours}</span>
               </li>
             </ul>
-            <div className="mt-6 rounded-2xl bg-cream p-4 text-sm text-muted">
+            <div className="mt-6 rounded-2xl bg-blush p-4 text-sm text-ink/75">
               For order queries, please include your order name and phone number so we can help faster.
             </div>
           </div>
         </Reveal>
       </div>
 
-      {/* message form -> WhatsApp */}
       <Reveal className="mt-10">
-        <div className="card mx-auto max-w-2xl p-8 sm:p-10">
-          <h3 className="font-display text-2xl font-semibold">Send us a message</h3>
+        <div className="card-soft mx-auto max-w-2xl p-8 sm:p-10">
+          <h3 className="section-title text-2xl">Send us a message</h3>
           <p className="mt-2 text-sm text-muted">Fill this in and it opens WhatsApp with your message ready to send.</p>
           <form
             className="mt-6 space-y-4"
@@ -86,7 +82,7 @@ export default function ContactPage() {
           >
             <input name="name" required placeholder="Your name" className="input-clean w-full rounded-xl px-5 py-3.5 text-[15px]" />
             <textarea name="message" required rows={4} placeholder="How can we help?" className="input-clean w-full resize-none rounded-xl px-5 py-3.5 text-[15px]" />
-            <button type="submit" className="btn-primary flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-[15px] font-bold">
+            <button type="submit" className="btn-maroon flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-[15px] font-bold">
               <Send className="h-4 w-4" /> Send via WhatsApp
             </button>
           </form>

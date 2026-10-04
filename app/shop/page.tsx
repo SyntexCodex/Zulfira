@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ProductCard from "@/components/ProductCard";
-import Reveal, { SectionHeading } from "@/components/Reveal";
 import { PRODUCTS } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -10,29 +9,19 @@ export const metadata: Metadata = {
 
 export default function ShopPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
-      <SectionHeading
-        eyebrow="The Collection"
-        title={<>Everything your hair needs.</>}
-        copy="Two signature formulas and one complete ritual — no endless shelves, no confusion."
-      />
-      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+      <div className="text-center">
+        <p className="eyebrow-red">The Collection</p>
+        <h1 className="section-title mt-3 text-4xl sm:text-5xl">Shop All</h1>
+        <p className="mx-auto mt-3 max-w-xl text-[14.5px] text-muted">
+          Two signature formulas and one complete ritual — no endless shelves, no confusion.
+        </p>
+      </div>
+      <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-3">
         {PRODUCTS.map((p, i) => (
           <ProductCard key={p.slug} product={p} index={i} />
         ))}
       </div>
-
-      <Reveal className="mt-14">
-        <div className="card flex flex-col items-center gap-4 bg-cream p-8 text-center sm:p-10">
-          <p className="eyebrow">Not sure where to start?</p>
-          <p className="font-display max-w-xl text-2xl font-semibold leading-snug">
-            Take the Complete Ritual Bundle — oil + shampoo, designed to work as one.
-          </p>
-          <a href="/product/complete-ritual-bundle" className="btn-primary rounded-full px-8 py-3.5 text-sm font-semibold">
-            Shop the Bundle
-          </a>
-        </div>
-      </Reveal>
     </div>
   );
 }
