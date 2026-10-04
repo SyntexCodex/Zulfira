@@ -58,18 +58,49 @@ pre-filled message — the standard CoD flow for Pakistan e-commerce.
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # static export → ./out
+npx prisma db push   # create tables (needs DATABASE_URL)
+npm run db:seed      # demo products, investor, expenses, admin login
+npm run dev          # http://localhost:3000
+npm run build
 ```
 
-## Deployment
+## Deploy on Vercel
 
-The site is a **static export** (`output: "export"` in `next.config.ts`) hosted at
-the root domain on **Vercel** — no base path. Every push to `main` redeploys.
+The app is a **dynamic Next.js app** (storefront + API + admin panel, one project).
+
+1. Push this repo to GitHub (`main` branch).
+2. In Vercel: **Add New → Project → Import** the repo. Framework preset: Next.js.
+   No build-command changes needed (`postinstall` runs `prisma generate`).
+3. Add **Environment Variables** (Project → Settings → Environment Variables):
+   - `DATABASE_URL` — Neon Postgres connection string (**required** for orders,
+     admin, and all DB features; the site still builds and serves the storefront
+     without it)
+   - `AUTH_SECRET` — long random string for admin sessions
+     (`openssl rand -base64 32`). **Required** for `/admin` login.
+   - `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` — optional; alerts silently skip
+     when absent.
+   - `CRON_SECRET` — optional; protects the daily-summary cron endpoint.
+4. Deploy. Then run once against the live DB:
+   `DATABASE_URL="..." npx prisma db push && DATABASE_URL="..." npm run db:seed`
+5. Log in at `/admin/login` (seed: `admin@zulfira.pk` / `zulfira123`) and **change
+   the password immediately** in Settings → Staff.
+
+The daily Telegram business summary runs via Vercel Cron (`vercel.json`,
+19:00 PKT). Custom domain: Vercel → Project → Settings → Domains (when ready).
+
+## Deployment notes (v3 platform)
+
+- Storefront (Naturalis design), `/api/*`, and `/admin/*` ship in one deploy.
+- Public pages read products from the DB with automatic fallback to the static
+  catalogue in `lib/site.ts`, so the site renders before the DB is provisioned.
+- Checkout posts orders to `/api/orders`; WhatsApp ordering remains as fallback.
+- See `dynamic-plan/PLAN.md` for the full architecture and P&L rules.
 
 ## Tech
 
-- Next.js 16 (App Router, static export), React 19, TypeScript
+- Next.js 16 (App Router, dynamic), React 19, TypeScript
 - Tailwind CSS 4 (`@theme` tokens in `app/globals.css`)
+- Prisma 6 + Neon Postgres, Auth.js-style JWT sessions (jose), bcryptjs
+- Recharts (admin dashboard), Telegram Bot API (alerts)
 - Framer Motion — hero slider, scroll reveals, cart drawer, lightbox, marquees
 - Lucide icons, `next/font` (Fraunces + Inter)
