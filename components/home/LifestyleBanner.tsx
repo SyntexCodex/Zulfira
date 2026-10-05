@@ -10,7 +10,7 @@ export default function LifestyleBanner() {
       <Reveal>
         <Link href="/shop" className="group relative block h-[380px] sm:h-[460px]">
           <Image
-            src="/banners/lifestyle-pink.webp"
+            src="/banners/lifestyle-ritual.webp"
             alt="Zulfira lifestyle"
             fill
             sizes="100vw"

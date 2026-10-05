@@ -17,7 +17,7 @@ const SLIDES = [
     href: "/shop",
   },
   {
-    image: "/banners/lifestyle-pink.webp",
+    image: "/banners/hero-oil.webp",
     eyebrow: "Bestseller · Revitalizing Hair Oil",
     title: "Nourish First.",
     title2: "Shine Always.",
