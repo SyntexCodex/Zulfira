@@ -13,7 +13,11 @@ export type { SiteProduct };
 
 /** Absolute base URL for server-side self-fetch (relative fetch has no host on the server). */
 function baseUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  // Vercel sets VERCEL_URL automatically on every deployment — use it when
+  // no explicit site URL is configured so the live API/DB is reachable.
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
 }
 
 /**
