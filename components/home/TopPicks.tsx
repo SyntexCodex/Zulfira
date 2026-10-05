@@ -12,7 +12,7 @@ export default function TopPicks() {
   const scroll = (dir: number) => track.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
 
   return (
-    <section className="bg-ivory py-16">
+    <section className="bg-gold-faint py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal>
           <div className="flex items-end justify-between">

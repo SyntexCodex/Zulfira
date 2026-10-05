@@ -26,7 +26,7 @@ export default function Spotlight() {
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <Reveal>
           <div className="relative">
-            <div className="relative aspect-[4/4.4] overflow-hidden rounded-3xl bg-blush">
+            <div className="relative aspect-[4/4.4] overflow-hidden rounded-3xl bg-gold-soft">
               <Image
                 src={FEATURED.gallery[0]}
                 alt={FEATURED.name}
@@ -35,7 +35,7 @@ export default function Spotlight() {
                 className="object-cover"
               />
             </div>
-            <div className="absolute -right-3 top-6 flex h-24 w-24 rotate-12 flex-col items-center justify-center rounded-full bg-maroon text-center text-white shadow-xl sm:-right-5 sm:h-28 sm:w-28">
+            <div className="absolute -right-3 top-6 flex h-24 w-24 rotate-12 flex-col items-center justify-center rounded-full bg-coal text-center text-white shadow-xl sm:-right-5 sm:h-28 sm:w-28">
               <span className="text-[10px] font-bold uppercase leading-tight tracking-wide">Flat</span>
               <span className="text-xl font-extrabold leading-none sm:text-2xl">{pct}%</span>
               <span className="text-[10px] font-bold uppercase leading-tight tracking-wide">Off</span>
@@ -43,11 +43,11 @@ export default function Spotlight() {
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
                 <Image src="/results/before-hair.webp" alt="Before using Zulfira" fill sizes="300px" className="object-cover" />
-                <span className="absolute left-3 top-3 rounded-full bg-ink/80 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">Before</span>
+                <span className="absolute left-3 top-3 rounded-full bg-gold/90 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-coal">Before</span>
               </div>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
                 <Image src="/results/after-hair.webp" alt="After using Zulfira" fill sizes="300px" className="object-cover" />
-                <span className="absolute left-3 top-3 rounded-full bg-maroon px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">After</span>
+                <span className="absolute left-3 top-3 rounded-full bg-coal px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">After</span>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@ export default function Spotlight() {
 
         <div>
           <Reveal>
-            <p className="text-[12px] font-extrabold uppercase tracking-[0.24em] text-maroon">
+            <p className="text-[12px] font-extrabold uppercase tracking-[0.24em] text-coal">
               Featured · {FEATURED.tagline}
             </p>
           </Reveal>
@@ -113,7 +113,7 @@ export default function Spotlight() {
             </div>
             <Link
               href={`/product/${FEATURED.slug}`}
-              className="mt-5 inline-block text-sm font-semibold underline underline-offset-4 hover:text-maroon"
+              className="mt-5 inline-block text-sm font-semibold underline underline-offset-4 hover:text-coal"
             >
               View full details
             </Link>

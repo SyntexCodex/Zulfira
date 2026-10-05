@@ -48,19 +48,19 @@ export default function ContactPage() {
             <h3 className="section-title text-xl">Contact details</h3>
             <ul className="mt-5 space-y-4 text-[14.5px]">
               <li className="flex items-start gap-3">
-                <Mail className="mt-0.5 h-5 w-5 shrink-0 text-maroon" />
+                <Mail className="mt-0.5 h-5 w-5 shrink-0 text-coal" />
                 <span>{CONTACT.email}</span>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-maroon" />
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-coal" />
                 <span>{CONTACT.address}</span>
               </li>
               <li className="flex items-start gap-3">
-                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-maroon" />
+                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-coal" />
                 <span>{CONTACT.hours}</span>
               </li>
             </ul>
-            <div className="mt-6 rounded-2xl bg-blush p-4 text-sm text-ink/75">
+            <div className="mt-6 rounded-2xl bg-gold-soft p-4 text-sm text-ink/75">
               For order queries, please include your order name and phone number so we can help faster.
             </div>
           </div>
@@ -82,7 +82,7 @@ export default function ContactPage() {
           >
             <input name="name" required placeholder="Your name" className="input-clean w-full rounded-xl px-5 py-3.5 text-[15px]" />
             <textarea name="message" required rows={4} placeholder="How can we help?" className="input-clean w-full resize-none rounded-xl px-5 py-3.5 text-[15px]" />
-            <button type="submit" className="btn-maroon flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-[15px] font-bold">
+            <button type="submit" className="btn-coal flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-[15px] font-bold">
               <Send className="h-4 w-4" /> Send via WhatsApp
             </button>
           </form>

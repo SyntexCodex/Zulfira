@@ -15,7 +15,7 @@ const QUICK_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="bg-ink text-white">
+    <footer className="bg-coal text-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -24,7 +24,7 @@ export default function Footer() {
                 <Image src="/brand/logo.webp" alt="Zulfira logo" fill className="object-cover" />
               </span>
               <span className="leading-none">
-                <span className="font-display block text-xl font-semibold tracking-[0.18em]">ZULFIRA</span>
+                <span className="font-display block text-xl font-semibold tracking-[0.18em] text-gold">ZULFIRA</span>
                 <span className="block text-[9px] font-medium uppercase tracking-[0.42em] text-white/55">
                   Hair Care
                 </span>
@@ -37,11 +37,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-white/90">Quick Links</h4>
+            <h4 className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-gold">Quick Links</h4>
             <ul className="mt-5 space-y-2.5">
               {QUICK_LINKS.map((l) => (
                 <li key={l.label}>
-                  <Link href={l.href} className="text-[13.5px] text-white/60 transition hover:text-white">
+                  <Link href={l.href} className="text-[13.5px] text-white/60 transition hover:text-gold">
                     {l.label}
                   </Link>
                 </li>
@@ -50,11 +50,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-white/90">Contact Information</h4>
+            <h4 className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-gold">Contact Information</h4>
             <ul className="mt-5 space-y-3.5 text-[13.5px] text-white/60">
               <li className="flex items-start gap-2.5">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-white/40" />
-                <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="hover:text-white">
+                <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
                   {CONTACT.phoneDisplay}
                 </a>
               </li>
@@ -70,7 +70,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-white/90">Social Media</h4>
+            <h4 className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-gold">Social Media</h4>
             <div className="mt-5 flex gap-2.5">
               {[
                 { icon: FacebookIcon, label: "Facebook" },
@@ -83,7 +83,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/70 transition hover:border-white hover:text-white"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/70 transition hover:border-gold hover:text-gold"
                 >
                   <s.icon className="h-4 w-4" />
                 </a>

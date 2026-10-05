@@ -23,7 +23,7 @@ function Gallery({ product }: { product: Product }) {
     <>
       <div className="lg:sticky lg:top-40">
         <div
-          className="relative aspect-[4/4.3] cursor-zoom-in overflow-hidden rounded-2xl bg-blush"
+          className="relative aspect-[4/4.3] cursor-zoom-in overflow-hidden rounded-2xl bg-gold-soft"
           onClick={() => setLightbox(true)}
         >
           <AnimatePresence mode="wait">
@@ -46,7 +46,7 @@ function Gallery({ product }: { product: Product }) {
             </motion.div>
           </AnimatePresence>
           {pct > 0 && (
-            <span className="absolute left-4 top-4 rounded-full bg-ink px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white">
+            <span className="absolute left-4 top-4 rounded-full bg-gold px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-coal">
               Sale
             </span>
           )}
@@ -59,7 +59,7 @@ function Gallery({ product }: { product: Product }) {
             <button
               key={g}
               onClick={() => setActive(i)}
-              className={`relative aspect-square overflow-hidden rounded-xl bg-blush transition-all ${i === active ? "ring-2 ring-ink ring-offset-2" : "opacity-70 hover:opacity-100"}`}
+              className={`relative aspect-square overflow-hidden rounded-xl bg-gold-soft transition-all ${i === active ? "ring-2 ring-ink ring-offset-2" : "opacity-70 hover:opacity-100"}`}
             >
               <Image src={g} alt={`${product.name} view ${i + 1}`} fill sizes="200px" className="object-cover" />
             </button>
@@ -188,7 +188,7 @@ export default function ProductView({ product, related }: { product: Product; re
         <Gallery product={product} />
 
         <div>
-          <p className="text-[12px] font-extrabold uppercase tracking-[0.24em] text-maroon">{product.tagline}</p>
+          <p className="text-[12px] font-extrabold uppercase tracking-[0.24em] text-coal">{product.tagline}</p>
           <h1 className="section-title mt-3 text-3xl leading-tight sm:text-4xl">{product.name}</h1>
           <div className="mt-3 flex items-center gap-2">
             <Stars rating={rating} className="h-4 w-4" />
@@ -200,7 +200,7 @@ export default function ProductView({ product, related }: { product: Product; re
             {product.compareAt && (
               <>
                 <span className="text-lg text-muted line-through">{formatPKR(product.compareAt)}</span>
-                <span className="rounded-full bg-ink px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">Sale</span>
+                <span className="rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-coal">Sale</span>
               </>
             )}
           </div>
@@ -252,7 +252,7 @@ export default function ProductView({ product, related }: { product: Product; re
               { icon: ShieldCheck, t: "CoD Available", s: "Pay at door" },
               { icon: RotateCcw, t: "Easy Returns", s: "7-day policy" },
             ].map((it) => (
-              <div key={it.t} className="rounded-2xl bg-ivory p-3.5 text-center">
+              <div key={it.t} className="rounded-2xl bg-gold-faint p-3.5 text-center">
                 <it.icon className="mx-auto h-5 w-5" />
                 <p className="mt-1.5 text-[12px] font-bold">{it.t}</p>
                 <p className="text-[11px] text-muted">{it.s}</p>
@@ -267,7 +267,7 @@ export default function ProductView({ product, related }: { product: Product; re
                 <ul className="space-y-2 pt-1">
                   {product.benefits.map((b) => (
                     <li key={b} className="flex items-start gap-2.5">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-maroon" strokeWidth={3} /> {b}
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-coal" strokeWidth={3} /> {b}
                     </li>
                   ))}
                 </ul>
@@ -308,7 +308,7 @@ export default function ProductView({ product, related }: { product: Product; re
                 {r.title && <p className="mt-3 text-[15px] font-bold">{r.title}</p>}
                 <p className="mt-2 text-[14px] leading-relaxed text-ink/85">“{r.comment}”</p>
                 <p className="mt-4 flex items-center gap-1.5 text-sm font-bold">
-                  {r.customerName} <BadgeCheck className="h-4 w-4 text-maroon" />
+                  {r.customerName} <BadgeCheck className="h-4 w-4 text-coal" />
                 </p>
                 <p className="text-xs text-muted">
                   Verified buyer
@@ -323,7 +323,7 @@ export default function ProductView({ product, related }: { product: Product; re
                 <Stars rating={5} />
                 <p className="mt-3.5 text-[14px] leading-relaxed text-ink/85">“{r.text}”</p>
                 <p className="mt-4 flex items-center gap-1.5 text-sm font-bold">
-                  {r.name} <BadgeCheck className="h-4 w-4 text-maroon" />
+                  {r.name} <BadgeCheck className="h-4 w-4 text-coal" />
                 </p>
                 <p className="text-xs text-muted">{r.city} · Verified buyer</p>
               </article>

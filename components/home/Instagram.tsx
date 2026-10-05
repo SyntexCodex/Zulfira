@@ -7,7 +7,7 @@ import { INSTAGRAM_POSTS, WHATSAPP_LINK } from "@/lib/site";
 
 export default function Instagram() {
   return (
-    <section className="bg-ivory py-16 sm:py-20">
+    <section className="bg-gold-faint py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
@@ -27,7 +27,7 @@ export default function Instagram() {
                 className="group relative block overflow-hidden rounded-2xl"
                 aria-label={p.label}
               >
-                <div className="relative aspect-[4/5] bg-blush">
+                <div className="relative aspect-[4/5] bg-gold-soft">
                   <Image
                     src={p.image}
                     alt={p.label}

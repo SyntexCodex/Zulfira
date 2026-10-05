@@ -31,7 +31,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           href={`/product/${product.slug}`}
           className="card-soft relative block overflow-hidden !rounded-2xl"
         >
-          <div className="relative aspect-[4/4.5] bg-blush">
+          <div className="relative aspect-[4/4.5] bg-gold-soft">
             <Image
               src={product.gallery[0]}
               alt={product.name}
@@ -41,7 +41,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             />
           </div>
           {pct > 0 && (
-            <span className="absolute left-3 top-3 rounded-full bg-ink px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
+            <span className="absolute left-3 top-3 rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-coal">
               Sale
             </span>
           )}

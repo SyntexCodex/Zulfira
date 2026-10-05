@@ -27,7 +27,7 @@ export default function Categories() {
               href={`/collections/${c.slug}`}
               className="card-soft group block overflow-hidden"
             >
-              <div className="relative aspect-[4/4.6] overflow-hidden bg-blush">
+              <div className="relative aspect-[4/4.6] overflow-hidden bg-gold-soft">
                 <Image
                   src={c.image}
                   alt={c.name}

@@ -23,7 +23,7 @@ export default function LifestyleBanner() {
               <h2 className="section-title mt-3 max-w-xl text-3xl text-white sm:text-5xl">
                 Two steps. Zero compromise.
               </h2>
-              <span className="mt-6 inline-block rounded-full bg-white px-10 py-3.5 text-sm font-bold uppercase tracking-widest text-ink transition group-hover:bg-blush">
+              <span className="mt-6 inline-block rounded-full bg-white px-10 py-3.5 text-sm font-bold uppercase tracking-widest text-ink transition group-hover:bg-gold-soft">
                 Shop Now
               </span>
             </div>

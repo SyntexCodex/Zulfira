@@ -43,8 +43,8 @@ export default function CartDrawer() {
             <div className="flex-1 overflow-y-auto px-6 py-5">
               {items.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center text-center">
-                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-blush">
-                    <ShoppingBag className="h-7 w-7 text-maroon" />
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gold-soft">
+                    <ShoppingBag className="h-7 w-7 text-coal" />
                   </span>
                   <p className="section-title mt-5 text-lg">Your cart is empty</p>
                   <p className="mt-2 text-sm text-muted">Beautiful hair starts with the first step.</p>
@@ -66,7 +66,7 @@ export default function CartDrawer() {
                         <Link
                           href={`/product/${p.slug}`}
                           onClick={() => setOpen(false)}
-                          className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-blush"
+                          className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gold-soft"
                         >
                           <Image src={p.gallery[0]} alt={p.name} fill className="object-cover" />
                         </Link>

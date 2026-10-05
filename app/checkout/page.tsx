@@ -116,8 +116,8 @@ export default function CheckoutPage() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
         <Reveal>
-          <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-maroon/10">
-            <CheckCircle2 className="h-10 w-10 text-maroon" />
+          <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-coal/10">
+            <CheckCircle2 className="h-10 w-10 text-coal" />
           </span>
           {orderNo ? (
             <>
@@ -158,8 +158,8 @@ export default function CheckoutPage() {
 
       {items.length === 0 ? (
         <div className="mx-auto mt-12 max-w-md text-center">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blush">
-            <ShoppingBag className="h-7 w-7 text-maroon" />
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold-soft">
+            <ShoppingBag className="h-7 w-7 text-coal" />
           </span>
           <p className="font-display mt-5 text-xl font-semibold">Your cart is empty</p>
           <Link href="/shop" className="btn-primary mt-6 inline-block rounded-full px-8 py-3 text-sm font-semibold">
@@ -194,12 +194,12 @@ export default function CheckoutPage() {
                     <button
                       key={m.id}
                       onClick={() => setPayMethod(m.id)}
-                      className={`rounded-2xl border-[1.5px] p-5 text-left transition-all ${payMethod === m.id ? "border-maroon bg-maroon/[0.04] shadow-sm" : "border-ink/12 hover:border-ink/25"}`}
+                      className={`rounded-2xl border-[1.5px] p-5 text-left transition-all ${payMethod === m.id ? "border-coal bg-coal/[0.04] shadow-sm" : "border-ink/12 hover:border-ink/25"}`}
                     >
                       <span className="flex items-center justify-between">
-                        <m.icon className={`h-6 w-6 ${payMethod === m.id ? "text-maroon" : "text-muted"}`} />
-                        <span className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${payMethod === m.id ? "border-maroon" : "border-ink/20"}`}>
-                          {payMethod === m.id && <span className="h-2.5 w-2.5 rounded-full bg-maroon" />}
+                        <m.icon className={`h-6 w-6 ${payMethod === m.id ? "text-coal" : "text-muted"}`} />
+                        <span className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${payMethod === m.id ? "border-coal" : "border-ink/20"}`}>
+                          {payMethod === m.id && <span className="h-2.5 w-2.5 rounded-full bg-coal" />}
                         </span>
                       </span>
                       <p className="mt-3 font-bold">{m.label}</p>
@@ -216,12 +216,12 @@ export default function CheckoutPage() {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-5 rounded-2xl bg-blush p-5">
+                      <div className="mt-5 rounded-2xl bg-gold-soft p-5">
                         <p className="text-sm font-bold">Pay to any of these accounts, then share the receipt on WhatsApp:</p>
                         <ul className="mt-3 space-y-2.5">
                           {ONLINE_PAYMENT_DETAILS.map((d) => (
                             <li key={d.label} className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
-                              <span className="font-semibold text-maroon">{d.label}</span>
+                              <span className="font-semibold text-coal">{d.label}</span>
                               <span className="font-mono text-[13px]">{d.value}</span>
                               <span className="w-full text-xs text-muted">{d.title}</span>
                             </li>
@@ -277,9 +277,9 @@ export default function CheckoutPage() {
                   if (!p) return null;
                   return (
                     <li key={it.slug} className="flex gap-3.5">
-                      <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-blush">
+                      <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-gold-soft">
                         <Image src={p.gallery[0]} alt={p.name} fill className="object-cover" />
-                        <span className="absolute -right-0 -top-0 flex h-5 w-5 items-center justify-center rounded-bl-lg bg-maroon text-[11px] font-bold text-white">
+                        <span className="absolute -right-0 -top-0 flex h-5 w-5 items-center justify-center rounded-bl-lg bg-coal text-[11px] font-bold text-white">
                           {it.qty}
                         </span>
                       </span>
@@ -296,14 +296,14 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-muted"><span>Subtotal ({count} items)</span><span className="font-semibold text-ink">{formatPKR(subtotal)}</span></div>
                 <div className="flex justify-between text-muted">
                   <span className="flex items-center gap-1.5"><Truck className="h-4 w-4" /> Delivery</span>
-                  <span className="font-semibold text-ink">{shipping === 0 ? <span className="text-maroon">FREE</span> : formatPKR(shipping)}</span>
+                  <span className="font-semibold text-ink">{shipping === 0 ? <span className="text-coal">FREE</span> : formatPKR(shipping)}</span>
                 </div>
                 {shipping > 0 && (
                   <p className="text-xs text-muted">Add {formatPKR(FREE_SHIP_THRESHOLD - subtotal)} more for free delivery.</p>
                 )}
                 <div className="flex justify-between pt-2">
                   <span className="font-bold">Total</span>
-                  <span className="font-display text-2xl font-bold text-maroon">{formatPKR(total)}</span>
+                  <span className="font-display text-2xl font-bold text-coal">{formatPKR(total)}</span>
                 </div>
               </div>
             </aside>

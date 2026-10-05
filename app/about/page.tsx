@@ -18,13 +18,13 @@ const VALUES = [
 export default function AboutPage() {
   return (
     <div>
-      <section className="bg-blush">
+      <section className="bg-gold-soft">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2">
           <div>
             <Reveal><p className="eyebrow-red">Our Story</p></Reveal>
             <Reveal delay={0.08}>
               <h1 className="section-title mt-4 text-4xl leading-[1.08] sm:text-5xl lg:text-6xl">
-                Hair care worth <span className="text-maroon">trusting.</span>
+                Hair care worth <span className="text-coal">trusting.</span>
               </h1>
             </Reveal>
             <Reveal delay={0.16}>
@@ -53,8 +53,8 @@ export default function AboutPage() {
           {VALUES.map((v, i) => (
             <Reveal key={v.title} delay={i * 0.08}>
               <div className="card-soft h-full p-8 transition-transform hover:-translate-y-1">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blush">
-                  <v.icon className="h-6 w-6 text-maroon" />
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-soft">
+                  <v.icon className="h-6 w-6 text-coal" />
                 </span>
                 <h3 className="section-title mt-5 text-xl">{v.title}</h3>
                 <p className="mt-2.5 text-[14.5px] leading-relaxed text-muted">{v.copy}</p>
@@ -79,7 +79,7 @@ export default function AboutPage() {
               copy="Argan for repair. Coconut for moisture. Castor for growth. Keratin and silk protein for strength and shine. Aloe and moringa to calm the scalp. That's the Zulfira pantry — no sulphates, no parabens, no silicones, no mineral oil."
             />
             <Reveal delay={0.15}>
-              <Link href="/shop" className="btn-maroon mt-8 inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-sm font-bold">
+              <Link href="/shop" className="btn-coal mt-8 inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-sm font-bold">
                 Shop the Collection <ArrowRight className="h-4 w-4" />
               </Link>
             </Reveal>
@@ -87,7 +87,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-ink py-14">
+      <section className="bg-coal py-14">
         <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 px-4 text-center sm:px-6 md:grid-cols-4">
           {[
             ["2", "Signature formulas"],
@@ -96,7 +96,7 @@ export default function AboutPage() {
             ["0", "Sulphates or parabens"],
           ].map(([n, l], i) => (
             <Reveal key={l} delay={i * 0.07}>
-              <p className="section-title text-4xl text-white sm:text-5xl">{n}</p>
+              <p className="section-title text-4xl text-gold sm:text-5xl">{n}</p>
               <p className="mt-2 text-sm text-white/60">{l}</p>
             </Reveal>
           ))}

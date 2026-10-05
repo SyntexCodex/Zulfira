@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SLIDES = [
   {
-    image: "/banners/hero-blush.webp",
+    image: "/banners/hero-gold-soft.webp",
     eyebrow: "Pakistan's Botanical Hair Ritual",
     title: "Strong Roots.",
     title2: "Silk Shine.",
@@ -38,7 +38,7 @@ export default function Hero() {
   const s = SLIDES[index];
 
   return (
-    <section className="relative overflow-hidden bg-blush">
+    <section className="relative overflow-hidden bg-gold-soft">
       <div className="relative h-[540px] sm:h-[600px] lg:h-[660px]">
         <AnimatePresence mode="popLayout">
           <motion.div
@@ -57,7 +57,7 @@ export default function Hero() {
               sizes="100vw"
               className="object-cover object-right"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-blush via-blush/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-gold-soft via-gold-soft/70 to-transparent" />
           </motion.div>
         </AnimatePresence>
 
@@ -72,13 +72,13 @@ export default function Hero() {
                 transition={{ duration: 0.5 }}
               >
                 <p className="eyebrow-red">{s.eyebrow}</p>
-                <h1 className="mt-4 text-[44px] font-extrabold uppercase leading-[1.02] tracking-tight text-crimson sm:text-6xl lg:text-7xl">
+                <h1 className="mt-4 text-[44px] font-extrabold uppercase leading-[1.02] tracking-tight text-coal sm:text-6xl lg:text-7xl">
                   {s.title}
                   <br />
                   {s.title2}
                 </h1>
                 <div className="dashed-box mt-6 inline-block px-7 py-4">
-                  <p className="text-center text-lg font-semibold text-crimson sm:text-2xl">
+                  <p className="text-center text-lg font-semibold text-coal sm:text-2xl">
                     {s.box}
                   </p>
                 </div>

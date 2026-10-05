@@ -60,7 +60,7 @@ function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }
                   onClick={onClose}
                   className="flex items-center gap-4 rounded-xl p-3 hover:bg-black/[0.03]"
                 >
-                  <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-blush">
+                  <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-gold-soft">
                     <Image src={p.gallery[0]} alt={p.name} fill className="object-cover" />
                   </span>
                   <span className="flex-1">
@@ -150,7 +150,7 @@ export default function Header() {
                       key={count}
                       initial={{ scale: 0.4 }}
                       animate={{ scale: 1 }}
-                      className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-maroon px-1 text-[11px] font-bold text-white"
+                      className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-coal px-1 text-[11px] font-bold text-white"
                     >
                       {count}
                     </motion.span>

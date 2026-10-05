@@ -55,10 +55,10 @@ export default function FaqPage() {
         <FaqAccordion items={FAQS} />
       </Reveal>
       <Reveal delay={0.15} className="mt-10">
-        <div className="card-soft bg-blush p-8 text-center">
+        <div className="card-soft bg-gold-soft p-8 text-center">
           <p className="section-title text-xl">Still have a question?</p>
           <p className="mt-2 text-sm text-muted">Message us on WhatsApp — we reply fast.</p>
-          <a href="/contact" className="btn-maroon mt-5 inline-block rounded-full px-8 py-3 text-sm font-bold">
+          <a href="/contact" className="btn-coal mt-5 inline-block rounded-full px-8 py-3 text-sm font-bold">
             Contact Us
           </a>
         </div>

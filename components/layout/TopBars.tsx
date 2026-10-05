@@ -41,14 +41,14 @@ export function FlashSaleBar() {
   if (hidden) return null;
   const cell = (v: number, l: string) => (
     <span className="flex flex-col items-center">
-      <span className="text-xl font-extrabold tabular-nums leading-none sm:text-2xl">
+      <span className="text-xl font-extrabold tabular-nums leading-none text-gold sm:text-2xl">
         {String(v).padStart(2, "0")}
       </span>
       <span className="mt-1 text-[9px] font-medium uppercase tracking-widest text-white/70">{l}</span>
     </span>
   );
   return (
-    <div className="relative bg-maroon px-4 py-2.5 text-white">
+    <div className="relative bg-coal px-4 py-2.5 text-white">
       <div className="mx-auto flex max-w-7xl items-center justify-center gap-4 sm:gap-8">
         <div className="text-center">
           <p className="text-sm font-extrabold uppercase tracking-wide sm:text-base">{FLASH_SALE.title}</p>

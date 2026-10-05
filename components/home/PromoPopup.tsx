@@ -45,8 +45,8 @@ export default function PromoPopup() {
             >
               <X className="h-4 w-4" />
             </button>
-            <div className="relative h-52 bg-blush">
-              <Image src="/banners/hero-blush.webp" alt="Zulfira offer" fill className="object-cover" />
+            <div className="relative h-52 bg-gold-soft">
+              <Image src="/banners/hero-gold-soft.webp" alt="Zulfira offer" fill className="object-cover" />
             </div>
             <div className="p-7 text-center">
               <p className="eyebrow-red">Limited Time</p>
@@ -57,7 +57,7 @@ export default function PromoPopup() {
               <Link
                 href="/product/complete-ritual-bundle"
                 onClick={close}
-                className="btn-maroon mt-5 block rounded-full py-3.5 text-sm font-bold uppercase tracking-widest"
+                className="btn-coal mt-5 block rounded-full py-3.5 text-sm font-bold uppercase tracking-widest"
               >
                 Claim Offer
               </Link>
