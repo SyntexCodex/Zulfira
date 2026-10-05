@@ -275,14 +275,14 @@ export const DRAWER_GROUPS = [
 ];
 
 export const ANNOUNCEMENT_MESSAGES = [
-  "Free delivery on orders above Rs 1,900",
+  "Free home delivery on all orders",
   "Cash on Delivery available nationwide",
   "Flat 15% off bundles — this week only",
 ];
 
 export const FLASH_SALE = {
   title: "Flash Sale",
-  subtitle: "Up to 25% off — hurry, ends in:",
+  subtitle: "Up to 33% off — hurry, ends in:",
 };
 
 export const INSTAGRAM_POSTS = [

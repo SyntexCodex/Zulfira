@@ -15,7 +15,7 @@ import {
 } from "@/lib/site";
 import Reveal, { SectionHeading } from "@/components/Reveal";
 
-const FREE_SHIP_THRESHOLD = 2500;
+const FREE_SHIP_THRESHOLD = 0;
 const SHIP_FEE = 200;
 
 export const dynamic = "force-dynamic";

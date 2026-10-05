@@ -9,7 +9,7 @@ import { generateOrderNo, adjustStock, checkLowStock } from "@/lib/orders";
 import { getSetting } from "@/lib/settings";
 import { sendTelegram, tgEscape } from "@/lib/telegram";
 
-const FREE_SHIPPING_THRESHOLD = 2500;
+const FREE_SHIPPING_THRESHOLD = 0;
 const FLAT_DELIVERY_CHARGE = 200;
 
 const money = (n: number) => `Rs ${Math.round(n).toLocaleString("en-PK")}`;
