@@ -6,6 +6,7 @@ import TopPicks from "@/components/home/TopPicks";
 import Spotlight from "@/components/home/Spotlight";
 import LifestyleBanner from "@/components/home/LifestyleBanner";
 import Bestsellers from "@/components/home/Bestsellers";
+import CustomerStories from "@/components/home/CustomerStories";
 import Instagram from "@/components/home/Instagram";
 import PromoPopup from "@/components/home/PromoPopup";
 
@@ -20,6 +21,7 @@ export default function Home() {
       <Spotlight />
       <LifestyleBanner />
       <Bestsellers />
+      <CustomerStories />
       <Instagram />
       <PromoPopup />
     </>
