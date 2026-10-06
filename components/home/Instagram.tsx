@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Play } from "lucide-react";
 import Reveal from "../Reveal";
-import { INSTAGRAM_POSTS, WHATSAPP_LINK } from "@/lib/site";
+import { INSTAGRAM_POSTS, SOCIAL_LINKS } from "@/lib/site";
 
 export default function Instagram() {
   return (
@@ -11,7 +11,7 @@ export default function Instagram() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
-            <h2 className="section-title text-3xl sm:text-4xl">Follow @zulfira.pk</h2>
+            <h2 className="section-title text-3xl sm:text-4xl">Follow @zulfira_0</h2>
             <p className="mx-auto mt-3 max-w-xl text-[14.5px] text-muted">
               Real routines, real results — join our community on Instagram.
             </p>
@@ -21,7 +21,7 @@ export default function Instagram() {
           {INSTAGRAM_POSTS.map((p, i) => (
             <Reveal key={p.image} delay={i * 0.06}>
               <a
-                href={WHATSAPP_LINK}
+                href={SOCIAL_LINKS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative block overflow-hidden rounded-2xl"
@@ -47,7 +47,7 @@ export default function Instagram() {
         </div>
         <Reveal className="mt-10 text-center">
           <a
-            href={WHATSAPP_LINK}
+            href={SOCIAL_LINKS.instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-dark inline-block rounded-full px-12 py-3.5 text-sm font-bold uppercase tracking-widest"
