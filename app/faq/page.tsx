@@ -57,7 +57,7 @@ export default function FaqPage() {
       <Reveal delay={0.15} className="mt-10">
         <div className="card-soft bg-gold-soft p-8 text-center">
           <p className="section-title text-xl">Still have a question?</p>
-          <p className="mt-2 text-sm text-muted">Message us on WhatsApp — we reply fast.</p>
+          <p className="mt-2 text-sm text-muted">Email us at hello@zulfira.shop — we reply within one business day.</p>
           <a href="/contact" className="btn-coal mt-5 inline-block rounded-full px-8 py-3 text-sm font-bold">
             Contact Us
           </a>

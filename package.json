@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "qr": "node --experimental-strip-types scripts/make-qr.mts",
     "db:seed": "node --experimental-strip-types prisma/seed.ts",
     "db:push": "prisma db push",
     "postinstall": "prisma generate"

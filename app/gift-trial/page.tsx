@@ -98,7 +98,7 @@ export default function GiftTrialPage() {
                 <h3 className="text-sm font-bold uppercase tracking-widest text-gold">You</h3>
                 <div className="mt-3 grid gap-3 md:grid-cols-2">
                   <input className={inputCls} placeholder="Your name" value={form.senderName} onChange={set("senderName")} required />
-                  <input className={inputCls} placeholder="Your WhatsApp number" value={form.senderPhone} onChange={set("senderPhone")} required />
+                  <input className={inputCls} placeholder="Your mobile number" value={form.senderPhone} onChange={set("senderPhone")} required />
                   <input className={`${inputCls} md:col-span-2`} type="email" placeholder="Your email (optional — for gift updates)" value={form.senderEmail} onChange={set("senderEmail")} />
                 </div>
               </div>

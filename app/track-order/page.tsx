@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  MessageCircle, Package, PackageCheck, Truck,
+  Mail, Package, PackageCheck, Truck,
   Check, AlertTriangle, RotateCcw, XCircle, ArrowLeft,
 } from "lucide-react";
-import { WHATSAPP_LINK, formatPKR } from "@/lib/site";
+import { formatPKR } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -206,7 +206,7 @@ export default function TrackOrderPage() {
       if (!res.ok || !json?.ok || !json?.data) {
         setError(
           res.status === 503
-            ? "Our tracking service is unreachable right now. Please try again in a moment — or ask us on WhatsApp and we'll check for you."
+            ? "Our tracking service is unreachable right now. Please try again in a moment — or contact us and we'll check for you."
             : json?.error ||
               "We couldn't find an order with that order number. Please check it and try again."
         );
@@ -217,7 +217,7 @@ export default function TrackOrderPage() {
       setState("found");
     } catch {
       setError(
-        "Our tracking service is unreachable right now. Please try again in a moment — or ask us on WhatsApp and we'll check for you."
+        "Our tracking service is unreachable right now. Please try again in a moment — or contact us and we'll check for you."
       );
       setState("error");
     }
@@ -275,7 +275,7 @@ export default function TrackOrderPage() {
                     This order was {status === "CANCELLED" ? "cancelled" : "returned"}.
                   </p>
                   <p className="mt-1 text-[13.5px] leading-relaxed text-amber-800">
-                    Please message us on WhatsApp if you have any questions — we're happy to help.
+                    Please contact us if you have any questions — we're happy to help.
                   </p>
                 </div>
               </div>
@@ -374,14 +374,12 @@ export default function TrackOrderPage() {
             )}
 
             <div className="mt-7 text-center">
-              <a
-                href={`${WHATSAPP_LINK}?text=${encodeURIComponent(`Hello Zulfira! I need help with my order ${data.orderNo}.`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-8 py-3.5 text-sm font-bold text-white"
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 rounded-full bg-coal px-8 py-3.5 text-sm font-bold text-white"
               >
-                <MessageCircle className="h-4 w-4" /> Ask on WhatsApp
-              </a>
+                <Mail className="h-4 w-4" /> Contact Us
+              </Link>
             </div>
           </div>
         ) : (
@@ -413,14 +411,12 @@ export default function TrackOrderPage() {
             </form>
             <p className="mt-6 text-center text-[13.5px] text-muted">
               Can't find your order number?{" "}
-              <a
-                href={`${WHATSAPP_LINK}?text=${encodeURIComponent("Hello Zulfira! Please help me track my order.")}`}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/contact"
                 className="font-bold text-coal hover:underline"
               >
-                Ask us on WhatsApp
-              </a>
+                Contact us
+              </Link>
             </p>
           </div>
         )}

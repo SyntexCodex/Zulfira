@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  ShoppingBag, Truck, Banknote, CreditCard, MessageCircle,
+  ShoppingBag, Truck, Banknote, CreditCard,
   CheckCircle2, ArrowLeft, Lock, AlertTriangle,
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import {
-  productBySlug, formatPKR, PAYMENT_METHODS, ONLINE_PAYMENT_DETAILS,
-  whatsappOrderLink,
+  productBySlug, formatPKR, PAYMENT_METHODS, ONLINE_PAYMENT_DETAILS, CONTACT,
 } from "@/lib/site";
 import Reveal, { SectionHeading } from "@/components/Reveal";
 
@@ -27,7 +26,6 @@ export default function CheckoutPage() {
   const [orderState, setOrderState] = useState<"idle" | "submitting" | "error">("idle");
   const [orderNo, setOrderNo] = useState<string | null>(null);
   const [apiError, setApiError] = useState("");
-  const [whatsappPlaced, setWhatsappPlaced] = useState(false);
   const [code, setCode] = useState("");
   const [appliedCode, setAppliedCode] = useState<{ code: string; amount: number } | null>(null);
   const [codeError, setCodeError] = useState("");
@@ -79,34 +77,6 @@ export default function CheckoutPage() {
     }
   };
 
-  const lines = useMemo(
-    () =>
-      items
-        .map((it) => {
-          const p = productBySlug(it.slug);
-          return p ? `• ${p.name} (${p.size}) x${it.qty} — ${formatPKR(p.price * it.qty)}` : "";
-        })
-        .filter(Boolean)
-        .join("\n"),
-    [items]
-  );
-
-  const message = [
-    "Hello Zulfira! I would like to place an order:",
-    "",
-    lines,
-    "",
-    `Subtotal: ${formatPKR(subtotal)}`,
-    `Delivery: ${shipping === 0 ? "FREE" : formatPKR(shipping)}`,
-    `Total: ${formatPKR(total)}`,
-    `Payment: ${payMethod === "cod" ? "Cash on Delivery" : "Online Payment"}`,
-    "",
-    `Name: ${form.name}`,
-    `Phone: ${form.phone}`,
-    `Address: ${form.address}, ${form.city}`,
-    form.notes ? `Notes: ${form.notes}` : "",
-  ].join("\n");
-
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
@@ -148,54 +118,34 @@ export default function CheckoutPage() {
       setOrderState("error");
       setApiError(
         e instanceof Error && e.message === "SERVICE_UNAVAILABLE"
-          ? "Online ordering is temporarily unavailable. You can still place this exact order via WhatsApp below — your details are already filled in."
-          : "We couldn't place your order online just now. Please try again, or use the WhatsApp button below — nothing you entered is lost."
+          ? "Online ordering is temporarily unavailable. Please try again in a moment."
+          : "We couldn't place your order just now. Please try again — nothing you entered is lost."
       );
     }
   };
 
-  const placeOrderWhatsApp = () => {
-    if (!valid) return;
-    setWhatsappPlaced(true);
-    window.open(whatsappOrderLink(message), "_blank");
-    clear();
-  };
-
-  if (orderNo || whatsappPlaced) {
+  if (orderNo) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
         <Reveal>
           <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-coal/10">
             <CheckCircle2 className="h-10 w-10 text-coal" />
           </span>
-          {orderNo ? (
-            <>
-              <h1 className="font-display mt-7 text-3xl font-semibold sm:text-4xl">Order placed!</h1>
-              <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-muted">
-                Thank you! Your order <b className="text-ink">{orderNo}</b> has been received.
-                We'll message you back shortly to finalize {payMethod === "cod" ? "your Cash on Delivery" : "payment details"}.
-              </p>
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link href="/track-order" className="btn-primary rounded-full px-8 py-3.5 text-sm font-semibold">
-                  Track Your Order
-                </Link>
-                <Link href="/shop" className="btn-outline-dark rounded-full px-8 py-3.5 text-sm font-semibold">
-                  Continue Shopping
-                </Link>
-              </div>
-            </>
-          ) : (
-            <>
-              <h1 className="font-display mt-7 text-3xl font-semibold sm:text-4xl">Order sent!</h1>
-              <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-muted">
-                Your order details were opened in WhatsApp. Just press <b>send</b> there to confirm —
-                we'll message you back shortly to finalize {payMethod === "cod" ? "your Cash on Delivery" : "payment details"}.
-              </p>
-              <Link href="/shop" className="btn-primary mt-8 inline-block rounded-full px-8 py-3.5 text-sm font-semibold">
+          <>
+            <h1 className="font-display mt-7 text-3xl font-semibold sm:text-4xl">Order placed!</h1>
+            <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-muted">
+              Thank you! Your order <b className="text-ink">{orderNo}</b> has been received.
+              We'll message you back shortly to finalize {payMethod === "cod" ? "your Cash on Delivery" : "payment details"}.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link href="/track-order" className="btn-primary rounded-full px-8 py-3.5 text-sm font-semibold">
+                Track Your Order
+              </Link>
+              <Link href="/shop" className="btn-outline-dark rounded-full px-8 py-3.5 text-sm font-semibold">
                 Continue Shopping
               </Link>
-            </>
-          )}
+            </div>
+          </>
         </Reveal>
       </div>
     );
@@ -267,7 +217,7 @@ export default function CheckoutPage() {
                       className="overflow-hidden"
                     >
                       <div className="mt-5 rounded-2xl bg-gold-soft p-5">
-                        <p className="text-sm font-bold">Pay to any of these accounts, then share the receipt on WhatsApp:</p>
+                        <p className="text-sm font-bold">Pay to any of these accounts, then email the receipt to {CONTACT.email} with your order number:</p>
                         <ul className="mt-3 space-y-2.5">
                           {ONLINE_PAYMENT_DETAILS.map((d) => (
                             <li key={d.label} className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
@@ -298,16 +248,6 @@ export default function CheckoutPage() {
               >
                 {orderState === "submitting" ? "Placing your order…" : <>Place Order · {formatPKR(total)}</>}
               </button>
-              {orderState === "error" && (
-                <button
-                  onClick={placeOrderWhatsApp}
-                  disabled={!valid}
-                  className={`mt-3 flex w-full items-center justify-center gap-2 rounded-full py-4 text-[16px] font-bold text-white transition-all ${valid ? "bg-[#25D366] hover:brightness-95" : "cursor-not-allowed bg-ink/10 !text-muted"}`}
-                >
-                  <MessageCircle className="h-5 w-5" />
-                  Place Order via WhatsApp · {formatPKR(total)}
-                </button>
-              )}
               <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
                 <Lock className="h-3.5 w-3.5" /> Your details are only shared with Zulfira.
               </p>

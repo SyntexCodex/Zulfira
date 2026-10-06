@@ -29,27 +29,20 @@ Live site: **https://zulfira.vercel.app/**
 |---|---|
 | `/` | Home — hero slider, trust badges, bestsellers, benefit marquee, marketing banners, brand philosophy, why-us, reviews, FAQ, newsletter |
 | `/shop` | Full product catalogue |
-| `/product/[slug]` | Product detail — image gallery with **fullscreen lightbox**, qty, Add to Cart / Buy Now / WhatsApp order, tabs (Description, How to Use, Ingredients), reviews, related products |
+| `/product/[slug]` | Product detail — image gallery with **fullscreen lightbox**, qty, Add to Cart / Buy Now, tabs (Description, How to Use, Ingredients), reviews, related products |
 | `/about` | Brand story, vision, values, stats |
-| `/contact` | WhatsApp chat, QR code, contact details, message form → WhatsApp |
+| `/contact` | Contact details (phone, email, address, hours), message form → email |
 | `/faq` | Full FAQ accordion |
-| `/checkout` | Contact + delivery form, Cash on Delivery / Online Payment, order summary, places order via WhatsApp deep link |
+| `/checkout` | Contact + delivery form, Cash on Delivery / Online Payment, order summary, places order via `/api/orders` |
 
 ## Ordering flow
 
 Cart (persistent via localStorage) → cart drawer → checkout (details + CoD/online
-payment, free delivery over Rs 2,500) → order sent to the business WhatsApp as a
-pre-filled message — the standard CoD flow for Pakistan e-commerce.
+payment, free delivery over Rs 2,500) → order saved to the database and shown in
+the admin panel.
 
 ## Before launch — 3 things to replace
 
-1. **WhatsApp number** — `WHATSAPP_NUMBER` in `lib/site.ts` is a placeholder
-   (`923001234567`). Set the real number, then regenerate the QR code:
-   ```bash
-   npm run qr
-   ```
-   (or `ZULFIRA_WHATSAPP=923001234567 npm run qr`). The QR is saved to
-   `public/images/qr-whatsapp.png` and shown on the Contact page.
 2. **Online payment accounts** — `ONLINE_PAYMENT_DETAILS` in `lib/site.ts`
    contains placeholder JazzCash / EasyPaisa / IBAN values.
 3. **Prices & claims** — confirm final prices and review all marketing copy.
@@ -93,7 +86,7 @@ The daily Telegram business summary runs via Vercel Cron (`vercel.json`,
 - Storefront (Naturalis design), `/api/*`, and `/admin/*` ship in one deploy.
 - Public pages read products from the DB with automatic fallback to the static
   catalogue in `lib/site.ts`, so the site renders before the DB is provisioned.
-- Checkout posts orders to `/api/orders`; WhatsApp ordering remains as fallback.
+- Checkout posts orders to `/api/orders`.
 - See `dynamic-plan/PLAN.md` for the full architecture and P&L rules.
 
 ## Tech

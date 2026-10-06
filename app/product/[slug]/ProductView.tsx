@@ -6,9 +6,9 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Minus, Plus, X, ChevronLeft, ChevronRight, Expand, Check,
-  Truck, ShieldCheck, RotateCcw, BadgeCheck, MessageCircle,
+  Truck, ShieldCheck, RotateCcw, BadgeCheck,
 } from "lucide-react";
-import { type Product, formatPKR, discountPct, WHATSAPP_LINK, REVIEWS } from "@/lib/site";
+import { type Product, formatPKR, discountPct, REVIEWS } from "@/lib/site";
 import { useCart } from "@/lib/cart";
 import { Stars } from "@/components/ProductCard";
 import ProductCard from "@/components/ProductCard";
@@ -305,14 +305,6 @@ export default function ProductView({ product, related }: { product: Product; re
             >
               Buy it now
             </button>
-            <a
-              href={WHATSAPP_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 rounded-full bg-[#25D366] py-3.5 text-sm font-bold uppercase tracking-widest text-white"
-            >
-              <MessageCircle className="h-4 w-4" /> Order on WhatsApp
-            </a>
           </div>
 
           <div className="mt-8 grid grid-cols-3 gap-3">

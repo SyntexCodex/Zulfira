@@ -189,7 +189,7 @@ export default function ChallengePage() {
               ) : (
                 <form onSubmit={doSignup} className="mt-5 space-y-3">
                   <input className={inputCls} placeholder="Full name" value={signup.name} onChange={(e) => setSignup({ ...signup, name: e.target.value })} required />
-                  <input className={inputCls} placeholder="WhatsApp number (03XX-XXXXXXX)" value={signup.phone} onChange={(e) => setSignup({ ...signup, phone: e.target.value })} required />
+                  <input className={inputCls} placeholder="Mobile number (03XX-XXXXXXX)" value={signup.phone} onChange={(e) => setSignup({ ...signup, phone: e.target.value })} required />
                   <input className={inputCls} placeholder="Social handle (@yourhandle)" value={signup.handle} onChange={(e) => setSignup({ ...signup, handle: e.target.value })} required />
                   <input className={inputCls} placeholder="Order number (e.g. ZF-12345)" value={signup.orderNo} onChange={(e) => setSignup({ ...signup, orderNo: e.target.value })} required />
                   <input className={inputCls} type="email" placeholder="Email (optional — for challenge updates)" value={signup.email} onChange={(e) => setSignup({ ...signup, email: e.target.value })} />
@@ -214,7 +214,7 @@ export default function ChallengePage() {
                 </div>
               ) : (
                 <form onSubmit={doCheckin} className="mt-5 space-y-3">
-                  <input className={inputCls} placeholder="WhatsApp number you signed up with" value={checkin.phone} onChange={(e) => setCheckin({ ...checkin, phone: e.target.value })} required />
+                  <input className={inputCls} placeholder="Mobile number you signed up with" value={checkin.phone} onChange={(e) => setCheckin({ ...checkin, phone: e.target.value })} required />
                   <input className={inputCls} type="number" min={1} max={30} placeholder="Day (1–30)" value={checkin.day} onChange={(e) => setCheckin({ ...checkin, day: e.target.value })} required />
                   <input className={inputCls} placeholder="Post URL (https://…)" value={checkin.postUrl} onChange={(e) => setCheckin({ ...checkin, postUrl: e.target.value })} required />
                   {checkinMsg && <p className="text-sm text-red-400">{checkinMsg}</p>}
