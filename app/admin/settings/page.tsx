@@ -129,7 +129,7 @@ export default function AdminSettingsPage() {
                   onChange={(e) => setBiz((p) => ({ ...p, business_name: e.target.value }))}
                 />
               </Field>
-              <Field label="WhatsApp number" hint="e.g. 923001234567">
+              <Field label="WhatsApp number" hint="e.g. 923028487658">
                 <TextInput
                   value={biz.whatsapp}
                   onChange={(e) => setBiz((p) => ({ ...p, whatsapp: e.target.value }))}
