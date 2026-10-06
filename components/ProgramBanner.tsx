@@ -1,14 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
-import type { ProgramPromo } from "@/lib/programs";
+import { useActivePrograms } from "@/lib/useActivePrograms";
 
 const DISMISS_KEY = "zulfira-programs-dismissed";
-const CACHE_KEY = "zulfira-programs-cache";
-const CACHE_TTL = 5 * 60 * 1000;
 
 function dismissedKeys(): string[] {
   try {
@@ -19,59 +17,37 @@ function dismissedKeys(): string[] {
 }
 
 export default function ProgramBanner() {
-  const [programs, setPrograms] = useState<ProgramPromo[]>([]);
+  const all = useActivePrograms();
+  const [dismissed, setDismissed] = useState<string[]>([]);
   const [index, setIndex] = useState(0);
-  const [hidden, setHidden] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-    const load = async () => {
-      // Serve from cache first for instant paint, then refresh.
-      try {
-        const cached = JSON.parse(localStorage.getItem(CACHE_KEY) ?? "null");
-        if (cached && Date.now() - cached.at < CACHE_TTL && !cancelled) {
-          setPrograms(filterDismissed(cached.programs));
-        }
-      } catch {}
-      try {
-        const res = await fetch("/api/programs/active", { cache: "no-store" });
-        const json = await res.json();
-        const list: ProgramPromo[] = json?.ok && Array.isArray(json.data?.programs)
-          ? json.data.programs
-          : [];
-        try {
-          localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), programs: list }));
-        } catch {}
-        if (!cancelled) setPrograms(filterDismissed(list));
-      } catch {}
-    };
-    const filterDismissed = (list: ProgramPromo[]) => {
-      const gone = new Set(dismissedKeys());
-      return list.filter((p) => !gone.has(p.key));
-    };
-    load();
-    return () => { cancelled = true; };
+    setDismissed(dismissedKeys());
+    setReady(true);
   }, []);
 
+  const programs = useMemo(
+    () => (ready ? all.filter((p) => !dismissed.includes(p.key)) : []),
+    [all, dismissed, ready]
+  );
+
   useEffect(() => {
-    if (programs.length < 2 || hidden) return;
+    if (programs.length < 2) return;
     const t = setInterval(() => setIndex((i) => (i + 1) % programs.length), 6000);
     return () => clearInterval(t);
-  }, [programs.length, hidden ]);
+  }, [programs.length]);
 
-  if (hidden || programs.length === 0) return null;
+  if (programs.length === 0) return null;
   const p = programs[Math.min(index, programs.length - 1)];
 
   const dismiss = () => {
     try {
-      const gone = new Set(dismissedKeys());
-      gone.add(p.key);
-      localStorage.setItem(DISMISS_KEY, JSON.stringify([...gone]));
+      const next = [...new Set([...dismissedKeys(), p.key])];
+      localStorage.setItem(DISMISS_KEY, JSON.stringify(next));
+      setDismissed(next);
     } catch {}
-    const rest = programs.filter((x) => x.key !== p.key);
-    setPrograms(rest);
     setIndex(0);
-    if (rest.length === 0) setHidden(true);
   };
 
   return (

@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, Search, User, ShoppingBag, ChevronRight } from "lucide-react";
 import { FacebookIcon, InstagramIcon, TiktokIcon } from "@/components/SocialIcons";
 import { NAV_LINKS, DRAWER_GROUPS, PRODUCTS, SOCIAL_LINKS } from "@/lib/site";
+import { useActivePrograms } from "@/lib/useActivePrograms";
 import { useCart } from "@/lib/cart";
 import { formatPKR } from "@/lib/site";
 
@@ -97,6 +98,7 @@ export default function Header() {
   const [drawer, setDrawer] = useState(false);
   const [search, setSearch] = useState(false);
   const { count, setOpen } = useCart();
+  const programs = useActivePrograms();
 
   return (
     <>
@@ -170,6 +172,29 @@ export default function Header() {
                 {l.label}
               </Link>
             ))}
+            {programs.length > 0 && (
+              <div className="group relative">
+                <button className="flex items-center gap-1 text-[13.5px] font-medium tracking-wide text-gold transition hover:text-white">
+                  Rewards
+                  <span className="ml-0.5 inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+                  <ChevronRight className="h-3.5 w-3.5 rotate-90 transition-transform group-hover:-rotate-90" />
+                </button>
+                <div className="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+                  <div className="overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/10">
+                    {programs.map((p) => (
+                      <Link
+                        key={p.key}
+                        href={p.href}
+                        className="block border-b border-line/60 px-5 py-3.5 transition last:border-0 hover:bg-gold-soft"
+                      >
+                        <span className="block text-[13.5px] font-bold text-ink">{p.name}</span>
+                        <span className="mt-0.5 block text-xs text-muted">{p.headline}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </nav>
         </div>
       </header>
@@ -212,6 +237,25 @@ export default function Header() {
                 >
                   Home
                 </Link>
+                {programs.length > 0 && (
+                  <div className="mt-5">
+                    <p className="px-3 text-[11px] font-extrabold uppercase tracking-[0.2em] text-gold">
+                      Rewards & Offers
+                    </p>
+                    <div className="mt-1.5">
+                      {programs.map((p) => (
+                        <Link
+                          key={p.key}
+                          href={p.href}
+                          onClick={() => setDrawer(false)}
+                          className="block rounded-xl px-3 py-2.5 text-[14.5px] font-semibold text-ink/80 hover:bg-black/[0.04]"
+                        >
+                          {p.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {DRAWER_GROUPS.map((g) => (
                   <div key={g.title} className="mt-5">
                     <p className="px-3 text-[11px] font-extrabold uppercase tracking-[0.2em] text-ink/45">
