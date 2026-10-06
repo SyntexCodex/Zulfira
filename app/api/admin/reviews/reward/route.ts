@@ -124,6 +124,6 @@ function buildWaLink(
       ? `your video review earned you ${money(value)} off 🎉`
       : `your review earned you ${money(value)} off 🎉`) +
     `\nYour code: ${code} (min. order ${money(minOrder)}, valid ${expiryDays} days).` +
-    `\nOrder here: https://zulfira.vercel.app`;
+    `\nOrder here: https://zulfira.shop`;
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 }
