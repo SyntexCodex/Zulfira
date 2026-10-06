@@ -28,7 +28,7 @@ export const CONTACT = {
 export const SOCIAL_LINKS = {
   facebook: "https://www.facebook.com/profile.php?id=61593966274766",
   instagram: "https://www.instagram.com/zulfira_0/",
-  tiktok: "https://www.tiktok.com/@zulfira.pk",
+  tiktok: "https://www.tiktok.com/@zulfira.official",
 };
 
 export interface Product {
