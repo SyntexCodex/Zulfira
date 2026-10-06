@@ -18,9 +18,17 @@ interface ReviewRow {
   rating: number;
   title: string | null;
   comment: string;
+  videoUrl: string | null;
   isApproved: boolean;
   createdAt: string;
   product: { name: string; slug: string };
+}
+
+interface RewardInfo {
+  code: string;
+  value: number;
+  waLink: string | null;
+  existing?: boolean;
 }
 
 function Stars({ n }: { n: number }) {
@@ -38,6 +46,9 @@ export default function ReviewsPage() {
     `/api/admin/reviews?status=${filter}`
   );
   const [busy, setBusy] = useState<string | null>(null);
+  // Reward codes issued from this session, keyed by review id (prevents
+  // re-issuing from the approve button more than once per review).
+  const [rewards, setRewards] = useState<Record<string, RewardInfo>>({});
 
   const reviews = asArray<ReviewRow>(data?.reviews);
 
@@ -48,6 +59,35 @@ export default function ReviewsPage() {
         method: "PATCH",
         body: JSON.stringify({ id, isApproved }),
       });
+      if (isApproved && !rewards[id]) {
+        // Issue the review-reward discount code (no-op when the program is
+        // disabled or a code was already created today).
+        try {
+          const res = await fetchJson<{
+            rewarded: boolean;
+            code?: string;
+            value?: number;
+            waLink?: string | null;
+            existing?: boolean;
+          }>("/api/admin/reviews/reward", {
+            method: "POST",
+            body: JSON.stringify({ reviewId: id }),
+          });
+          if (res?.rewarded && res.code) {
+            setRewards((prev) => ({
+              ...prev,
+              [id]: {
+                code: res.code!,
+                value: res.value ?? 0,
+                waLink: res.waLink ?? null,
+                existing: res.existing,
+              },
+            }));
+          }
+        } catch {
+          // Reward failure must not block the approval itself.
+        }
+      }
       reload();
     } finally {
       setBusy(null);
@@ -122,6 +162,45 @@ export default function ReviewsPage() {
                   </p>
                   {r.title && <p className="mt-2 font-semibold text-slate-900">{r.title}</p>}
                   <p className="mt-1 text-sm leading-relaxed text-slate-700">{r.comment}</p>
+                  {r.videoUrl && (
+                    <p className="mt-2 text-[13px]">
+                      <span className="font-bold text-slate-900">Video review:</span>{" "}
+                      <a
+                        href={r.videoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="break-all text-[#8a6d1b] underline hover:text-[#6b5414]"
+                      >
+                        {r.videoUrl}
+                      </a>
+                    </p>
+                  )}
+                  {rewards[r.id] && (
+                    <div className="mt-3 rounded-2xl border border-[#C9A227] bg-[#C9A227]/10 p-4">
+                      <p className="text-[13px] font-bold text-[#0B0B0B]">
+                        Reward issued:{" "}
+                        <span className="rounded bg-[#0B0B0B] px-2 py-0.5 font-mono text-[13px] text-[#C9A227]">
+                          {rewards[r.id].code}
+                        </span>{" "}
+                        — Rs {rewards[r.id].value} off
+                        {rewards[r.id].existing ? " (already created earlier today)" : ""}
+                      </p>
+                      {rewards[r.id].waLink ? (
+                        <a
+                          href={rewards[r.id].waLink!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#0B0B0B] px-4 py-2 text-[13px] font-bold text-white hover:opacity-90"
+                        >
+                          Send via WhatsApp
+                        </a>
+                      ) : (
+                        <p className="mt-1 text-[12px] text-slate-500">
+                          No customer phone on the order — share the code manually.
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
