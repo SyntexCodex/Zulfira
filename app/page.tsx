@@ -2,6 +2,7 @@ import Hero from "@/components/home/Hero";
 import Marquee from "@/components/home/Marquee";
 import Mission from "@/components/home/Mission";
 import Categories from "@/components/home/Categories";
+import LoyaltyBanner from "@/components/home/LoyaltyBanner";
 import TopPicks from "@/components/home/TopPicks";
 import Spotlight from "@/components/home/Spotlight";
 import LifestyleBanner from "@/components/home/LifestyleBanner";
@@ -17,6 +18,7 @@ export default function Home() {
       <Marquee />
       <Mission />
       <Categories />
+      <LoyaltyBanner />
       <TopPicks />
       <Spotlight />
       <LifestyleBanner />
