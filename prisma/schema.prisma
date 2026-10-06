@@ -71,6 +71,7 @@ model Product {
   orderItems  OrderItem[]
   movements   StockMovement[]
   reviews     Review[]
+  subscriptions Subscription[]
 }
 
 model Investor {
@@ -138,6 +139,7 @@ model Order {
   id             String        @id @default(cuid())
   orderNo        String        @unique
   customerName   String
+  email          String?
   phone          String
   address        String
   city           String
@@ -231,9 +233,188 @@ model Review {
   rating     Int      // 1..5
   title      String?
   comment    String
+  videoUrl   String? // optional video testimonial URL (TikTok/Instagram/YouTube)
   isApproved Boolean  @default(false)
   createdAt  DateTime @default(now())
 
   @@index([productId])
   @@index([isApproved])
+}
+
+// ── Loyalty & growth programs ──────────────────────────────────────
+// Master switches + per-program config. Admin enables a program here;
+// all program logic checks its flag before running.
+model LoyaltyProgram {
+  id        String   @id @default(cuid())
+  key       String   @unique // reorder_reminders | subscribe_save | review_rewards | inbox_upsell | challenge_30 | gift_trial | insiders
+  name      String
+  enabled   Boolean  @default(false)
+  config    Json     @default("{}")
+  updatedAt DateTime @updatedAt
+}
+
+// Discount codes issued by loyalty programs (also usable manually).
+model DiscountCode {
+  id         String    @id @default(cuid())
+  code       String    @unique
+  kind       String    // 'percent' | 'fixed'
+  value      Decimal   @db.Decimal(12, 2)
+  minOrder   Decimal?  @db.Decimal(12, 2)
+  maxUses    Int?
+  usedCount  Int       @default(0)
+  programKey String?   // loyalty program that issued it
+  phone      String?   // locked to one customer phone (personal codes)
+  expiresAt  DateTime?
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+
+  @@index([code])
+  @@index([programKey])
+}
+
+// Subscribe & Save recurring orders.
+model Subscription {
+  id           String   @id @default(cuid())
+  customerName String
+  phone        String
+  address      String
+  city         String
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+  intervalDays Int      @default(45)
+  nextShipDate DateTime
+  status       String   @default("active") // active | paused | cancelled
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([status])
+  @@index([nextShipDate])
+}
+
+// 30-day hair challenge.
+model ChallengeRound {
+  id             String   @id @default(cuid())
+  name           String
+  startDate      DateTime
+  endDate        DateTime
+  maxChallengers Int      @default(200)
+  status         String   @default("open") // open | running | ended
+  createdAt      DateTime @default(now())
+  challengers    Challenger[]
+}
+
+model Challenger {
+  id        String   @id @default(cuid())
+  roundId   String
+  round     ChallengeRound @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  name      String
+  phone     String
+  email     String?
+  handle    String
+  orderNo   String?
+  strikes   Int      @default(0)
+  status    String   @default("active") // active | out | completed
+  joinedAt  DateTime @default(now())
+  checkins  ChallengeCheckin[]
+
+  @@index([roundId])
+  @@index([phone])
+}
+
+model ChallengeCheckin {
+  id           String   @id @default(cuid())
+  challengerId String
+  challenger   Challenger @relation(fields: [challengerId], references: [id], onDelete: Cascade)
+  day          Int
+  postUrl      String
+  verified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@unique([challengerId, day])
+}
+
+// Gift-a-trial-bottle.
+model GiftTrial {
+  id            String   @id @default(cuid())
+  senderName    String
+  senderPhone   String
+  senderEmail   String?
+  friendName    String
+  friendPhone   String
+  friendEmail   String?
+  friendAddress String
+  friendCity    String
+  status        String   @default("pending") // pending | shipped | delivered | ordered
+  creditIssued  Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@index([senderPhone])
+  @@index([friendPhone])
+}
+
+// Wallet credits earned (referral rewards, gift-trial sender rewards).
+model WalletCredit {
+  id        String   @id @default(cuid())
+  phone     String
+  amount    Decimal  @db.Decimal(12, 2)
+  reason    String
+  code      String?  // discount code issued for this credit
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+}
+
+// 1% equity (profit-share) program — 1-year term.
+model EquityOwner {
+  id         String    @id @default(cuid())
+  name       String
+  phone      String
+  email      String?
+  cnic       String?
+  slots      Int       @default(1) // number of 1% slots
+  amountPaid Decimal   @db.Decimal(12, 2)
+  status     String    @default("applied") // applied | approved | active | ended
+  startDate  DateTime?
+  endDate    DateTime?
+  createdAt  DateTime  @default(now())
+  payouts    EquityPayout[]
+
+  @@index([phone])
+  @@index([status])
+}
+
+model EquityPayout {
+  id        String      @id @default(cuid())
+  ownerId   String
+  owner     EquityOwner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  quarter   String      // e.g. "2026-Q3"
+  profit    Decimal     @db.Decimal(12, 2)
+  payout    Decimal     @db.Decimal(12, 2)
+  paidAt    DateTime?
+  createdAt DateTime    @default(now())
+
+  @@index([ownerId])
+}
+
+// Log of every email send attempt.
+model EmailLog {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  template  String?
+  status    String   // sent | skipped | failed
+  error     String?
+  createdAt DateTime @default(now())
+
+  @@index([to])
+  @@index([createdAt])
+}
+
+// Marketing email opt-outs.
+model EmailPreference {
+  email        String   @id
+  unsubscribed Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
