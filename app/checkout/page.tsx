@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -22,15 +22,62 @@ export const dynamic = "force-dynamic";
 
 export default function CheckoutPage() {
   const { items, subtotal, count, clear } = useCart();
-  const [form, setForm] = useState({ name: "", phone: "", address: "", city: "", notes: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", city: "", notes: "" });
   const [payMethod, setPayMethod] = useState<"cod" | "online">("cod");
   const [orderState, setOrderState] = useState<"idle" | "submitting" | "error">("idle");
   const [orderNo, setOrderNo] = useState<string | null>(null);
   const [apiError, setApiError] = useState("");
   const [whatsappPlaced, setWhatsappPlaced] = useState(false);
+  const [code, setCode] = useState("");
+  const [appliedCode, setAppliedCode] = useState<{ code: string; amount: number } | null>(null);
+  const [codeError, setCodeError] = useState("");
+  const [applying, setApplying] = useState(false);
+
+  // Program flags (for Subscribe & Save display). Server recomputes authoritatively.
+  const [programsOn, setProgramsOn] = useState<Record<string, boolean>>({});
+  useEffect(() => {
+    fetch("/api/programs/status")
+      .then((r) => r.json())
+      .then((j) => { if (j?.ok && j.data) setProgramsOn(j.data); })
+      .catch(() => {});
+  }, []);
+  const subscribeDiscount = programsOn.subscribe_save
+    ? items.reduce((s, it) => {
+        const p = productBySlug(it.slug);
+        return s + (it.subscribe && p ? Math.round(p.price * it.qty * 0.1) : 0);
+      }, 0)
+    : 0;
 
   const shipping = subtotal >= FREE_SHIP_THRESHOLD || subtotal === 0 ? 0 : SHIP_FEE;
-  const total = subtotal + shipping;
+  const discount = (appliedCode?.amount ?? 0) + subscribeDiscount;
+  const total = subtotal + shipping - discount;
+
+  const applyDiscount = async () => {
+    const c = code.trim();
+    if (!c || applying) return;
+    setApplying(true);
+    setCodeError("");
+    try {
+      const res = await fetch("/api/discounts/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: c, subtotal, phone: form.phone.trim() }),
+      });
+      const json = (await res.json().catch(() => null)) as
+        | { ok?: boolean; data?: { discountAmount?: number }; error?: string }
+        | null;
+      if (!res.ok || !json?.ok) {
+        throw new Error(json?.error || `Server responded ${res.status}`);
+      }
+      setAppliedCode({ code: c.toUpperCase(), amount: json.data?.discountAmount ?? 0 });
+      setCodeError("");
+    } catch (e) {
+      setAppliedCode(null);
+      setCodeError(e instanceof Error ? e.message : "Could not validate this code.");
+    } finally {
+      setApplying(false);
+    }
+  };
 
   const lines = useMemo(
     () =>
@@ -77,12 +124,14 @@ export default function CheckoutPage() {
           customer: {
             name: form.name.trim(),
             phone: form.phone.trim(),
+            ...(form.email.trim() ? { email: form.email.trim() } : {}),
             address: form.address.trim(),
             city: form.city.trim(),
             ...(form.notes.trim() ? { notes: form.notes.trim() } : {}),
           },
-          items: items.map(({ slug, qty }) => ({ slug, qty })),
+          items: items.map(({ slug, qty, subscribe }) => ({ slug, qty, ...(subscribe ? { subscribe: true } : {}) })),
           payment: payMethod,
+          ...(appliedCode ? { discountCode: appliedCode.code } : {}),
         }),
       });
       const json = (await res.json().catch(() => null)) as
@@ -176,6 +225,7 @@ export default function CheckoutPage() {
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   <input placeholder="Full name *" value={form.name} onChange={set("name")} className="input-clean rounded-xl px-5 py-3.5 text-[15px]" />
                   <input placeholder="Mobile number * (03xx-xxxxxxx)" value={form.phone} onChange={set("phone")} inputMode="tel" className="input-clean rounded-xl px-5 py-3.5 text-[15px]" />
+                  <input placeholder="Email (optional, for order updates)" value={form.email} onChange={set("email")} inputMode="email" className="input-clean rounded-xl px-5 py-3.5 text-[15px] sm:col-span-2" />
                   <input placeholder="Street address *" value={form.address} onChange={set("address")} className="input-clean rounded-xl px-5 py-3.5 text-[15px] sm:col-span-2" />
                   <input placeholder="City *" value={form.city} onChange={set("city")} className="input-clean rounded-xl px-5 py-3.5 text-[15px]" />
                   <input placeholder="Landmark (optional)" value={form.notes} onChange={set("notes")} className="input-clean rounded-xl px-5 py-3.5 text-[15px]" />
@@ -271,6 +321,44 @@ export default function CheckoutPage() {
           <Reveal delay={0.1}>
             <aside className="card h-fit p-7 lg:sticky lg:top-28">
               <h2 className="font-display text-xl font-semibold">Order summary</h2>
+              <div className="mt-5 rounded-2xl bg-coal/[0.03] p-4">
+                <p className="text-sm font-bold">Discount code</p>
+                {appliedCode ? (
+                  <div className="mt-2.5 flex items-center justify-between gap-2 rounded-xl border border-[#C9A227]/50 bg-[#C9A227]/10 px-3.5 py-2.5">
+                    <span className="text-sm font-bold text-coal">{appliedCode.code}</span>
+                    <button
+                      type="button"
+                      onClick={() => { setAppliedCode(null); setCode(""); }}
+                      className="text-xs font-semibold text-muted underline hover:text-ink"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="mt-2.5 flex gap-2">
+                      <input
+                        placeholder="Enter code"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); applyDiscount(); } }}
+                        className="input-clean min-w-0 flex-1 rounded-xl px-4 py-2.5 text-sm uppercase"
+                      />
+                      <button
+                        type="button"
+                        onClick={applyDiscount}
+                        disabled={!code.trim() || applying}
+                        className={`shrink-0 rounded-xl px-5 py-2.5 text-sm font-bold transition-all ${code.trim() && !applying ? "btn-primary" : "cursor-not-allowed bg-ink/10 text-muted"}`}
+                      >
+                        {applying ? "Checking…" : "Apply"}
+                      </button>
+                    </div>
+                    {codeError && (
+                      <p className="mt-2 text-xs font-medium text-red-600">{codeError}</p>
+                    )}
+                  </>
+                )}
+              </div>
               <ul className="mt-5 space-y-4">
                 {items.map((it) => {
                   const p = productBySlug(it.slug);
@@ -298,6 +386,12 @@ export default function CheckoutPage() {
                   <span className="flex items-center gap-1.5"><Truck className="h-4 w-4" /> Delivery</span>
                   <span className="font-semibold text-ink">{shipping === 0 ? <span className="text-coal">FREE</span> : formatPKR(shipping)}</span>
                 </div>
+                {discount > 0 && (
+                  <div className="flex justify-between text-[#9A7B1C]">
+                    <span className="font-semibold">Discount{appliedCode ? ` (${appliedCode.code})` : ""}{subscribeDiscount > 0 ? " · Subscribe & Save 10%" : ""}</span>
+                    <span className="font-bold">−{formatPKR(discount)}</span>
+                  </div>
+                )}
                 {shipping > 0 && (
                   <p className="text-xs text-muted">Add {formatPKR(FREE_SHIP_THRESHOLD - subtotal)} more for free delivery.</p>
                 )}

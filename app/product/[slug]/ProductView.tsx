@@ -149,6 +149,20 @@ export default function ProductView({ product, related }: { product: Product; re
   // static testimonials as fallback while there are no real reviews yet.
   const [liveReviews, setLiveReviews] = useState<{ customerName: string; rating: number; title: string | null; comment: string; createdAt: string }[]>([]);
   const [liveStats, setLiveStats] = useState<{ average: number | null; count: number } | null>(null);
+  // Subscribe & Save: only offered while the subscribe_save program is enabled.
+  const [subscribeEnabled, setSubscribeEnabled] = useState(false);
+  const [purchaseOption, setPurchaseOption] = useState<"once" | "subscribe">("once");
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/programs/status");
+        const json = await res.json().catch(() => null);
+        if (res.ok && json?.ok) setSubscribeEnabled(!!json.data.subscribe_save);
+      } catch {
+        // subscribe option stays hidden
+      }
+    })();
+  }, []);
   useEffect(() => {
     if (!product.dbId) return;
     (async () => {
@@ -168,9 +182,11 @@ export default function ProductView({ product, related }: { product: Product; re
   const staticReviews = REVIEWS.slice(0, Math.max(0, 3 - liveReviews.length));
   const rating = liveStats?.average ?? product.rating;
   const reviewCount = (liveStats?.count ?? 0) + (product.reviewCount || 0);
+  const subscribePrice = Math.round(product.price * 0.9);
+  const wantsSubscribe = purchaseOption === "subscribe";
 
   const buyNow = () => {
-    add(product.slug, qty);
+    add(product.slug, qty, { subscribe: wantsSubscribe });
     window.location.href = "/checkout";
   };
 
@@ -208,6 +224,59 @@ export default function ProductView({ product, related }: { product: Product; re
             <Truck className="h-4 w-4" /> Free delivery above Rs 1,900 · Cash on Delivery available
           </p>
 
+          {subscribeEnabled && (
+            <div className="mt-5 space-y-2.5">
+              <p className="text-[13px] font-bold">Purchase options</p>
+              <label
+                className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border px-4 py-3 transition-all ${
+                  purchaseOption === "once" ? "border-coal bg-gold-faint" : "border-ink/20 hover:border-ink/40"
+                }`}
+              >
+                <span className="flex items-center gap-3">
+                  <input
+                    type="radio"
+                    name="purchase-option"
+                    checked={purchaseOption === "once"}
+                    onChange={() => setPurchaseOption("once")}
+                    className="h-4 w-4 accent-[#0B0B0B]"
+                  />
+                  <span>
+                    <span className="block text-[14px] font-bold">One-time purchase</span>
+                    <span className="block text-[12px] text-muted">Ships once, no commitment</span>
+                  </span>
+                </span>
+                <span className="text-[15px] font-extrabold">{formatPKR(product.price)}</span>
+              </label>
+              <label
+                className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border px-4 py-3 transition-all ${
+                  purchaseOption === "subscribe" ? "border-coal bg-gold-faint" : "border-ink/20 hover:border-ink/40"
+                }`}
+              >
+                <span className="flex items-center gap-3">
+                  <input
+                    type="radio"
+                    name="purchase-option"
+                    checked={purchaseOption === "subscribe"}
+                    onChange={() => setPurchaseOption("subscribe")}
+                    className="h-4 w-4 accent-[#0B0B0B]"
+                  />
+                  <span>
+                    <span className="flex items-center gap-2 text-[14px] font-bold">
+                      Subscribe &amp; Save 10%
+                      <span className="rounded-full bg-gold px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-coal">
+                        Save {formatPKR(product.price - subscribePrice)}
+                      </span>
+                    </span>
+                    <span className="block text-[12px] text-muted">
+                      {formatPKR(subscribePrice)} every 45 days · COD · skip or cancel anytime
+                    </span>
+                  </span>
+                </span>
+                <span className="text-[15px] font-extrabold">{formatPKR(subscribePrice)}</span>
+              </label>
+            </div>
+          )}
+
           <p className="mt-5 text-[14.5px] leading-relaxed text-ink/75">{product.short}</p>
 
           <div className="mt-6">
@@ -225,7 +294,7 @@ export default function ProductView({ product, related }: { product: Product; re
 
           <div className="mt-4 flex flex-col gap-3">
             <button
-              onClick={() => { add(product.slug, qty); setOpen(true); }}
+              onClick={() => { add(product.slug, qty, { subscribe: wantsSubscribe }); setOpen(true); }}
               className="btn-outline-dark rounded-full py-3.5 text-sm font-bold uppercase tracking-widest"
             >
               Add to cart
