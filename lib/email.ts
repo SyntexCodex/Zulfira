@@ -15,7 +15,7 @@ import crypto from "node:crypto";
 import { getDb } from "@/lib/db";
 import { CONTACT, WHATSAPP_LINK } from "@/lib/site";
 
-export const SITE_URL = "https://zulfira.vercel.app";
+export const SITE_URL = "https://zulfira.shop";
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 
 /* ------------------------------------------------------------------ */

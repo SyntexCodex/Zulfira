@@ -1,12 +1,14 @@
 /**
  * ZULFIRA — central site configuration.
  * ------------------------------------------------------------------
- * IMPORTANT: Replace WHATSAPP_NUMBER with the real business WhatsApp
- * number (country code + number, no "+", no spaces, e.g. 923001234567),
- * then run `npm run qr` to regenerate the QR code and rebuild.
+ * Business WhatsApp: +92 302 8487658 (country code + number, no "+").
+ * After changing WHATSAPP_NUMBER, run `npm run qr` to regenerate the
+ * QR code, then rebuild.
  */
 
-export const WHATSAPP_NUMBER = "923001234567"; // <-- TODO: real number
+export const SITE_URL = "https://zulfira.shop";
+
+export const WHATSAPP_NUMBER = "923028487658";
 export const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}`;
 export function whatsappOrderLink(message: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -14,9 +16,19 @@ export function whatsappOrderLink(message: string) {
 
 export const CONTACT = {
   email: "hello@zulfira.pk",
-  phoneDisplay: "0300-1234567",
+  phoneDisplay: "0302-8487658",
+  phoneIntl: "+92 302 8487658",
   hours: "Mon–Sat · 9am–9pm PKT",
   address: "Lahore, Pakistan",
+};
+
+/**
+ * Official social profiles. Update these URLs if the handles differ.
+ */
+export const SOCIAL_LINKS = {
+  facebook: "https://www.facebook.com/profile.php?id=61593966274766",
+  instagram: "https://www.instagram.com/zulfira_0/",
+  tiktok: "https://www.tiktok.com/@zulfira.pk",
 };
 
 export interface Product {
@@ -326,7 +338,7 @@ export const POLICIES: Record<string, { title: string; updated: string; body: st
     updated: "Last updated October 2026",
     body: [
       "Orders are dispatched within 24 hours, Monday to Saturday. Delivery takes 2–4 working days anywhere in Pakistan.",
-      "Delivery is Rs 200 per order, and FREE on orders above Rs 1,900. Cash on Delivery is available nationwide.",
+      "Delivery is FREE on all orders across Pakistan. Cash on Delivery is available nationwide.",
       "You will receive a WhatsApp confirmation with tracking details as soon as your parcel ships. If your parcel is delayed beyond 5 working days, contact us and we will trace it for you.",
     ],
   },
