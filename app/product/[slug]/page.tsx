@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PRODUCTS, productBySlug, formatPKR } from "@/lib/site";
+import { PRODUCTS, productBySlug, formatPKR, SITE_URL } from "@/lib/site";
 import { getPublicProduct, getPublicProducts } from "@/lib/products";
 import ProductView from "./ProductView";
 
@@ -17,6 +17,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${p.name} — Zulfira`,
     description: p.short,
+    alternates: { canonical: `/product/${p.slug}` },
+    openGraph: {
+      title: `${p.name} — Zulfira`,
+      description: p.short,
+      url: `/product/${p.slug}`,
+      type: "website",
+      images: p.gallery.slice(0, 1).map((g) => ({ url: g, alt: p.name })),
+    },
   };
 }
 
@@ -31,7 +39,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     "@type": "Product",
     name: product.name,
     description: product.short,
-    image: product.gallery.map((g) => `https://zulfira.pk${g}`),
+    image: product.gallery.map((g) => `${SITE_URL}${g}`),
     offers: {
       "@type": "Offer",
       priceCurrency: "PKR",
