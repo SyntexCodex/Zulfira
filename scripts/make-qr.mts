@@ -8,7 +8,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const WHATSAPP_NUMBER = process.env.ZULFIRA_WHATSAPP || "923001234567";
+const WHATSAPP_NUMBER = process.env.ZULFIRA_WHATSAPP || "923028487658";
 const out = join(root, "public", "images", "qr-whatsapp.png");
 
 mkdirSync(dirname(out), { recursive: true });
