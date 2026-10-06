@@ -166,8 +166,8 @@ export function footerVars(emailForUnsub?: string): Record<string, string> {
   return {
     site_url: SITE_URL,
     contact_email: CONTACT.email,
-    instagram_url: "https://instagram.com/zulfira.pk",
-    facebook_url: "https://facebook.com/zulfira.pk",
+    instagram_url: "https://instagram.com/zulfira_0",
+    facebook_url: "https://www.facebook.com/profile.php?id=61593966274766",
     whatsapp_url: WHATSAPP_LINK,
     unsubscribe_url: emailForUnsub ? unsubscribeLink(emailForUnsub) : "",
     year: String(new Date().getFullYear()),

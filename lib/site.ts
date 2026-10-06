@@ -15,7 +15,7 @@ export function whatsappOrderLink(message: string) {
 }
 
 export const CONTACT = {
-  email: "hello@zulfira.pk",
+  email: "hello@zulfira.shop",
   phoneDisplay: "0302-8487658",
   phoneIntl: "+92 302 8487658",
   hours: "Mon–Sat · 9am–9pm PKT",
@@ -310,7 +310,7 @@ export const POLICIES: Record<string, { title: string; updated: string; body: st
     body: [
       "Zulfira Hair Care collects only the information needed to fulfil your order: your name, phone number, and delivery address. We never sell or share your personal data with third parties for marketing.",
       "Order details shared over WhatsApp are used solely to process, ship, and support your purchase. Payment receipts you share are used only to verify online payments.",
-      "You may ask us at any time what data we hold about you, or ask us to delete it, by messaging us on WhatsApp or emailing hello@zulfira.pk.",
+      "You may ask us at any time what data we hold about you, or ask us to delete it, by messaging us on WhatsApp or emailing hello@zulfira.shop.",
     ],
   },
   "refund-policy": {
