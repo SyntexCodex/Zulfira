@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { FacebookIcon, InstagramIcon, TiktokIcon } from "@/components/SocialIcons";
-import { CONTACT, WHATSAPP_LINK } from "@/lib/site";
+import { CONTACT, WHATSAPP_LINK, SOCIAL_LINKS } from "@/lib/site";
 
 const QUICK_LINKS = [
   { label: "Privacy Policy", href: "/policies/privacy-policy" },
@@ -73,13 +73,13 @@ export default function Footer() {
             <h4 className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-gold">Social Media</h4>
             <div className="mt-5 flex gap-2.5">
               {[
-                { icon: FacebookIcon, label: "Facebook" },
-                { icon: InstagramIcon, label: "Instagram" },
-                { icon: TiktokIcon, label: "TikTok" },
+                { icon: FacebookIcon, label: "Facebook", href: SOCIAL_LINKS.facebook },
+                { icon: InstagramIcon, label: "Instagram", href: SOCIAL_LINKS.instagram },
+                { icon: TiktokIcon, label: "TikTok", href: SOCIAL_LINKS.tiktok },
               ].map((s) => (
                 <a
                   key={s.label}
-                  href={WHATSAPP_LINK}
+                  href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
