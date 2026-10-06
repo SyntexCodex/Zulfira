@@ -6,7 +6,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, Search, User, ShoppingBag, ChevronRight } from "lucide-react";
 import { FacebookIcon, InstagramIcon, TiktokIcon } from "@/components/SocialIcons";
-import { NAV_LINKS, DRAWER_GROUPS, PRODUCTS, WHATSAPP_LINK } from "@/lib/site";
+import { NAV_LINKS, DRAWER_GROUPS, PRODUCTS, SOCIAL_LINKS } from "@/lib/site";
 import { useCart } from "@/lib/cart";
 import { formatPKR } from "@/lib/site";
 
@@ -250,13 +250,13 @@ export default function Header() {
               </div>
               <div className="flex items-center gap-2 border-t border-line p-5">
                 {[
-                  { icon: FacebookIcon, label: "Facebook" },
-                  { icon: InstagramIcon, label: "Instagram" },
-                  { icon: TiktokIcon, label: "TikTok" },
+                  { icon: FacebookIcon, label: "Facebook", href: SOCIAL_LINKS.facebook },
+                  { icon: InstagramIcon, label: "Instagram", href: SOCIAL_LINKS.instagram },
+                  { icon: TiktokIcon, label: "TikTok", href: SOCIAL_LINKS.tiktok },
                 ].map((s) => (
                   <a
                     key={s.label}
-                    href={WHATSAPP_LINK}
+                    href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}

@@ -5,7 +5,6 @@ import { CartProvider } from "@/lib/cart";
 import { SITE_URL } from "@/lib/site";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import { FlashSaleBar, AnnouncementBar } from "@/components/layout/TopBars";
 import CartDrawer from "@/components/CartDrawer";
 import VisitorPing from "@/components/VisitorPing";
@@ -134,7 +133,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <main className="min-h-[60vh]">{children}</main>
           <Footer />
           <CartDrawer />
-          <WhatsAppFloat />
         </CartProvider>
       </body>
     </html>

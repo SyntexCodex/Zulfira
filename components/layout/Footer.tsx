@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { FacebookIcon, InstagramIcon, TiktokIcon } from "@/components/SocialIcons";
-import { CONTACT, WHATSAPP_LINK, SOCIAL_LINKS } from "@/lib/site";
+import { CONTACT, SOCIAL_LINKS } from "@/lib/site";
 
 const QUICK_LINKS = [
   { label: "Privacy Policy", href: "/policies/privacy-policy" },
@@ -54,7 +54,7 @@ export default function Footer() {
             <ul className="mt-5 space-y-3.5 text-[13.5px] text-white/60">
               <li className="flex items-start gap-2.5">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-white/40" />
-                <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
+                <a href={`tel:${CONTACT.phoneDisplay.replace(/-/g, "")}`} className="hover:text-gold">
                   {CONTACT.phoneDisplay}
                 </a>
               </li>

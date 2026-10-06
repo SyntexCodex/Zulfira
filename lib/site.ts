@@ -1,18 +1,8 @@
 /**
  * ZULFIRA — central site configuration.
- * ------------------------------------------------------------------
- * Business WhatsApp: +92 302 8487658 (country code + number, no "+").
- * After changing WHATSAPP_NUMBER, run `npm run qr` to regenerate the
- * QR code, then rebuild.
  */
 
 export const SITE_URL = "https://zulfira.shop";
-
-export const WHATSAPP_NUMBER = "923028487658";
-export const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}`;
-export function whatsappOrderLink(message: string) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
 
 export const CONTACT = {
   email: "hello@zulfira.shop",
@@ -183,7 +173,7 @@ export const PAYMENT_METHODS = {
   online: {
     id: "online",
     label: "Online Payment",
-    note: "Pay via JazzCash, EasyPaisa or bank transfer, then share the receipt screenshot on WhatsApp.",
+    note: "Pay via JazzCash, EasyPaisa or bank transfer, then email the receipt to hello@zulfira.shop with your order number.",
   },
 } as const;
 
@@ -197,7 +187,7 @@ export const ONLINE_PAYMENT_DETAILS = [
 export const REVIEWS = [
   { name: "Sana K.", city: "Lahore", product: "Hair Oil", text: "I struggled with hair fall for months, but this oil really helped. My scalp feels nourished, shedding reduced noticeably within weeks." },
   { name: "Ahsan R.", city: "Karachi", product: "Shampoo", text: "Finally, a shampoo that doesn't strip my hair — gentle, nourishing, and leaves my hair soft, shiny and fall-free." },
-  { name: "Mahnoor S.", city: "Islamabad", product: "Ritual Bundle", text: "Ordered on WhatsApp, paid cash on delivery. Arrived in 2 days. The packaging feels like a gift to myself." },
+  { name: "Mahnoor S.", city: "Islamabad", product: "Ritual Bundle", text: "Ordered online, paid cash on delivery. Arrived in 2 days. The packaging feels like a gift to myself." },
   { name: "Bilal A.", city: "Rawalpindi", product: "Hair Oil", text: "Such a lightweight and effective oil! Doesn't feel greasy at all, yet keeps my scalp hydrated and my hair much healthier." },
   { name: "Iqra M.", city: "Multan", product: "Ritual Bundle", text: "Dandruff gone, scalp calm, hair soft. The bundle is worth every rupee — CoD made it so easy to try." },
   { name: "Danish R.", city: "Faisalabad", product: "Shampoo", text: "My curls have never looked this defined. Two washes and the frizz surrendered completely." },
@@ -206,11 +196,11 @@ export const REVIEWS = [
 export const FAQS = [
   {
     q: "How do I pay? Is Cash on Delivery available?",
-    a: "Yes — Cash on Delivery is available nationwide across Pakistan. Pay in cash when the rider hands you your parcel. Prefer paying upfront? Choose Online Payment at checkout and pay via JazzCash, EasyPaisa or bank transfer, then share the receipt screenshot on WhatsApp.",
+    a: "Yes — Cash on Delivery is available nationwide across Pakistan. Pay in cash when the rider hands you your parcel. Prefer paying upfront? Choose Online Payment at checkout and pay via JazzCash, EasyPaisa or bank transfer, then email the receipt to hello@zulfira.shop with your order number.",
   },
   {
     q: "How long does delivery take?",
-    a: "Orders are dispatched within 24 hours. Delivery typically takes 2–4 working days anywhere in Pakistan. You'll get a confirmation message on WhatsApp as soon as your order ships.",
+    a: "Orders are dispatched within 24 hours. Delivery typically takes 2–4 working days anywhere in Pakistan. You'll get a confirmation email as soon as your order ships.",
   },
   {
     q: "Are Zulfira products sulphate and paraben free?",
@@ -226,7 +216,7 @@ export const FAQS = [
   },
   {
     q: "What is your return policy?",
-    a: "If you receive a damaged or incorrect product, message us on WhatsApp with a photo within 7 days of delivery and we'll replace it free of charge.",
+    a: "If you receive a damaged or incorrect product, email us at hello@zulfira.shop with a photo within 7 days of delivery and we'll replace it free of charge.",
   },
 ];
 
@@ -309,15 +299,15 @@ export const POLICIES: Record<string, { title: string; updated: string; body: st
     updated: "Last updated October 2026",
     body: [
       "Zulfira Hair Care collects only the information needed to fulfil your order: your name, phone number, and delivery address. We never sell or share your personal data with third parties for marketing.",
-      "Order details shared over WhatsApp are used solely to process, ship, and support your purchase. Payment receipts you share are used only to verify online payments.",
-      "You may ask us at any time what data we hold about you, or ask us to delete it, by messaging us on WhatsApp or emailing hello@zulfira.shop.",
+      "Your name, phone number and delivery address are used solely to process, ship, and support your purchase. Payment receipts you share are used only to verify online payments.",
+      "You may ask us at any time what data we hold about you, or ask us to delete it, by emailing hello@zulfira.shop.",
     ],
   },
   "refund-policy": {
     title: "Refund Policy",
     updated: "Last updated October 2026",
     body: [
-      "If your order arrives damaged or incorrect, message us on WhatsApp with a photo within 7 days of delivery and we will replace it free of charge — no return shipping needed.",
+      "If your order arrives damaged or incorrect, email us at hello@zulfira.shop with a photo within 7 days of delivery and we will replace it free of charge — no return shipping needed.",
       "For Cash on Delivery orders, replacements are shipped after we confirm the issue. For online payments, refunds are issued to the original payment method within 7 working days once the returned item reaches us.",
       "Change-of-mind returns are accepted within 7 days for unopened products in original packaging; delivery charges are non-refundable.",
     ],
@@ -326,7 +316,7 @@ export const POLICIES: Record<string, { title: string; updated: string; body: st
     title: "Terms & Conditions",
     updated: "Last updated October 2026",
     body: [
-      "By placing an order with Zulfira Hair Care you agree to provide accurate contact and delivery details. Orders are confirmed over WhatsApp before dispatch.",
+      "By placing an order with Zulfira Hair Care you agree to provide accurate contact and delivery details. Orders are confirmed by email before dispatch.",
       "Product results vary by hair type and routine; our descriptions reflect typical customer experience, not guaranteed outcomes. Always patch-test new products.",
       "Prices are in Pakistani Rupees and include all taxes. We may update prices and offers without notice; confirmed orders keep the price agreed at checkout.",
     ],
@@ -337,7 +327,7 @@ export const POLICIES: Record<string, { title: string; updated: string; body: st
     body: [
       "Orders are dispatched within 24 hours, Monday to Saturday. Delivery takes 2–4 working days anywhere in Pakistan.",
       "Delivery is FREE on all orders across Pakistan. Cash on Delivery is available nationwide.",
-      "You will receive a WhatsApp confirmation with tracking details as soon as your parcel ships. If your parcel is delayed beyond 5 working days, contact us and we will trace it for you.",
+      "You will receive an email confirmation with tracking details as soon as your parcel ships. If your parcel is delayed beyond 5 working days, contact us and we will trace it for you.",
     ],
   },
 };

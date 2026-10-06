@@ -13,7 +13,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { getDb } from "@/lib/db";
-import { CONTACT, WHATSAPP_LINK } from "@/lib/site";
+import { CONTACT } from "@/lib/site";
 
 export const SITE_URL = "https://zulfira.shop";
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
@@ -168,7 +168,6 @@ export function footerVars(emailForUnsub?: string): Record<string, string> {
     contact_email: CONTACT.email,
     instagram_url: "https://instagram.com/zulfira_0",
     facebook_url: "https://www.facebook.com/profile.php?id=61593966274766",
-    whatsapp_url: WHATSAPP_LINK,
     unsubscribe_url: emailForUnsub ? unsubscribeLink(emailForUnsub) : "",
     year: String(new Date().getFullYear()),
   };
@@ -581,7 +580,7 @@ export async function notifyInsidersInvite(
     const html = miniEmail({
       customerName: firstName(args.name),
       title: "You're invited: Zulfira Insiders",
-      bodyHtml: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 12px 0;">As one of our repeat customers, you're invited to <strong>Zulfira Insiders</strong> — our private WhatsApp circle with early access to new formulas, members-only prices, and hair-ritual tips from our studio.</p><p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0;">Reply to this email with your WhatsApp number and we'll add you.</p>`,
+      bodyHtml: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 12px 0;">As one of our repeat customers, you're invited to <strong>Zulfira Insiders</strong> — our private members' circle with early access to new formulas, members-only prices, and hair-ritual tips from our studio.</p><p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0;">Reply to this email to join — we'll send your invite.</p>`,
       unsubscribeUrl: unsubscribeLink(args.email),
     });
     return await sendEmail({
