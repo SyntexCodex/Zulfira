@@ -84,3 +84,36 @@ export const PROGRAM_PROMOS: Record<string, ProgramPromo> = {
 
 /** All program keys, in banner rotation order. */
 export const PROGRAM_KEYS = Object.keys(PROGRAM_PROMOS);
+
+/**
+ * Website promo text fields editable from /admin/loyalty.
+ * Stored in LoyaltyProgram.config; empty/missing falls back to the
+ * hardcoded defaults above.
+ */
+export const PROMO_CONFIG_KEYS = {
+  headline: "promo_headline",
+  subtext: "promo_subtext",
+  cta: "promo_cta",
+  href: "promo_href",
+} as const;
+
+/** Overlay admin-edited promo copy (from DB config) over the defaults. */
+export function promoWithOverrides(
+  key: string,
+  config: Record<string, unknown> | null | undefined
+): ProgramPromo | null {
+  const base = PROGRAM_PROMOS[key];
+  if (!base) return null;
+  const c = config ?? {};
+  const str = (k: string, fallback: string) => {
+    const v = c[k];
+    return typeof v === "string" && v.trim() ? v.trim() : fallback;
+  };
+  return {
+    ...base,
+    headline: str(PROMO_CONFIG_KEYS.headline, base.headline),
+    subtext: str(PROMO_CONFIG_KEYS.subtext, base.subtext),
+    cta: str(PROMO_CONFIG_KEYS.cta, base.cta),
+    href: str(PROMO_CONFIG_KEYS.href, base.href),
+  };
+}

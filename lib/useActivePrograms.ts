@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ProgramPromo } from "@/lib/programs";
 
-const CACHE_TTL = 5 * 60 * 1000;
+const CACHE_TTL = 60 * 1000;
 
 // Module-level cache shared by every component using this hook — one
 // network request per page load no matter how many menus/banners render.

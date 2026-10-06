@@ -10,6 +10,7 @@ import {
   PageHeader,
   TextInput,
 } from "../_components/ui";
+import { PROGRAM_PROMOS, PROMO_CONFIG_KEYS } from "@/lib/programs";
 
 interface ProgramRow {
   key: string;
@@ -184,7 +185,9 @@ export default function LoyaltyPage() {
             enabled: p.enabled,
             config: p.config ?? {},
           };
-          const entries = Object.entries(draft.config);
+          const entries = Object.entries(draft.config).filter(
+            ([k]) => !Object.values(PROMO_CONFIG_KEYS).includes(k as any)
+          );
           const open = openKey === p.key;
           const busy = busyKey === p.key;
           return (
@@ -232,7 +235,53 @@ export default function LoyaltyPage() {
                   {open ? "Hide settings" : "Show settings"}
                 </button>
                 {open && (
-                  <div className="mt-4">
+                  <div className="mt-4 space-y-5">
+                    {/* Website banner & menu text — what customers see */}
+                    <div>
+                      <p className="mb-2 text-xs font-extrabold uppercase tracking-wide text-slate-500">
+                        Website banner & menu text
+                      </p>
+                      <div className="grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
+                        {(
+                          [
+                            [PROMO_CONFIG_KEYS.headline, "Banner headline"],
+                            [PROMO_CONFIG_KEYS.subtext, "Banner subtext"],
+                            [PROMO_CONFIG_KEYS.cta, "Button label"],
+                            [PROMO_CONFIG_KEYS.href, "Button link"],
+                          ] as const
+                        ).map(([ck, label]) => (
+                          <label key={ck} className="block">
+                            <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                              {label}
+                            </span>
+                            <TextInput
+                              value={String(draft.config[ck] ?? "")}
+                              placeholder={String(
+                                (PROGRAM_PROMOS[p.key] as any)?.[
+                                  ck.replace("promo_", "")
+                                ] ?? ""
+                              )}
+                              onChange={(nv) =>
+                                setDrafts((prev) => ({
+                                  ...prev,
+                                  [p.key]: {
+                                    ...prev[p.key],
+                                    config: { ...prev[p.key].config, [ck]: nv },
+                                  },
+                                }))
+                              }
+                            />
+                          </label>
+                        ))}
+                      </div>
+                      <p className="mt-1.5 text-xs text-slate-400">
+                        Leave empty to use the default text (shown as placeholder).
+                      </p>
+                    </div>
+                    <div>
+                      <p className="mb-2 text-xs font-extrabold uppercase tracking-wide text-slate-500">
+                        Program settings
+                      </p>
                     {entries.length === 0 ? (
                       <p className="text-sm text-slate-500">
                         This program has no configurable settings.
@@ -261,6 +310,7 @@ export default function LoyaltyPage() {
                       <Btn tone="primary" disabled={busy} onClick={() => saveSettings(p.key)}>
                         {busy ? "Saving…" : savedAt === p.key ? "Saved ✓" : "Save settings"}
                       </Btn>
+                    </div>
                     </div>
                   </div>
                 )}
