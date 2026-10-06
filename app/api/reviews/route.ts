@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
     rating?: number;
     title?: string;
     comment?: string;
+    videoUrl?: string;
   };
   try {
     body = await req.json();
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
   const rating = Math.round(Number(body.rating));
   const title = String(body.title ?? "").trim().slice(0, 120) || null;
   const comment = String(body.comment ?? "").trim().slice(0, 2000);
+  const videoUrl = String(body.videoUrl ?? "").trim().slice(0, 300) || null;
 
   if (!productId) return err("productId is required", 400);
   if (!customerName) return err("Please enter your name", 400);
@@ -91,7 +93,7 @@ export async function POST(req: NextRequest) {
   }
 
   const review = await db.review.create({
-    data: { productId, orderId: orderId || null, customerName, rating, title, comment },
+    data: { productId, orderId: orderId || null, customerName, rating, title, comment, videoUrl },
   });
 
   return ok({ id: review.id }, 201);

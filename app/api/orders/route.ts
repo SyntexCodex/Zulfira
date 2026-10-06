@@ -5,6 +5,9 @@ import type { NextRequest } from "next/server";
 import { Prisma } from "@prisma/client";
 import { getDb } from "@/lib/db";
 import { ok, err, dbRequired } from "@/lib/api";
+import { validateDiscountCode, programEnabled } from "@/lib/discounts";
+import { createSubscriptionsForOrder } from "@/lib/subscriptions";
+import { notifyOrderPlaced } from "@/lib/email";
 import { generateOrderNo, adjustStock, checkLowStock } from "@/lib/orders";
 import { getSetting } from "@/lib/settings";
 import { sendTelegram, tgEscape } from "@/lib/telegram";
@@ -19,6 +22,7 @@ interface OrderItemInput {
   slug?: string;
   productId?: string;
   qty?: number;
+  subscribe?: boolean;
 }
 
 interface ResolvedItem {
@@ -26,6 +30,7 @@ interface ResolvedItem {
   name: string;
   qty: number;
   unitPrice: number;
+  subscribe: boolean;
 }
 
 // POST is PUBLIC (checkout). Validates against live DB prices/stock, never
@@ -38,12 +43,14 @@ export async function POST(req: NextRequest) {
     customer?: {
       name?: string;
       phone?: string;
+      email?: string;
       address?: string;
       city?: string;
       notes?: string;
     };
     items?: OrderItemInput[];
     payment?: string;
+    discountCode?: string;
   };
   try {
     body = await req.json();
@@ -57,6 +64,8 @@ export async function POST(req: NextRequest) {
   const address = String(customer.address ?? "").trim();
   const city = String(customer.city ?? "").trim();
   const notes = customer.notes ? String(customer.notes).trim() : null;
+  const rawEmail = customer.email ? String(customer.email).trim() : "";
+  const email = /^\S+@\S+\.\S+$/.test(rawEmail) ? rawEmail : null;
   if (!name) return err("Customer name is required", 400);
   if (!phone) return err("Customer phone is required", 400);
   if (!address) return err("Customer address is required", 400);
@@ -92,6 +101,7 @@ export async function POST(req: NextRequest) {
       name: product.name,
       qty,
       unitPrice: Number(product.salePrice),
+      subscribe: it.subscribe === true,
     });
   }
 
@@ -99,7 +109,32 @@ export async function POST(req: NextRequest) {
     resolved.reduce((s, it) => s + it.unitPrice * it.qty, 0)
   );
   const deliveryCharge = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_DELIVERY_CHARGE;
-  const discount = 0;
+  let discount = 0;
+  let appliedDiscountCode: string | null = null;
+  const rawDiscountCode = String(body.discountCode ?? "").trim();
+  if (rawDiscountCode) {
+    const check = await validateDiscountCode(db, {
+      code: rawDiscountCode,
+      subtotal,
+      phone,
+    });
+    if (!check.ok) return err(check.error ?? "Invalid discount code", 400);
+    discount = check.discountAmount ?? 0;
+    appliedDiscountCode = rawDiscountCode.toUpperCase();
+  }
+
+  // Subscribe & Save: 10% off subscribe-flagged lines (authoritative server-side;
+  // only when the program is enabled — otherwise flags are ignored).
+  let subscribeDiscount = 0;
+  const subProgram = await programEnabled(db, "subscribe_save");
+  if (subProgram.enabled) {
+    for (const it of resolved) {
+      if (it.subscribe) subscribeDiscount += round2(it.unitPrice * it.qty * 0.1);
+    }
+    discount = round2(discount + subscribeDiscount);
+  } else {
+    for (const it of resolved) it.subscribe = false;
+  }
   const total = round2(subtotal + deliveryCharge - discount);
 
   // Retry on the (very unlikely) order-number collision.
@@ -112,6 +147,7 @@ export async function POST(req: NextRequest) {
           data: {
             orderNo,
             customerName: name,
+            email,
             phone,
             address,
             city,
@@ -155,6 +191,53 @@ export async function POST(req: NextRequest) {
     }
   }
   if (!created) return err("Could not place order, please try again", 500);
+
+  // A redeemed discount code counts as used exactly once per order.
+  if (appliedDiscountCode) {
+    await db.discountCode.update({
+      where: { code: appliedDiscountCode },
+      data: { usedCount: { increment: 1 } },
+    });
+  }
+
+  // Subscribe & Save: create recurring subscriptions for flagged items.
+  if (subProgram.enabled && resolved.some((it) => it.subscribe)) {
+    try {
+      await createSubscriptionsForOrder(
+        db,
+        {
+          customerName: name,
+          phone,
+          address,
+          city,
+          items: resolved
+            .filter((it) => it.subscribe)
+            .map((it) => ({ productId: it.productId, subscribe: true as boolean })),
+        },
+        Number(subProgram.config?.intervalDays ?? 45)
+      );
+    } catch (e) {
+      // Order already placed — alert admin to create the subscription manually.
+      await sendTelegram(
+        `⚠️ <b>Subscription NOT created</b> for order ${tgEscape(created.orderNo)} (${tgEscape(phone)}). Please create it manually in /admin/subscriptions.`
+      );
+    }
+  }
+
+  // Order confirmation email (fire-and-forget; skipped silently without an address).
+  notifyOrderPlaced(db, {
+    email: email ?? undefined,
+    customerName: name,
+    orderNo: created.orderNo,
+    createdAt: new Date(),
+    items: resolved.map((it) => ({ name: it.name, qty: it.qty, unitPrice: it.unitPrice })),
+    subtotal,
+    deliveryCharge,
+    total,
+    payment,
+    address: `${address}, ${city}`,
+    city,
+  }).catch(() => {});
 
   // Fire-and-forget alert (never throws when Telegram isn't configured).
   if ((await getSetting("alert_new_order", "1")) !== "0") {

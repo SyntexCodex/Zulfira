@@ -9,10 +9,35 @@ import { getSessionFromRequest } from "@/lib/auth";
 import { adjustStock } from "@/lib/orders";
 import { getSetting } from "@/lib/settings";
 import { sendTelegram, tgEscape } from "@/lib/telegram";
+import { notifyOrderStatus, notifyDelivered } from "@/lib/email";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 const VALID_STATUSES = new Set<string>(Object.values(OrderStatus));
 // Terminal states that already returned their stock to inventory.
 const RESTOCKED_STATES = new Set(["RETURNED", "CANCELLED"]);
+
+const STATUS_COPY: Record<string, string> = {
+  CONFIRMED: "Your order is confirmed and is being prepared with care.",
+  SHIPPED: "Your parcel has left our studio and is on its way to you.",
+  DELIVERED: "Your parcel has been delivered. Enjoy your Zulfira ritual!",
+  CANCELLED: "Your order has been cancelled as requested.",
+  RETURNED: "We have received your return.",
+};
+
+/** Extract the pre-rendered timeline block for a status from timeline-snippets.html. */
+function timelineSnippet(status: string): string {
+  try {
+    const raw = readFileSync(join(process.cwd(), "email-templates", "timeline-snippets.html"), "utf8");
+    const marker = `============ STATUS: ${status} ============`;
+    const start = raw.indexOf(marker);
+    if (start < 0) return "";
+    const end = raw.indexOf("============ STATUS:", start + marker.length);
+    return raw.slice(start + marker.length, end < 0 ? undefined : end).trim();
+  } catch {
+    return "";
+  }
+}
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -125,6 +150,31 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
         `Items restocked to inventory.` +
         (reason ? `\nReason: ${tgEscape(reason)}` : "")
     );
+  }
+
+  // Customer status emails (fire-and-forget; skipped silently without an address).
+  if (updated.email) {
+    notifyOrderStatus(
+      db,
+      {
+        email: updated.email,
+        customerName: updated.customerName,
+        orderNo: updated.orderNo,
+        status,
+        courierName: updated.courierName ?? undefined,
+        trackingNumber: updated.trackingNumber ?? undefined,
+        city: updated.city,
+      },
+      STATUS_COPY[status] ?? `Your order status is now ${status}.`,
+      timelineSnippet(status)
+    ).catch(() => {});
+    if (status === "DELIVERED") {
+      notifyDelivered(db, {
+        email: updated.email,
+        customerName: updated.customerName,
+        orderNo: updated.orderNo,
+      }).catch(() => {});
+    }
   }
 
   return ok(serialize({ ...updated, items: order.items }));
