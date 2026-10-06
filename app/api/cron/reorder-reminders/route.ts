@@ -8,7 +8,7 @@ import { generateCode, createDiscountCode, programEnabled } from "@/lib/discount
 import { sendTelegram, tgEscape } from "@/lib/telegram";
 import { notifyReorderReminder } from "@/lib/email";
 
-const SITE_URL = "https://zulfira.vercel.app";
+const SITE_URL = "https://zulfira.shop";
 const OIL_SLUG = "revitalizing-hair-oil";
 
 const normPhone = (p: string) => {
