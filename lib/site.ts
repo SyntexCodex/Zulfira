@@ -245,8 +245,8 @@ export const CATEGORIES: Category[] = [
   { slug: "hair-oils", name: "Hair Oils", tagline: "Deep nourishment", image: "/products/oil-front.webp" },
   { slug: "shampoos", name: "Shampoos", tagline: "Gentle cleanse", image: "/products/shampoo-front.webp" },
   { slug: "bundles", name: "Bundles", tagline: "Complete rituals", image: "/products/bundle-ritual.webp" },
-  { slug: "bestsellers", name: "Bestsellers", tagline: "Customer favourites", image: "/banners/banner-oil.webp" },
-  { slug: "new-arrivals", name: "New Arrivals", tagline: "Fresh in store", image: "/banners/banner-shampoo.webp" },
+  { slug: "bestsellers", name: "Bestsellers", tagline: "Customer favourites", image: "/products/bundle-ritual.webp" },
+  { slug: "new-arrivals", name: "New Arrivals", tagline: "Fresh in store", image: "/products/oil-detail.webp" },
   { slug: "gift-sets", name: "Gift Sets", tagline: "Ready to gift", image: "/categories/cat-gifts.webp" },
 ];
 
@@ -298,9 +298,7 @@ export const FLASH_SALE = {
 };
 
 export const INSTAGRAM_POSTS = [
-  { image: "/social/insta-oil.webp", label: "The oil ritual" },
   { image: "/social/insta-hair.webp", label: "Shine days" },
-  { image: "/banners/lifestyle-pink.webp", label: "Behind the scenes" },
   { image: "/products/oil-detail.webp", label: "Golden drops" },
   { image: "/products/shampoo-detail.webp", label: "Fresh lather" },
 ];
