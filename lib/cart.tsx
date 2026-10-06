@@ -6,13 +6,15 @@ import { productBySlug } from "./site";
 export interface CartItem {
   slug: string;
   qty: number;
+  /** true = Subscribe & Save (recurring every 45 days); absent/false = one-time */
+  subscribe?: boolean;
 }
 
 interface CartCtx {
   items: CartItem[];
   count: number;
   subtotal: number;
-  add: (slug: string, qty?: number) => void;
+  add: (slug: string, qty?: number, opts?: { subscribe?: boolean }) => void;
   remove: (slug: string) => void;
   setQty: (slug: string, qty: number) => void;
   clear: () => void;
@@ -50,12 +52,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const count = items.reduce((s, it) => s + it.qty, 0);
     return {
       items, count, subtotal, isOpen, setOpen,
-      add: (slug, qty = 1) =>
-        setItems((prev) => {
-          const found = prev.find((i) => i.slug === slug);
-          if (found) return prev.map((i) => (i.slug === slug ? { ...i, qty: Math.min(99, i.qty + qty) } : i));
-          return [...prev, { slug, qty }];
-        }),
+      add: (slug, qty = 1, opts) => {
+        const sub = !!opts?.subscribe;
+        return setItems((prev) => {
+          // Dedupe key includes the subscribe flag: one-time and subscribe
+          // are separate cart lines.
+          const found = prev.find((i) => i.slug === slug && !!i.subscribe === sub);
+          if (found)
+            return prev.map((i) =>
+              i.slug === slug && !!i.subscribe === sub
+                ? { ...i, qty: Math.min(99, i.qty + qty) }
+                : i
+            );
+          return [...prev, { slug, qty, subscribe: sub || undefined }];
+        });
+      },
       remove: (slug) => setItems((prev) => prev.filter((i) => i.slug !== slug)),
       setQty: (slug, qty) =>
         setItems((prev) =>

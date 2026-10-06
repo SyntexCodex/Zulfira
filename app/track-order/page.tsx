@@ -52,6 +52,7 @@ function ReviewPrompt({ orderId, items }: { orderId: string; items: TrackItem[] 
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [error, setError] = useState("");
 
@@ -70,6 +71,7 @@ function ReviewPrompt({ orderId, items }: { orderId: string; items: TrackItem[] 
           customerName: name.trim(),
           rating,
           comment: comment.trim(),
+          videoUrl: videoUrl.trim() || undefined,
         }),
       });
       const json = await res.json().catch(() => null);
@@ -99,7 +101,7 @@ function ReviewPrompt({ orderId, items }: { orderId: string; items: TrackItem[] 
 
   return (
     <div className="mt-7 rounded-2xl border border-ink/10 bg-white/60 p-6 text-left">
-      <p className="text-[12px] font-extrabold uppercase tracking-[0.2em] text-maroon">
+      <p className="text-[12px] font-extrabold uppercase tracking-[0.2em] text-coal">
         Enjoying your products?
       </p>
       <h3 className="mt-1 text-xl font-bold">Leave a review</h3>
@@ -158,6 +160,17 @@ function ReviewPrompt({ orderId, items }: { orderId: string; items: TrackItem[] 
             rows={3}
             className="input-clean w-full rounded-xl px-4 py-3 text-[14px]"
             required
+          />
+        </div>
+        <div>
+          <label className="mb-1.5 block text-[13px] font-bold">
+            Video review URL <span className="font-normal text-muted">(optional — earns a bigger reward)</span>
+          </label>
+          <input
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+            placeholder="TikTok / Instagram / YouTube link"
+            className="input-clean w-full rounded-xl px-4 py-3 text-[14px]"
           />
         </div>
         <button
@@ -239,7 +252,7 @@ export default function TrackOrderPage() {
           <div>
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-[12px] font-extrabold uppercase tracking-[0.2em] text-maroon">Order {data.orderNo}</p>
+                <p className="text-[12px] font-extrabold uppercase tracking-[0.2em] text-coal">Order {data.orderNo}</p>
                 {createdAt && <p className="mt-1 text-[13px] text-muted">Placed on {createdAt}</p>}
               </div>
               <button
@@ -281,9 +294,9 @@ export default function TrackOrderPage() {
                             <span
                               className={`mx-auto flex h-11 w-11 items-center justify-center rounded-full border-2 transition-colors ${
                                 current
-                                  ? "border-maroon bg-maroon text-white shadow-md"
+                                  ? "border-coal bg-coal text-white shadow-md"
                                   : done
-                                    ? "border-maroon bg-maroon/10 text-maroon"
+                                    ? "border-coal bg-coal/10 text-coal"
                                     : "border-ink/15 bg-white text-muted"
                               }`}
                             >
@@ -294,14 +307,14 @@ export default function TrackOrderPage() {
                             {s.label}
                           </p>
                           {current && (
-                            <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-maroon">
+                            <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-coal">
                               Current
                             </p>
                           )}
                         </div>
                         {i < STEP_META.length - 1 && (
                           <span
-                            className={`mt-[22px] h-0.5 w-full min-w-3 ${i < stepIdx ? "bg-maroon" : "bg-ink/12"}`}
+                            className={`mt-[22px] h-0.5 w-full min-w-3 ${i < stepIdx ? "bg-coal" : "bg-ink/12"}`}
                             aria-hidden
                           />
                         )}
@@ -327,7 +340,7 @@ export default function TrackOrderPage() {
 
             <div className="mt-5 flex items-center justify-between border-t border-ink/10 pt-5">
               <span className="font-bold">Total</span>
-              <span className="font-display text-2xl font-bold text-maroon">{formatPKR(data.total || 0)}</span>
+              <span className="font-display text-2xl font-bold text-coal">{formatPKR(data.total || 0)}</span>
             </div>
 
             {deliveredAt && (
@@ -338,7 +351,7 @@ export default function TrackOrderPage() {
 
             {(data.courierName || data.trackingNumber) && (
               <div className="mt-5 rounded-2xl border border-ink/10 bg-white/60 p-5 text-left">
-                <p className="text-[12px] font-extrabold uppercase tracking-[0.2em] text-maroon">
+                <p className="text-[12px] font-extrabold uppercase tracking-[0.2em] text-coal">
                   Delivery details
                 </p>
                 <div className="mt-3 space-y-1.5 text-[14px]">
@@ -404,7 +417,7 @@ export default function TrackOrderPage() {
                 href={`${WHATSAPP_LINK}?text=${encodeURIComponent("Hello Zulfira! Please help me track my order.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-bold text-maroon hover:underline"
+                className="font-bold text-coal hover:underline"
               >
                 Ask us on WhatsApp
               </a>
