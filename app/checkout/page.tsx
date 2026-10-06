@@ -244,7 +244,7 @@ export default function CheckoutPage() {
               <button
                 onClick={submitOrder}
                 disabled={!valid || orderState === "submitting"}
-                className={`flex w-full items-center justify-center gap-2 rounded-full py-4 text-[16px] font-bold transition-all ${valid && orderState !== "submitting" ? "btn-primary" : "cursor-not-allowed bg-ink/10 text-muted"}`}
+                className={`mx-auto flex w-full max-w-sm items-center justify-center gap-2 rounded-full py-3 text-sm font-bold transition-all ${valid && orderState !== "submitting" ? "btn-primary" : "cursor-not-allowed bg-ink/10 text-muted"}`}
               >
                 {orderState === "submitting" ? "Placing your order…" : <>Place Order · {formatPKR(total)}</>}
               </button>

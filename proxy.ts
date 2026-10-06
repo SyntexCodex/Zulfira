@@ -14,6 +14,19 @@ const PUBLIC_API: { method: string; pattern: RegExp }[] = [
   { method: "GET", pattern: /^\/api\/orders\/track$/ },
   { method: "POST", pattern: /^\/api\/track$/ },
   { method: "POST", pattern: /^\/api\/auth\/login$/ },
+  // Loyalty programs — public storefront endpoints (banner, checkout, program pages).
+  { method: "GET", pattern: /^\/api\/programs\/active$/ },
+  { method: "GET", pattern: /^\/api\/programs\/status$/ },
+  { method: "POST", pattern: /^\/api\/discounts\/validate$/ },
+  { method: "GET", pattern: /^\/api\/challenge\/status$/ },
+  { method: "POST", pattern: /^\/api\/challenge\/signup$/ },
+  { method: "POST", pattern: /^\/api\/challenge\/checkin$/ },
+  { method: "GET", pattern: /^\/api\/equity\/info$/ },
+  { method: "GET", pattern: /^\/api\/equity\/owners$/ },
+  { method: "POST", pattern: /^\/api\/equity\/apply$/ },
+  { method: "POST", pattern: /^\/api\/gift-trial$/ },
+  { method: "POST", pattern: /^\/api\/reviews$/ },
+  { method: "GET", pattern: /^\/api\/reviews$/ },
 ];
 
 async function hasValidSession(req: NextRequest): Promise<boolean> {
