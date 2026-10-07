@@ -17,7 +17,7 @@ export const CONTACT = {
  */
 export const SOCIAL_LINKS = {
   facebook: "https://www.facebook.com/profile.php?id=61593966274766",
-  instagram: "https://www.instagram.com/zulfira_0/",
+  instagram: "https://www.instagram.com/zulfira_0/",    
   tiktok: "https://www.tiktok.com/@zulfira.official",
 };
 
@@ -138,7 +138,7 @@ export const PRODUCTS: Product[] = [
     ],
     benefits: [
       "Both signature formulas in one box",
-      "Save Rs 399 vs. buying separately",
+      "Save Rs 298 vs. buying separately",
       "The complete 2-step weekly ritual",
       "Beautiful gift-ready packaging",
     ],
