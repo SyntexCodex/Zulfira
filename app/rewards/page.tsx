@@ -1,90 +1,130 @@
 import type { Metadata } from "next";
-import { RewardShell, RewardHero, Steps, DealProducts, CtaBand } from "@/components/rewards/reward-ui";
+import Link from "next/link";
+import { RewardShell } from "@/components/rewards/reward-ui";
 
 export const metadata: Metadata = {
-  title: "Zulfira Insiders — Members Save 15% | Zulfira",
+  title: "Rewards & Loyalty — 8 Ways Zulfira Pays You Back | Zulfira",
   description:
-    "Join Zulfira Insiders for members-only pricing (15% off everything), early access to launches, birthday gifts, and a direct line to the founders.",
+    "Reorder discounts, subscriptions, review credit, welcome gifts, the 30-day challenge, trial gifting, Insiders club and even profit-share. Explore all 8 Zulfira reward programs.",
 };
 
-const PERKS = [
-  { t: "15% off everything", d: "A permanent members-only price on oil, shampoo and bundles — no codes, no expiry." },
-  { t: "Early access", d: "Shop new launches 48 hours before anyone else, with insider-only bundle deals." },
-  { t: "Birthday gift", d: "A free 100ml trial bottle lands on your doorstep every year on your birthday." },
-  { t: "Founder's circle", d: "Vote on new scents, shades and products. Insiders shape what Zulfira becomes." },
-  { t: "Priority support", d: "Jump the queue — insider messages get answered first, every time." },
-  { t: "Secret sales", d: "Flash insider-only sales up to 30% off, announced only inside the circle." },
+const PROGRAMS = [
+  {
+    name: "Reorder Rewards",
+    href: "/rewards/reorder",
+    badge: "10% OFF",
+    blurb: "Every delivery ships with a personal 10% code. Loyal rituals get rewarded on autopilot.",
+  },
+  {
+    name: "Subscribe & Save",
+    href: "/rewards/subscribe",
+    badge: "10% OFF",
+    blurb: "Automatic delivery every 45 days at subscriber prices. Pause or cancel anytime.",
+  },
+  {
+    name: "Review Rewards",
+    href: "/rewards/reviews",
+    badge: "Rs 150",
+    blurb: "Rs 75 for a photo review, Rs 150 for a video review — real store credit for real results.",
+  },
+  {
+    name: "Welcome Gift",
+    href: "/rewards/welcome",
+    badge: "20% OFF",
+    blurb: "Your first box hides a gold card worth 20% off your entire next order. Code INBOX20.",
+  },
+  {
+    name: "30-Day Hair Challenge",
+    href: "/challenge",
+    badge: "WIN BIG",
+    blurb: "Post your ritual for 30 days. Finishers win a free bundle — best transformation wins a year's supply.",
+  },
+  {
+    name: "Gift a Trial",
+    href: "/gift-trial",
+    badge: "Rs 200",
+    blurb: "Send a friend a free 100ml trial bottle and earn Rs 200 credit when they fall in love.",
+  },
+  {
+    name: "Zulfira Insiders",
+    href: "/rewards/insiders",
+    badge: "15% OFF",
+    blurb: "The members' club: 15% off everything, early access, birthday gifts and secret sales.",
+  },
+  {
+    name: "1% Equity Program",
+    href: "/equity",
+    badge: "PROFIT SHARE",
+    blurb: "Our boldest thank-you: own a slice of Zulfira and earn monthly profit-share payouts.",
+  },
 ];
 
-export default function InsidersPage() {
+export default function RewardsHubPage() {
   return (
     <RewardShell>
-      <RewardHero
-        kicker="Zulfira Loyalty · Insiders Circle"
-        title={<>Welcome to the <span className="text-gold">inner circle</span></>}
-        subtitle="Zulfira Insiders is our members' club for the obsessed — the ones who never miss wash day. Members unlock 15% off everything, early access to launches, birthday gifts and a direct line to us."
-        badge="Members save 15% · Forever"
-        ctaLabel="Join the circle"
-        ctaHref="/contact"
-        image="/products/shampoo-front.webp"
-        imageAlt="Zulfira Sulphate-Free Shampoo"
-      />
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "radial-gradient(800px 420px at 50% -100px, rgba(232,193,90,0.16), transparent 70%)" }}
+        />
+        <div className="relative mx-auto max-w-4xl px-4 pb-12 pt-16 text-center md:pt-24">
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-gold">Zulfira Loyalty</p>
+          <h1 className="font-display mt-4 text-4xl leading-tight md:text-6xl">
+            8 ways we <span className="text-gold">pay you back</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-white/70">
+            Great hair shouldn't cost a fortune — and loyalty shouldn't go unnoticed. Pick the rewards
+            that fit your ritual, stack them, and watch your hair care pay for itself.
+          </p>
+          <div className="mx-auto mt-6 h-px w-24 bg-gold/60" />
+        </div>
+      </section>
 
-      <Steps
-        title="How to become an Insider"
-        steps={[
-          {
-            title: "Say hello",
-            text: "Send us a message with the word INSIDER — by email or through the contact form.",
-          },
-          {
-            title: "Get your member code",
-            text: "We reply within 24 hours with your personal insider code and welcome pack details.",
-          },
-          {
-            title: "Unlock member prices",
-            text: "Your code takes 15% off every order, forever. It stacks with free delivery.",
-          },
-          {
-            title: "Enjoy the perks",
-            text: "Early access, birthday gifts, secret sales — the circle takes care of its own.",
-          },
-        ]}
-      />
-
-      <DealProducts
-        title="Insider prices"
-        subtitle="What members pay — every day, on every product, no sale required."
-        discount={0.15}
-        discountLabel="Insider price · 15% off"
-        ctaHref="/contact"
-        ctaLabel="Become an Insider"
-        note="Insider pricing applies with your personal member code at checkout."
-      />
-
+      {/* Program grid */}
       <section className="mx-auto max-w-6xl px-4 pb-16">
-        <h2 className="text-center font-display text-2xl md:text-4xl">The full insider treatment</h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {PERKS.map((p) => (
-            <div key={p.t} className="rounded-2xl border border-gold/25 bg-white/[0.03] p-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold/15 text-gold">
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                  <path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z" />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {PROGRAMS.map((p, i) => (
+            <Link
+              key={p.name}
+              href={p.href}
+              className="group relative flex flex-col overflow-hidden rounded-3xl border border-gold/25 bg-white/[0.03] p-7 transition hover:-translate-y-1 hover:border-gold/60 hover:bg-gold/[0.06]"
+            >
+              <span className="absolute right-5 top-5 rounded-full bg-gold px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-black">
+                {p.badge}
+              </span>
+              <span className="font-display text-lg text-white/30">0{i + 1}</span>
+              <h2 className="mt-2 text-xl font-bold text-gold">{p.name}</h2>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-white/65">{p.blurb}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-white transition group-hover:text-gold">
+                Explore
+                <svg viewBox="0 0 24 24" className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m-6-6l6 6-6 6" />
                 </svg>
-              </div>
-              <p className="mt-4 font-bold text-gold">{p.t}</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-white/65">{p.d}</p>
-            </div>
+              </span>
+            </Link>
           ))}
         </div>
       </section>
 
-      <CtaBand
-        title="The circle is open"
-        text="Membership is free — all it takes is one message. Join Zulfira Insiders today and never pay full price again."
-        ctaLabel="Join the circle"
-        ctaHref="/contact"
-      />
+      {/* Stacking note */}
+      <section className="mx-auto max-w-4xl px-4 pb-20 text-center">
+        <div className="rounded-3xl border border-gold/30 bg-gold/[0.06] p-8 md:p-10">
+          <h2 className="font-display text-2xl md:text-3xl">
+            Rewards <span className="text-gold">stack</span>
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/65">
+            Join Insiders for 15% off, pay with review credit, and toss in your reorder code where it fits —
+            every program is designed to combine. The more loyal your ritual, the less it costs.
+          </p>
+          <Link
+            href="/shop"
+            className="mt-6 inline-block rounded-full bg-gold px-9 py-3.5 text-sm font-extrabold text-black transition hover:bg-gold-deep"
+          >
+            Start earning — shop now
+          </Link>
+        </div>
+      </section>
     </RewardShell>
   );
 }
