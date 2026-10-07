@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     locale: "en_PK",
     images: [
       {
-        url: "/banners/hero-main.webp",
+        url: "/banners/hero-duo.webp",
         width: 1200,
         height: 630,
         alt: "Zulfira natural hair care — hair oil and sulphate-free shampoo",
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     title: "Zulfira — Natural Hair Care",
     description:
       "Revitalizing Hair Oil & Sulphate-Free Shampoo. Free home delivery and Cash on Delivery across Pakistan.",
-    images: ["/banners/hero-main.webp"],
+    images: ["/banners/hero-duo.webp"],
   },
   robots: {
     index: true,
