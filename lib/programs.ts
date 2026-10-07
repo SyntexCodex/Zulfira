@@ -22,7 +22,7 @@ export const PROGRAM_PROMOS: Record<string, ProgramPromo> = {
     headline: "Running low? Reorder & save 10%",
     subtext: "Your personal reorder discount is waiting.",
     cta: "Reorder Now",
-    href: "/shop",
+    href: "/rewards/reorder",
   },
   subscribe_save: {
     key: "subscribe_save",
@@ -30,7 +30,7 @@ export const PROGRAM_PROMOS: Record<string, ProgramPromo> = {
     headline: "Subscribe & Save 10%",
     subtext: "Automatic delivery every 45 days — never run out.",
     cta: "Subscribe Now",
-    href: "/shop",
+    href: "/rewards/subscribe",
   },
   review_rewards: {
     key: "review_rewards",
@@ -38,7 +38,7 @@ export const PROGRAM_PROMOS: Record<string, ProgramPromo> = {
     headline: "Get rewarded for your reviews",
     subtext: "Earn Rs 75 for a photo review, Rs 150 for a video review.",
     cta: "Shop Now",
-    href: "/shop",
+    href: "/rewards/reviews",
   },
   inbox_upsell: {
     key: "inbox_upsell",
@@ -46,7 +46,7 @@ export const PROGRAM_PROMOS: Record<string, ProgramPromo> = {
     headline: "20% off your next order",
     subtext: "First-time buyer? Your in-box card unlocks 20% off.",
     cta: "Shop Now",
-    href: "/shop",
+    href: "/rewards/welcome",
   },
   challenge_30: {
     key: "challenge_30",
@@ -70,7 +70,7 @@ export const PROGRAM_PROMOS: Record<string, ProgramPromo> = {
     headline: "Zulfira Insiders is live",
     subtext: "Exclusive perks, early access and members-only prices.",
     cta: "Join the Circle",
-    href: "/contact",
+    href: "/rewards/insiders",
   },
   equity_1pct: {
     key: "equity_1pct",
