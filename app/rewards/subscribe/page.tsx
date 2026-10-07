@@ -60,7 +60,7 @@ export default function SubscribeSavePage() {
       <section className="mx-auto max-w-6xl px-4 pb-14">
         <div className="grid gap-4 rounded-3xl border border-gold/25 bg-white/[0.03] p-8 md:grid-cols-3 md:p-10">
           {[
-            { t: "Never run out", d: "Timed to your usage — a 200ml oil and 400ml shampoo last roughly 45 days of regular ritual." },
+            { t: "Never run out", d: "Timed to your ritual — 100ml bottles keep you glowing between deliveries, every 45 days." },
             { t: "Priority dispatch", d: "Subscriber orders ship first, so your ritual never skips a beat." },
             { t: "Flexible by design", d: "Swap products, skip a cycle, or cancel — one message and it's done." },
           ].map((f) => (
