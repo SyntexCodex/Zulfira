@@ -168,6 +168,7 @@ export function footerVars(emailForUnsub?: string): Record<string, string> {
     contact_email: CONTACT.email,
     instagram_url: "https://instagram.com/zulfira_0",
     facebook_url: "https://www.facebook.com/profile.php?id=61593966274766",
+    tiktok_url: "https://www.tiktok.com/@zulfira.official",
     unsubscribe_url: emailForUnsub ? unsubscribeLink(emailForUnsub) : "",
     year: String(new Date().getFullYear()),
   };
