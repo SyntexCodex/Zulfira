@@ -8,12 +8,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SLIDES = [
   {
-    image: "/banners/hero-gold-soft.webp",
-    eyebrow: "Pakistan's Botanical Hair Ritual",
+    image: "/banners/hero-duo.webp",
+    eyebrow: "New Look · 100ml Bottles",
     title: "Strong Roots.",
     title2: "Silk Shine.",
-    box: "From hair fall to healthy growth — powered by Zulfira",
-    cta: "Order Now",
+    box: "Zulfira Hair Oil & Sulphate-Free Shampoo — the complete ritual",
+    cta: "Shop the Ritual",
     href: "/shop",
   },
   {
@@ -24,6 +24,15 @@ const SLIDES = [
     box: "Argan, coconut & castor — the pre-wash ritual your hair deserves",
     cta: "Shop the Oil",
     href: "/product/revitalizing-hair-oil",
+  },
+    {
+    image: "/banners/hero-shampoo.webp",
+    eyebrow: "New · Sulphate-Free Shampoo",
+    title: "Gentle Cleanse.",
+    title2: "Healthy Scalp.",
+    box: "Keratin, aloe & silk protein — 100ml of everyday care",
+    cta: "Shop the Shampoo",
+    href: "/product/sulphate-free-shampoo",
   },
 ];
 
