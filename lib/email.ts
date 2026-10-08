@@ -1,12 +1,11 @@
 /**
- * ZULFIRA — central email sender (Resend) + event helpers.
+ * ZULFIRA — central email sender (SMTP via own mail server, Resend fallback).
  * ------------------------------------------------------------------
  * - All helpers are fire-and-forget safe: they NEVER throw. Callers can
  *   invoke without awaiting, or `notifyX(...).catch(() => {})`.
  * - Every send attempt is logged to EmailLog (sent | skipped | failed).
- * - Without RESEND_API_KEY everything logs as `skipped` — nothing real
- *   is sent until the user adds RESEND_API_KEY + a verified sending
- *   domain (e.g. zulfira.shop DNS) in Vercel env vars.
+ * - Sending priority: SMTP_HOST (own Mailcow server) → RESEND_API_KEY.
+ *   Without either, everything logs as `skipped`.
  */
 
 import fs from "node:fs";
@@ -67,6 +66,34 @@ export async function sendEmail(opts: {
     await log("skipped", "no recipient address");
     return { sent: false, skipped: true };
   }
+
+  /* SMTP via own mail server (mail.pacificb2b.com) — preferred when configured. */
+  if (process.env.SMTP_HOST) {
+    try {
+      const nodemailer = (await import("nodemailer")).default;
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT ?? 587),
+        secure: process.env.SMTP_SECURE === "1",
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+      await transporter.sendMail({
+        from: process.env.EMAIL_FROM ?? "Zulfira <hello@zulfira.shop>",
+        to,
+        subject,
+        html,
+      });
+      await log("sent");
+      return { sent: true };
+    } catch (e) {
+      await log("failed", `smtp: ${String(e).slice(0, 500)}`);
+      return { sent: false };
+    }
+  }
+
   if (!process.env.RESEND_API_KEY) {
     await log("skipped", "RESEND_API_KEY not configured");
     return { sent: false, skipped: true };
@@ -80,7 +107,7 @@ export async function sendEmail(opts: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: process.env.EMAIL_FROM ?? "Zulfira <noreply@zulfira.shop>",
+        from: process.env.EMAIL_FROM ?? "Zulfira <hello@zulfira.shop>",
         to,
         subject,
         html,
