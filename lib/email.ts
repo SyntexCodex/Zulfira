@@ -68,30 +68,56 @@ export async function sendEmail(opts: {
   }
 
   /* SMTP via own mail server (mail.pacificb2b.com) — preferred when configured. */
-  if (process.env.SMTP_HOST) {
-    try {
-      const nodemailer = (await import("nodemailer")).default;
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
+  if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    const host = process.env.SMTP_HOST;
+    const user = process.env.SMTP_USER;
+    const pass = process.env.SMTP_PASS;
+    const message = {
+      from: process.env.EMAIL_FROM ?? "Zulfira <hello@zulfira.shop>",
+      to,
+      subject,
+      html,
+    };
+    // Primary: port 587 STARTTLS (or SMTP_SECURE=1 for implicit TLS).
+    // Fallback: port 465 SMTPS — some networks/routes stall on 587.
+    const attempts = [
+      {
         port: Number(process.env.SMTP_PORT ?? 587),
         secure: process.env.SMTP_SECURE === "1",
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      });
-      await transporter.sendMail({
-        from: process.env.EMAIL_FROM ?? "Zulfira <hello@zulfira.shop>",
-        to,
-        subject,
-        html,
-      });
-      await log("sent");
-      return { sent: true };
+      },
+      { port: 465, secure: true },
+    ];
+    let lastError: unknown = null;
+    try {
+      const nodemailer = (await import("nodemailer")).default;
+      for (const a of attempts) {
+        try {
+          const transporter = nodemailer.createTransport({
+            host,
+            port: a.port,
+            secure: a.secure,
+            auth: { user, pass },
+            // Serverless cold starts + long routes: be patient on greeting.
+            greetingTimeout: 30000,
+            connectionTimeout: 30000,
+            socketTimeout: 120000,
+            tls: { minVersion: "TLSv1.2" },
+          });
+          await transporter.sendMail(message);
+          await log("sent");
+          return { sent: true };
+        } catch (e) {
+          lastError = e;
+          // Only retry on connection-level failures, not auth/content errors.
+          const msg = String(e && (e as any).message ? (e as any).message : e);
+          if (!/greeting|timeout|connect|econn|socket|network/i.test(msg)) break;
+        }
+      }
     } catch (e) {
-      await log("failed", `smtp: ${String(e).slice(0, 500)}`);
-      return { sent: false };
+      lastError = e;
     }
+    await log("failed", `smtp: ${String(lastError).slice(0, 500)}`);
+    return { sent: false };
   }
 
   if (!process.env.RESEND_API_KEY) {
