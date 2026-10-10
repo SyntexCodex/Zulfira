@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const PERKS = [
-  { t: "15% off everything", d: "A permanent members-only price on oil, shampoo and bundles — no codes, no expiry." },
+  { t: "15% off everything", d: "Personal one-time member codes — 15% off, unique to you, on every order." },
   { t: "Early access", d: "Shop new launches 48 hours before anyone else, with insider-only bundle deals." },
   { t: "Birthday gift", d: "A free 100ml trial bottle lands on your doorstep every year on your birthday." },
   { t: "Founder's circle", d: "Vote on new scents, shades and products. Insiders shape what Zulfira becomes." },
@@ -23,7 +23,7 @@ export default function InsidersPage() {
         kicker="Zulfira Loyalty · Insiders Circle"
         title={<>Welcome to the <span className="text-gold">inner circle</span></>}
         subtitle="Zulfira Insiders is our members' club for the obsessed — the ones who never miss wash day. Members unlock 15% off everything, early access to launches, birthday gifts and a direct line to us."
-        badge="Members save 15% · Forever"
+        badge="Members save 15% · Personal codes"
         ctaLabel="Join the circle"
         ctaHref="/contact"
         image="/products/shampoo-front.webp"
@@ -43,7 +43,7 @@ export default function InsidersPage() {
           },
           {
             title: "Unlock member prices",
-            text: "Your code takes 15% off every order, forever. It stacks with free delivery.",
+            text: "Your personal code takes 15% off your order — unique, one-time use, made just for you. It stacks with free delivery.",
           },
           {
             title: "Enjoy the perks",
@@ -59,7 +59,7 @@ export default function InsidersPage() {
         discountLabel="Insider price · 15% off"
         ctaHref="/contact"
         ctaLabel="Become an Insider"
-        note="Insider pricing applies with your personal member code at checkout."
+        note="Your personal one-time member code applies 15% off at checkout."
       />
 
       <section className="mx-auto max-w-6xl px-4 pb-16">
@@ -81,7 +81,7 @@ export default function InsidersPage() {
 
       <CtaBand
         title="The circle is open"
-        text="Membership is free — all it takes is one message. Join Zulfira Insiders today and never pay full price again."
+        text="Membership is free — all it takes is one message. Join Zulfira Insiders today and unlock your personal 15% code."
         ctaLabel="Join the circle"
         ctaHref="/contact"
       />
