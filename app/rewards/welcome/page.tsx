@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { RewardShell, RewardHero, Steps, DealProducts, CtaBand } from "@/components/rewards/reward-ui";
-import CopyCode from "@/components/rewards/CopyCode";
+import WelcomeCodeForm from "./WelcomeCodeForm";
 
 export const metadata: Metadata = {
-  title: "Welcome Gift — 20% Off With Code INBOX20 | Zulfira",
+  title: "Welcome Gift — Personal 20% Off Code | Zulfira",
   description:
-    "Every first Zulfira box hides a gold welcome card worth 20% off your next order. Enter code INBOX20 at checkout and save on your entire ritual.",
+    "Get your personal one-time 20% welcome code by email. Unique to you, 20% off your entire ritual at checkout.",
 };
 
 export default function WelcomeGiftPage() {
@@ -13,8 +13,8 @@ export default function WelcomeGiftPage() {
     <RewardShell>
       <RewardHero
         kicker="Zulfira Loyalty · Welcome Gift"
-        title={<>Your first box hides <span className="text-gold">20% off</span></>}
-        subtitle="We don't do boring packing slips. Every first order ships with a gold welcome card — your key to 20% off your entire next order. Our way of saying: welcome to the ritual."
+        title={<>Your first ritual, <span className="text-gold">20% off</span></>}
+        subtitle="No generic codes, no fine print. Enter your email and we'll send you a personal one-time 20% code — unique to you, made for your first ritual."
         badge="First-order gift · 20% off everything"
         ctaLabel="Claim my gift"
         ctaHref="/shop"
@@ -22,35 +22,28 @@ export default function WelcomeGiftPage() {
         imageAlt="Zulfira Complete Ritual Bundle"
       />
 
-      <section className="mx-auto max-w-3xl px-4 pb-14 text-center">
-        <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-gold">Your welcome code</p>
-        <h2 className="font-display mt-3 text-2xl md:text-3xl">Tap to copy, use at checkout</h2>
-        <div className="mt-6 flex justify-center">
-          <CopyCode code="INBOX20" />
-        </div>
-        <p className="mt-4 text-sm text-white/55">
-          Found on the gold card inside your first delivery box — but you can use it right now.
-        </p>
+      <section className="mx-auto max-w-3xl px-4 pb-14">
+        <WelcomeCodeForm />
       </section>
 
       <Steps
         title="How your welcome gift works"
         steps={[
           {
-            title: "Place your first order",
-            text: "Any product counts — the oil, the shampoo, or the full ritual bundle.",
+            title: "Enter your email",
+            text: "One tap above — we generate a code that's yours alone.",
           },
           {
-            title: "Find the gold card",
-            text: "Inside your box: a gold-foil welcome card with your personal 20% code.",
+            title: "Check your inbox",
+            text: "Your personal 20% code arrives by email within a minute.",
           },
           {
-            title: "Enter INBOX20",
-            text: "Type the code at checkout on your next order — 20% melts off everything in your cart.",
+            title: "Use it at checkout",
+            text: "Type the code at checkout — 20% melts off everything in your cart.",
           },
           {
             title: "Save on your ritual",
-            text: "One code, one big saving. Your second ritual costs a fifth less than your first.",
+            text: "One code, one big saving. Your first ritual costs a fifth less.",
           },
         ]}
       />
@@ -62,12 +55,12 @@ export default function WelcomeGiftPage() {
         discountLabel="Welcome gift · 20% off"
         ctaHref="/shop"
         ctaLabel="Shop with my gift"
-        note="Code INBOX20 · one use per customer · applies to all products · free delivery still included."
+        note="Personal one-time code · 20% off · applies to all products · free delivery still included."
       />
 
       <CtaBand
-        title="Don't let 20% sit in a box"
-        text="Your welcome code is waiting. Your hair is waiting. Everybody wins."
+        title="Don't let 20% sit unclaimed"
+        text="Your personal code is one email away. Your hair is waiting. Everybody wins."
         ctaLabel="Shop now"
         ctaHref="/shop"
       />
