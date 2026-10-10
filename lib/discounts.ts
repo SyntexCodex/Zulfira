@@ -158,3 +158,60 @@ export async function programEnabled(
     config: { ...defaults, ...stored },
   };
 }
+
+/**
+ * Per-program unique one-time discount code specs.
+ * Every loyalty reward code is unique (PREFIX-XXXX), single-use
+ * (maxUses: 1) and delivered to the customer by email.
+ * Values mirror exactly what each program page advertises.
+ */
+export const PROGRAM_CODES: Record<
+  string,
+  {
+    prefix: string;
+    kind: \"percent\" | \"fixed\";
+    value: number;
+    expiryDays: number;
+    programKey: string;
+    lockPhone?: boolean;
+  }
+> = {
+  welcome: { prefix: \"WELCOME\", kind: \"percent\", value: 20, expiryDays: 30, programKey: \"inbox_upsell\" },
+  reorder: { prefix: \"REFILL\", kind: \"percent\", value: 10, expiryDays: 30, programKey: \"reorder_reminders\" },
+  subscribe: { prefix: \"SUBSCRIBE\", kind: \"percent\", value: 10, expiryDays: 45, programKey: \"subscribe_save\" },
+  insiders: { prefix: \"INSIDER\", kind: \"percent\", value: 15, expiryDays: 90, programKey: \"insiders\", lockPhone: true },
+  gift_friend: { prefix: \"GIFT\", kind: \"percent\", value: 15, expiryDays: 30, programKey: \"gift_trial\" },
+  gift_credit: { prefix: \"CREDIT\", kind: \"fixed\", value: 200, expiryDays: 60, programKey: \"gift_trial\" },
+  challenge: { prefix: \"BUNDLE\", kind: \"fixed\", value: 1700, expiryDays: 60, programKey: \"challenge_30\" },
+};
+
+export interface IssueProgramCodeInput {
+  phone?: string;
+  email?: string;
+  valueOverride?: number;
+}
+
+/**
+ * Issue a unique one-time discount code for a loyalty program.
+ * Returns the code string. Throws on unknown program.
+ */
+export async function issueProgramCode(
+  db: any,
+  program: keyof typeof PROGRAM_CODES,
+  input: IssueProgramCodeInput = {}
+): Promise<{ code: string; spec: (typeof PROGRAM_CODES)[string] }> {
+  const spec = PROGRAM_CODES[program];
+  if (!spec) throw new Error(`Unknown program code spec: ${String(program)}`);
+  const expiresAt = new Date(Date.now() + spec.expiryDays * 24 * 60 * 60 * 1000);
+  const { code } = await createDiscountCode(db, {
+    code: generateCode(spec.prefix),
+    kind: spec.kind,
+    value: input.valueOverride ?? spec.value,
+    maxUses: 1,
+    programKey: spec.programKey,
+    phone: spec.lockPhone ? input.phone : undefined,
+    expiresAt,
+    isActive: true,
+  });
+  return { code, spec };
+}
