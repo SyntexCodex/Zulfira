@@ -169,20 +169,20 @@ export const PROGRAM_CODES: Record<
   string,
   {
     prefix: string;
-    kind: \"percent\" | \"fixed\";
+    kind: "percent" | "fixed";
     value: number;
     expiryDays: number;
     programKey: string;
     lockPhone?: boolean;
   }
 > = {
-  welcome: { prefix: \"WELCOME\", kind: \"percent\", value: 20, expiryDays: 30, programKey: \"inbox_upsell\" },
-  reorder: { prefix: \"REFILL\", kind: \"percent\", value: 10, expiryDays: 30, programKey: \"reorder_reminders\" },
-  subscribe: { prefix: \"SUBSCRIBE\", kind: \"percent\", value: 10, expiryDays: 45, programKey: \"subscribe_save\" },
-  insiders: { prefix: \"INSIDER\", kind: \"percent\", value: 15, expiryDays: 90, programKey: \"insiders\", lockPhone: true },
-  gift_friend: { prefix: \"GIFT\", kind: \"percent\", value: 15, expiryDays: 30, programKey: \"gift_trial\" },
-  gift_credit: { prefix: \"CREDIT\", kind: \"fixed\", value: 200, expiryDays: 60, programKey: \"gift_trial\" },
-  challenge: { prefix: \"BUNDLE\", kind: \"fixed\", value: 1700, expiryDays: 60, programKey: \"challenge_30\" },
+  welcome: { prefix: "WELCOME", kind: "percent", value: 20, expiryDays: 30, programKey: "inbox_upsell" },
+  reorder: { prefix: "REFILL", kind: "percent", value: 10, expiryDays: 30, programKey: "reorder_reminders" },
+  subscribe: { prefix: "SUBSCRIBE", kind: "percent", value: 10, expiryDays: 45, programKey: "subscribe_save" },
+  insiders: { prefix: "INSIDER", kind: "percent", value: 15, expiryDays: 90, programKey: "insiders", lockPhone: true },
+  gift_friend: { prefix: "GIFT", kind: "percent", value: 15, expiryDays: 30, programKey: "gift_trial" },
+  gift_credit: { prefix: "CREDIT", kind: "fixed", value: 200, expiryDays: 60, programKey: "gift_trial" },
+  challenge: { prefix: "BUNDLE", kind: "fixed", value: 1700, expiryDays: 60, programKey: "challenge_30" },
 };
 
 export interface IssueProgramCodeInput {
