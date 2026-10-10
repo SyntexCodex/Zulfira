@@ -62,8 +62,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/banners/hero-duo.webp",
-        width: 1200,
-        height: 630,
+        width: 1600,
+        height: 893,
         alt: "Zulfira natural hair care — hair oil and sulphate-free shampoo",
       },
     ],

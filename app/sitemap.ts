@@ -13,6 +13,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/gift-trial",
     "/equity",
     "/track-order",
+    "/rewards",
+    "/rewards/welcome",
+    "/rewards/reorder",
+    "/rewards/subscribe",
+    "/rewards/reviews",
+    "/rewards/insiders",
   ];
   const entries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${SITE_URL}${route}`,
