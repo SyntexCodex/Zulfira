@@ -177,11 +177,10 @@ export const PAYMENT_METHODS = {
   },
 } as const;
 
-// Placeholder merchant accounts — replace with real details before launch.
+// Real merchant accounts (provided by owner 2026-10-10). EasyPaisa number still pending.
 export const ONLINE_PAYMENT_DETAILS = [
-  { label: "JazzCash", value: "0300-1234567", title: "Zulfira (placeholder)" },
-  { label: "EasyPaisa", value: "0300-1234567", title: "Zulfira (placeholder)" },
-  { label: "Bank transfer", value: "PK00 XXXX 0000 0000 0000 0000", title: "Zulfira (placeholder)" },
+  { label: "JazzCash", value: "03092161570", title: "Syed Muzammil Ahmad Bukhari" },
+  { label: "Bank transfer (Faysal Bank)", value: "3163704000011988", title: "Syed Muzammil Ahmad Bukhari · IBAN: PK38FAYS3163704000011988" },
 ];
 
 export const REVIEWS = [
