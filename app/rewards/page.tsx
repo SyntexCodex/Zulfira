@@ -31,7 +31,7 @@ const PROGRAMS = [
     name: "Welcome Gift",
     href: "/rewards/welcome",
     badge: "20% OFF",
-    blurb: "Your first box hides a gold card worth 20% off your entire next order. Code INBOX20.",
+    blurb: "Claim your personal one-time 20% welcome code by email — unique to you.",
   },
   {
     name: "30-Day Hair Challenge",
