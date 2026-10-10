@@ -63,7 +63,7 @@ export default function GiftTrialPage() {
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-white/70">
           Know someone who needs the Zulfira ritual? We'll send them a free 100ml trial bottle
-          (COD-free, on us). They get 15% off their first order with code <span className="font-bold text-gold">FRIEND15</span> —
+          (COD-free, on us). They get 15% off their first order with a <span className="font-bold text-gold">personal one-time code</span> emailed to them —
           and when they order, <span className="font-semibold text-gold">you earn Rs 200</span> wallet credit.
         </p>
         <div className="mx-auto mt-6 h-px w-24 bg-gold/60" />
