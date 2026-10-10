@@ -17,7 +17,7 @@ export const CONTACT = {
  */
 export const SOCIAL_LINKS = {
   facebook: "https://www.facebook.com/profile.php?id=61593966274766",
-  instagram: "https://www.instagram.com/zulfira_0/",    
+  instagram: "https://www.instagram.com/zulfira_0/",
   tiktok: "https://www.tiktok.com/@zulfira.official",
 };
 
@@ -177,9 +177,10 @@ export const PAYMENT_METHODS = {
   },
 } as const;
 
-// Real merchant accounts (provided by owner 2026-10-10). EasyPaisa number still pending.
+// Real merchant accounts (provided by owner 2026-10-10).
 export const ONLINE_PAYMENT_DETAILS = [
   { label: "JazzCash", value: "03092161570", title: "Syed Muzammil Ahmad Bukhari" },
+  { label: "EasyPaisa", value: "03092161570", title: "Syed Muzammil Ahmad Bukhari" },
   { label: "Bank transfer (Faysal Bank)", value: "3163704000011988", title: "Syed Muzammil Ahmad Bukhari · IBAN: PK38FAYS3163704000011988" },
 ];
 
