@@ -221,7 +221,7 @@ export default function ProductView({ product, related }: { product: Product; re
             )}
           </div>
           <p className="mt-2 flex items-center gap-1.5 text-[13px] text-muted">
-            <Truck className="h-4 w-4" /> Free delivery above Rs 1,900 · Cash on Delivery available
+            <Truck className="h-4 w-4" /> Free home delivery on all orders · Cash on Delivery available
           </p>
 
           {subscribeEnabled && (
@@ -351,7 +351,7 @@ export default function ProductView({ product, related }: { product: Product; re
               </ul>
             </Accordion>
             <Accordion title="Shipping & Returns">
-              <p>Dispatched within 24 hours. Delivery takes 2–4 working days across Pakistan. Free delivery above Rs 1,900. 7-day replacement for damaged or incorrect items.</p>
+              <p>Dispatched within 24 hours. Delivery takes 2–4 working days across Pakistan. Free home delivery on all orders. 7-day replacement for damaged or incorrect items.</p>
             </Accordion>
           </div>
         </div>
