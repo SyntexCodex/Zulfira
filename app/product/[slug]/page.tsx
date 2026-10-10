@@ -40,8 +40,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     name: product.name,
     description: product.short,
     image: product.gallery.map((g) => `${SITE_URL}${g}`),
+    brand: { "@type": "Brand", name: "Zulfira" },
     offers: {
       "@type": "Offer",
+      url: `${SITE_URL}/product/${product.slug}`,
       priceCurrency: "PKR",
       price: product.price,
       availability: "https://schema.org/InStock",
@@ -53,9 +55,28 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     },
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Shop", item: `${SITE_URL}/shop` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.name,
+        item: `${SITE_URL}/product/${product.slug}`,
+      },
+    ],
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <ProductView product={product} related={related} />
     </>
   );
