@@ -4,7 +4,8 @@ export const runtime = "nodejs";
 import type { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { ok, err, dbRequired } from "@/lib/api";
-import { programEnabled, normPhone } from "@/lib/discounts";
+import { programEnabled, normPhone, issueProgramCode } from "@/lib/discounts";
+import { notifyGiftTrial } from "@/lib/email";
 
 // PUBLIC — is the gift-a-trial program open?
 export async function GET() {
@@ -81,23 +82,25 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Ensure the shared friend code exists.
+  // Unique one-time 15% code for this friend (replaces the old shared FRIEND15).
   const pct = Number(config.friendDiscountPct ?? 15);
-  await db.discountCode.upsert({
-    where: { code: "FRIEND15" },
-    create: {
-      code: "FRIEND15",
-      kind: "percent",
-      value: pct,
-      maxUses: 10000,
-      programKey: "gift_trial",
-      isActive: true,
-    },
-    update: { kind: "percent", value: pct, maxUses: 10000, programKey: "gift_trial", isActive: true },
+  const { code: friendCode } = await issueProgramCode(db, "gift_friend", {
+    phone: friendPhone,
+    valueOverride: pct,
   });
+
+  // Email the personal code to the friend (if they gave an email).
+  if (friendEmail) {
+    notifyGiftTrial(db, {
+      email: friendEmail,
+      name: friendName,
+      kind: "friend_welcome",
+      code: friendCode,
+    }).catch(() => {});
+  }
 
   return ok({
     trialId: trial.id,
-    message: `Thank you, ${senderName.split(" ")[0]}! We'll send a free trial bottle to ${friendName} soon. They get ${pct}% off their first order with code FRIEND15.`,
+    message: `Thank you, ${senderName.split(" ")[0]}! We'll send a free trial bottle to ${friendName} soon. They get ${pct}% off their first order with their personal code${friendEmail ? ", emailed to them" : ""}.`,
   });
 }
