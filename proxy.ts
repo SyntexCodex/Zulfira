@@ -25,6 +25,8 @@ const PUBLIC_API: { method: string; pattern: RegExp }[] = [
   { method: "GET", pattern: /^\/api\/equity\/owners$/ },
   { method: "POST", pattern: /^\/api\/equity\/apply$/ },
   { method: "POST", pattern: /^\/api\/gift-trial$/ },
+  { method: "GET", pattern: /^\/api\/gift-trial$/ },
+  { method: "POST", pattern: /^\/api\/welcome-code$/ },
   { method: "POST", pattern: /^\/api\/reviews$/ },
   { method: "GET", pattern: /^\/api\/reviews$/ },
 ];
