@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 import type { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { ok, err, dbRequired } from "@/lib/api";
-import { programEnabled, normPhone } from "@/lib/discounts";
+import { programEnabled, normPhone, issueProgramCode } from "@/lib/discounts";
 import { getSetting, setSetting } from "@/lib/settings";
 import { sendTelegram, tgEscape } from "@/lib/telegram";
 import { notifyInsidersInvite } from "@/lib/email";
