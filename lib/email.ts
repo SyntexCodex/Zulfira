@@ -533,6 +533,7 @@ export async function notifyChallenge(
     email?: string;
     name: string;
     kind: "signup" | "day7" | "day14" | "day21" | "completed";
+    code?: string;
   }
 ): Promise<{ sent: boolean; skipped?: boolean }> {
   try {
@@ -555,8 +556,8 @@ export async function notifyChallenge(
         body: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0;">Nine days to go. Finish strong — the best transformation wins a 1-year supply of Zulfira.</p>`,
       },
       completed: {
-        title: "Challenge complete",
-        body: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0;">You did it — 30 days of ritual complete. Winners will be announced soon. Strong Roots. Silk Shine.</p>`,
+        title: "Challenge complete — your free bundle awaits",
+        body: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 12px 0;">You did it — 30 days of ritual complete. As promised, here is your <strong>free Complete Ritual Bundle</strong> (worth Rs 1,700), as a personal one-time code:</p>${args.code ? codeChip(args.code) : ""}<p style="font-size:13px;line-height:1.7;color:#6F6F6F;margin:8px 0 0 0;">Apply the code at checkout. One use per finisher. Winners of the 1-year supply will be announced soon. Strong Roots. Silk Shine.</p>`,
       },
     };
     const c = copy[args.kind];
@@ -601,7 +602,7 @@ export async function notifyGiftTrial(
           }
         : {
             title: "A friend gifted you Zulfira",
-            body: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 12px 0;">Someone who cares about your hair sent you a free trial bottle of Zulfira Revitalizing Hair Oil. Welcome to the ritual.</p><p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 4px 0;">Use this code for <strong>15% off</strong> your first full-size order:</p>${codeChip(escapeHtml(args.code ?? "FRIEND15"))}`,
+            body: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 12px 0;">Someone who cares about your hair sent you a free trial bottle of Zulfira Revitalizing Hair Oil. Welcome to the ritual.</p><p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 4px 0;">Use this code for <strong>15% off</strong> your first full-size order:</p>${codeChip(escapeHtml(args.code ?? ""))}`,
             unsub: unsubscribeLink(args.email),
           };
     const html = miniEmail({
@@ -626,15 +627,18 @@ export async function notifyGiftTrial(
 /** Zulfira Insiders invite (marketing → gate on unsubscribe). */
 export async function notifyInsidersInvite(
   db: any,
-  args: { email?: string; name: string }
+  args: { email?: string; name: string; code?: string }
 ): Promise<{ sent: boolean; skipped?: boolean }> {
   try {
     if (!args.email) return { sent: false, skipped: true };
     if (await isUnsubscribed(db, args.email)) return { sent: false, skipped: true };
+    const codeHtml = args.code
+      ? `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:12px 0 4px 0;">Your personal <strong style="color:#A8821C;">15% off</strong> member code — one-time use, just for you:</p>${codeChip(args.code)}<p style="font-size:13px;line-height:1.7;color:#6F6F6F;margin:8px 0 0 0;">Apply the code at checkout. One use per member.</p>`
+      : `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0;">Reply to this email to join — we'll send your invite.</p>`;
     const html = miniEmail({
       customerName: firstName(args.name),
       title: "You're invited: Zulfira Insiders",
-      bodyHtml: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 12px 0;">As one of our repeat customers, you're invited to <strong>Zulfira Insiders</strong> — our private members' circle with early access to new formulas, members-only prices, and hair-ritual tips from our studio.</p><p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0;">Reply to this email to join — we'll send your invite.</p>`,
+      bodyHtml: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 12px 0;">As one of our repeat customers, you're invited to <strong>Zulfira Insiders</strong> — our private members' circle with early access to new formulas, members-only prices, and hair-ritual tips from our studio.</p>${codeHtml}`,
       unsubscribeUrl: unsubscribeLink(args.email),
     });
     return await sendEmail({
@@ -642,6 +646,30 @@ export async function notifyInsidersInvite(
       subject: "You're invited: Zulfira Insiders",
       html,
       template: "insiders",
+    });
+  } catch {
+    return { sent: false };
+  }
+}
+
+/** Welcome gift — unique one-time 20% code, transactional-ish (no unsubscribe gate). */
+export async function notifyWelcomeCode(
+  db: any,
+  args: { email: string; name?: string; code: string; expiryDate: string }
+): Promise<{ sent: boolean; skipped?: boolean }> {
+  try {
+    const html = miniEmail({
+      customerName: firstName(args.name ?? ""),
+      title: "Your personal 20% welcome gift",
+      bodyHtml: `<p style="font-size:15px;line-height:1.7;color:#3a3a3a;margin:0 0 12px 0;">Welcome to Zulfira. Here is your personal <strong style="color:#A8821C;">20% off</strong> code for your first ritual — made just for you, single use.</p>${codeChip(args.code)}<p style="font-size:13px;line-height:1.7;color:#6F6F6F;margin:8px 0 0 0;">Apply the code at checkout before ${escapeHtml(args.expiryDate)}. One use per customer. Free delivery included.</p>`,
+      ctaUrl: `${SITE_URL}/shop`,
+      ctaLabel: "SHOP NOW",
+    });
+    return await sendEmail({
+      to: args.email,
+      subject: "Your personal 20% welcome code — Zulfira",
+      html,
+      template: "welcome-code",
     });
   } catch {
     return { sent: false };
