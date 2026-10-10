@@ -5,9 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import { useCart } from "@/lib/cart";
 
 export default function PromoPopup() {
   const [open, setOpen] = useState(false);
+  const { isOpen: cartOpen } = useCart();
 
   useEffect(() => {
     if (localStorage.getItem("zulfira-popup-seen")) return;
@@ -15,10 +17,18 @@ export default function PromoPopup() {
     return () => clearTimeout(t);
   }, []);
 
+  // Never cover the cart drawer — wait until it's closed
+  useEffect(() => {
+    if (cartOpen) setOpen(false);
+  }, [cartOpen]);
+
   const close = () => {
     localStorage.setItem("zulfira-popup-seen", "1");
     setOpen(false);
   };
+
+  // Don't render over the cart drawer (z-71) — popup is z-90
+  if (cartOpen) return null;
 
   return (
     <AnimatePresence>
