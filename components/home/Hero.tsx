@@ -21,11 +21,11 @@ const SLIDES = [
     eyebrow: "Bestseller · Revitalizing Hair Oil",
     title: "Nourish First.",
     title2: "Shine Always.",
-    box: "Argan, coconut & castor — the pre-wash ritual your hair deserves",
+    box: "Argan, amla & organic seeds — the pre-wash ritual your hair deserves",
     cta: "Shop the Oil",
     href: "/product/revitalizing-hair-oil",
   },
-    {
+  {
     image: "/banners/hero-shampoo.webp",
     eyebrow: "New · Sulphate-Free Shampoo",
     title: "Gentle Cleanse.",
@@ -33,6 +33,15 @@ const SLIDES = [
     box: "Keratin, aloe & silk protein — 100ml of everyday care",
     cta: "Shop the Shampoo",
     href: "/product/sulphate-free-shampoo",
+  },
+  {
+    image: "/banners/hero-results.webp",
+    eyebrow: "Real Results · Before & After",
+    title: "See the",
+    title2: "Difference.",
+    box: "Frizz to silk shine — the Zulfira ritual transforms real hair",
+    cta: "Start Your Ritual",
+    href: "/shop",
   },
 ];
 
