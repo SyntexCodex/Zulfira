@@ -170,21 +170,21 @@ export default function CheckoutPage() {
           {/* form */}
           <div className="space-y-8">
             <Reveal>
-              <section className="card p-7 sm:p-8">
+              <section className="card p-5 sm:p-8">
                 <h2 className="font-display text-xl font-semibold">1 · Contact & delivery</h2>
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  <input placeholder="Full name *" value={form.name} onChange={set("name")} className="input-clean rounded-xl px-5 py-3.5 text-[15px]" />
-                  <input placeholder="Mobile number * (03xx-xxxxxxx)" value={form.phone} onChange={set("phone")} inputMode="tel" className="input-clean rounded-xl px-5 py-3.5 text-[15px]" />
-                  <input placeholder="Email (optional, for order updates)" value={form.email} onChange={set("email")} inputMode="email" className="input-clean rounded-xl px-5 py-3.5 text-[15px] sm:col-span-2" />
-                  <input placeholder="Street address *" value={form.address} onChange={set("address")} className="input-clean rounded-xl px-5 py-3.5 text-[15px] sm:col-span-2" />
-                  <input placeholder="City *" value={form.city} onChange={set("city")} className="input-clean rounded-xl px-5 py-3.5 text-[15px]" />
-                  <input placeholder="Landmark (optional)" value={form.notes} onChange={set("notes")} className="input-clean rounded-xl px-5 py-3.5 text-[15px]" />
+                  <input placeholder="Full name *" value={form.name} onChange={set("name")} className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm" />
+                  <input placeholder="Mobile number * (03xx-xxxxxxx)" value={form.phone} onChange={set("phone")} inputMode="tel" className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm" />
+                  <input placeholder="Email (optional, for order updates)" value={form.email} onChange={set("email")} inputMode="email" className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm sm:col-span-2" />
+                  <input placeholder="Street address *" value={form.address} onChange={set("address")} className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm sm:col-span-2" />
+                  <input placeholder="City *" value={form.city} onChange={set("city")} className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm" />
+                  <input placeholder="Landmark (optional)" value={form.notes} onChange={set("notes")} className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm" />
                 </div>
               </section>
             </Reveal>
 
             <Reveal delay={0.08}>
-              <section className="card p-7 sm:p-8">
+              <section className="card p-5 sm:p-8">
                 <h2 className="font-display text-xl font-semibold">2 · Payment method</h2>
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   {[
@@ -216,13 +216,13 @@ export default function CheckoutPage() {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-5 rounded-2xl bg-gold-soft p-5">
+                      <div className="mt-5 rounded-2xl bg-gold-soft p-4 sm:p-5">
                         <p className="text-sm font-bold">Pay to any of these accounts, then email the receipt to {CONTACT.email} with your order number:</p>
                         <ul className="mt-3 space-y-2.5">
                           {ONLINE_PAYMENT_DETAILS.map((d) => (
-                            <li key={d.label} className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
+                            <li key={d.label} className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1 text-sm">
                               <span className="font-semibold text-coal">{d.label}</span>
-                              <span className="font-mono text-[13px]">{d.value}</span>
+                              <span className="break-all font-mono text-[13px]">{d.value}</span>
                               <span className="w-full text-xs text-muted">{d.title}</span>
                             </li>
                           ))}
@@ -259,7 +259,7 @@ export default function CheckoutPage() {
 
           {/* summary */}
           <Reveal delay={0.1}>
-            <aside className="card h-fit p-7 lg:sticky lg:top-28">
+            <aside className="card h-fit p-5 sm:p-7 lg:sticky lg:top-28">
               <h2 className="font-display text-xl font-semibold">Order summary</h2>
               <div className="mt-5 rounded-2xl bg-coal/[0.03] p-4">
                 <p className="text-sm font-bold">Discount code</p>
