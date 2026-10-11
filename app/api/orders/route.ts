@@ -225,20 +225,26 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Order confirmation email (fire-and-forget; skipped silently without an address).
-  notifyOrderPlaced(db, {
-    email: email ?? undefined,
-    customerName: name,
-    orderNo: created.orderNo,
-    createdAt: new Date(),
-    items: resolved.map((it) => ({ name: it.name, qty: it.qty, unitPrice: it.unitPrice })),
-    subtotal,
-    deliveryCharge,
-    total,
-    payment,
-    address: `${address}, ${city}`,
-    city,
-  }).catch(() => {});
+  // Order confirmation email — awaited (not fire-and-forget) so Vercel
+  // serverless doesn't terminate before the SMTP send completes.
+  // Internal try/catch in notifyOrderPlaced ensures this never throws.
+  try {
+    await notifyOrderPlaced(db, {
+      email: email ?? undefined,
+      customerName: name,
+      orderNo: created.orderNo,
+      createdAt: new Date(),
+      items: resolved.map((it) => ({ name: it.name, qty: it.qty, unitPrice: it.unitPrice })),
+      subtotal,
+      deliveryCharge,
+      total,
+      payment,
+      address: `${address}, ${city}`,
+      city,
+    });
+  } catch {
+    /* email failure must never break order placement */
+  }
 
   // Fire-and-forget alert (never throws when Telegram isn't configured).
   if ((await getSetting("alert_new_order", "1")) !== "0") {
