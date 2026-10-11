@@ -40,21 +40,21 @@ export function FlashSaleBar() {
   const { d, h, m, s } = useCountdown();
   if (hidden) return null;
   const cell = (v: number, l: string) => (
-    <span className="flex flex-col items-center">
-      <span className="text-xl font-extrabold tabular-nums leading-none text-gold sm:text-2xl">
+    <span className="flex min-w-0 flex-col items-center">
+      <span className="text-lg font-extrabold tabular-nums leading-none text-gold sm:text-2xl">
         {String(v).padStart(2, "0")}
       </span>
-      <span className="mt-1 text-[9px] font-medium uppercase tracking-widest text-white/70">{l}</span>
+      <span className="mt-1 text-[8px] font-medium uppercase tracking-widest text-white/70 sm:text-[9px]">{l}</span>
     </span>
   );
   return (
     <div className="relative bg-coal px-4 py-2.5 text-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-center gap-4 sm:gap-8">
-        <div className="text-center">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-8">
+        <div className="min-w-0 text-center">
           <p className="text-sm font-extrabold uppercase tracking-wide sm:text-base">{FLASH_SALE.title}</p>
           <p className="text-[10px] text-white/75 sm:text-[11px]">{FLASH_SALE.subtitle}</p>
         </div>
-        <div className="flex items-start gap-2 sm:gap-3">
+        <div className="flex min-w-0 items-start gap-1.5 sm:gap-3">
           {cell(d, "Days")}
           <span className="pt-0.5 font-bold text-white/60">:</span>
           {cell(h, "Hours")}
