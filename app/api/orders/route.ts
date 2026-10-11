@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
   const rawEmail = customer.email ? String(customer.email).trim() : "";
   const email = /^\S+@\S+\.\S+$/.test(rawEmail) ? rawEmail : null;
   if (!name) return err("Customer name is required", 400);
+  if (!email) return err("A valid email address is required", 400);
   if (!phone) return err("Customer phone is required", 400);
   if (!address) return err("Customer address is required", 400);
   if (!city) return err("Customer city is required", 400);
