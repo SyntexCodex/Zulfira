@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ShoppingBag, Truck, Banknote, CreditCard,
-  CheckCircle2, ArrowLeft, Lock, AlertTriangle,
+  ArrowLeft, Lock, AlertTriangle,
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import {
@@ -20,11 +21,11 @@ const SHIP_FEE = 200;
 export const dynamic = "force-dynamic";
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const { items, subtotal, count, clear } = useCart();
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", city: "", notes: "" });
   const [payMethod, setPayMethod] = useState<"cod" | "online">("cod");
   const [orderState, setOrderState] = useState<"idle" | "submitting" | "error">("idle");
-  const [orderNo, setOrderNo] = useState<string | null>(null);
   const [apiError, setApiError] = useState("");
   const [code, setCode] = useState("");
   const [appliedCode, setAppliedCode] = useState<{ code: string; amount: number } | null>(null);
@@ -111,9 +112,9 @@ export default function CheckoutPage() {
       if (!res.ok || !json?.ok || !json?.data?.orderNo) {
         throw new Error(json?.error || `Server responded ${res.status}`);
       }
-      setOrderNo(json.data.orderNo);
       setOrderState("idle");
       clear();
+      router.push(`/thank-you?order=${encodeURIComponent(json.data.orderNo)}`);
     } catch (e) {
       setOrderState("error");
       setApiError(
@@ -123,33 +124,6 @@ export default function CheckoutPage() {
       );
     }
   };
-
-  if (orderNo) {
-    return (
-      <div className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
-        <Reveal>
-          <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-coal/10">
-            <CheckCircle2 className="h-10 w-10 text-coal" />
-          </span>
-          <>
-            <h1 className="font-display mt-7 text-3xl font-semibold sm:text-4xl">Order placed!</h1>
-            <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-muted">
-              Thank you! Your order <b className="text-ink">{orderNo}</b> has been received.
-              We'll message you back shortly to finalize {payMethod === "cod" ? "your Cash on Delivery" : "payment details"}.
-            </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href="/track-order" className="btn-primary rounded-full px-8 py-3.5 text-sm font-semibold">
-                Track Your Order
-              </Link>
-              <Link href="/shop" className="btn-outline-dark rounded-full px-8 py-3.5 text-sm font-semibold">
-                Continue Shopping
-              </Link>
-            </div>
-          </>
-        </Reveal>
-      </div>
-    );
-  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
