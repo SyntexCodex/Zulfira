@@ -311,7 +311,7 @@ export default function CheckoutPage() {
                           {it.qty}
                         </span>
                       </span>
-                      <div className="flex-1">
+                      <div className="min-w-0 flex-1">
                         <p className="text-[13.5px] font-semibold leading-snug">{p.name}</p>
                         <p className="text-xs text-muted">{p.size}</p>
                       </div>
