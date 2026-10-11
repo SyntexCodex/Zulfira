@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import { Prisma } from "@prisma/client";
 import { getDb } from "@/lib/db";
 import { ok, err, dbRequired } from "@/lib/api";
-import { validateDiscountCode, programEnabled } from "@/lib/discounts";
+import { validateDiscountCode, programEnabled, issueProgramCode } from "@/lib/discounts";
 import { createSubscriptionsForOrder } from "@/lib/subscriptions";
 import { notifyOrderPlaced } from "@/lib/email";
 import { generateOrderNo, adjustStock, checkLowStock } from "@/lib/orders";
@@ -228,6 +228,14 @@ export async function POST(req: NextRequest) {
   // Order confirmation email — awaited (not fire-and-forget) so Vercel
   // serverless doesn't terminate before the SMTP send completes.
   // Internal try/catch in notifyOrderPlaced ensures this never throws.
+  // Also issue a one-time 10% reorder code to include in the email.
+  let reorderCode: string | null = null;
+  try {
+    const issued = await issueProgramCode(db, "reorder");
+    reorderCode = issued.code;
+  } catch {
+    /* code issuance must never break order placement */
+  }
   try {
     await notifyOrderPlaced(db, {
       email: email ?? undefined,
@@ -241,6 +249,7 @@ export async function POST(req: NextRequest) {
       payment,
       address: `${address}, ${city}`,
       city,
+      reorderCode,
     });
   } catch {
     /* email failure must never break order placement */
