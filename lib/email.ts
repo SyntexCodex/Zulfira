@@ -371,6 +371,7 @@ export async function notifyOrderStatus(
     courierName?: string | null;
     trackingNumber?: string | null;
     city: string;
+    reorderCode?: string | null;
   },
   statusMessage: string,
   timelineHtml: string
@@ -390,10 +391,28 @@ export async function notifyOrderStatus(
       ...footerVars(order.email),
     });
     if (!html) return { sent: false };
+    const reorderSection = order.reorderCode
+      ? `<tr>
+<td style="padding:16px 40px 8px 40px;font-family:Helvetica,Arial,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#0B0B0B;border-radius:10px;overflow:hidden;">
+<tr>
+<td align="center" style="padding:28px 24px;">
+<div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C9A227;font-weight:bold;margin-bottom:10px;">A gift for your next ritual</div>
+<div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#FFFFFF;margin-bottom:8px;">Enjoy 10% off your next order</div>
+<div style="font-size:13px;color:#CBB98A;margin-bottom:16px;">Use this one-time code at checkout:</div>
+<div style="display:inline-block;background-color:#FFFFFF;border:2px dashed #C9A227;border-radius:8px;padding:12px 32px;font-family:'Courier New',monospace;font-size:22px;font-weight:bold;letter-spacing:3px;color:#0B0B0B;">${escapeHtml(order.reorderCode)}</div>
+<div style="font-size:12px;color:#8a8a8a;margin-top:12px;">Valid for 30 days · One-time use</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>`
+      : "";
+    const finalHtml = html.replace("{{reorder_section}}", reorderSection);
     return await sendEmail({
       to: order.email,
       subject: `Order #${order.orderNo}: ${order.status.replace(/_/g, " ")} — Zulfira`,
-      html,
+      html: finalHtml,
       template: "order-status-update",
     });
   } catch {
