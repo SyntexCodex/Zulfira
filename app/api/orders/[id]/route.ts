@@ -10,6 +10,7 @@ import { adjustStock } from "@/lib/orders";
 import { getSetting } from "@/lib/settings";
 import { sendTelegram, tgEscape } from "@/lib/telegram";
 import { notifyOrderStatus, notifyDelivered } from "@/lib/email";
+import { issueProgramCode } from "@/lib/discounts";
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -152,28 +153,45 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     );
   }
 
-  // Customer status emails (fire-and-forget; skipped silently without an address).
+  // Customer status emails — awaited (not fire-and-forget) so Vercel
+  // serverless doesn't terminate before the SMTP send completes.
   if (updated.email) {
-    notifyOrderStatus(
-      db,
-      {
-        email: updated.email,
-        customerName: updated.customerName,
-        orderNo: updated.orderNo,
-        status,
-        courierName: updated.courierName ?? undefined,
-        trackingNumber: updated.trackingNumber ?? undefined,
-        city: updated.city,
-      },
-      STATUS_COPY[status] ?? `Your order status is now ${status}.`,
-      timelineSnippet(status)
-    ).catch(() => {});
+    let reorderCode: string | null = null;
+    try {
+      const issued = await issueProgramCode(db, "reorder");
+      reorderCode = issued.code;
+    } catch {
+      /* code issuance must never break the status update */
+    }
+    try {
+      await notifyOrderStatus(
+        db,
+        {
+          email: updated.email,
+          customerName: updated.customerName,
+          orderNo: updated.orderNo,
+          status,
+          courierName: updated.courierName ?? undefined,
+          trackingNumber: updated.trackingNumber ?? undefined,
+          city: updated.city,
+          reorderCode,
+        },
+        STATUS_COPY[status] ?? `Your order status is now ${status}.`,
+        timelineSnippet(status)
+      );
+    } catch {
+      /* email failure must never break the status update */
+    }
     if (status === "DELIVERED") {
-      notifyDelivered(db, {
-        email: updated.email,
-        customerName: updated.customerName,
-        orderNo: updated.orderNo,
-      }).catch(() => {});
+      try {
+        await notifyDelivered(db, {
+          email: updated.email,
+          customerName: updated.customerName,
+          orderNo: updated.orderNo,
+        });
+      } catch {
+        /* email failure must never break the status update */
+      }
     }
   }
 
