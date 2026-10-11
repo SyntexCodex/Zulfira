@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import { FlashSaleBar, AnnouncementBar } from "@/components/layout/TopBars";
 import CartDrawer from "@/components/CartDrawer";
 import VisitorPing from "@/components/VisitorPing";
+import MetaPixel from "@/components/MetaPixel";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -127,6 +128,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <CartProvider>
+          <MetaPixel />
           <VisitorPing />
           <FlashSaleBar />
           <AnnouncementBar />
