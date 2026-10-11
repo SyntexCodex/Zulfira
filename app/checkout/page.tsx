@@ -81,7 +81,7 @@ export default function CheckoutPage() {
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const valid = form.name.trim() && /^0?3\d{9}$/.test(form.phone.replace(/[\s-]/g, "")) && form.address.trim() && form.city.trim();
+  const valid = form.name.trim() && /^\S+@\S+\.\S+$/.test(form.email.trim()) && /^0?3\d{9}$/.test(form.phone.replace(/[\s-]/g, "")) && form.address.trim() && form.city.trim();
 
   const submitOrder = async () => {
     if (!valid || orderState === "submitting") return;
@@ -149,7 +149,7 @@ export default function CheckoutPage() {
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   <input placeholder="Full name *" value={form.name} onChange={set("name")} className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm" />
                   <input placeholder="Mobile number * (03xx-xxxxxxx)" value={form.phone} onChange={set("phone")} inputMode="tel" className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm" />
-                  <input placeholder="Email (optional, for order updates)" value={form.email} onChange={set("email")} inputMode="email" className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm sm:col-span-2" />
+                  <input placeholder="Email * (for order updates)" value={form.email} onChange={set("email")} inputMode="email" className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm sm:col-span-2" />
                   <input placeholder="Street address *" value={form.address} onChange={set("address")} className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm sm:col-span-2" />
                   <input placeholder="City *" value={form.city} onChange={set("city")} className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm" />
                   <input placeholder="Landmark (optional)" value={form.notes} onChange={set("notes")} className="input-clean w-full min-w-0 rounded-xl px-4 py-3 text-sm" />
