@@ -118,6 +118,7 @@ export async function POST(req: NextRequest) {
       code: rawDiscountCode,
       subtotal,
       phone,
+      email: email ?? undefined,
     });
     if (!check.ok) return err(check.error ?? "Invalid discount code", 400);
     discount = check.discountAmount ?? 0;
