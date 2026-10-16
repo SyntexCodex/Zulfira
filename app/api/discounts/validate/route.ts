@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   const db = getDb();
   if (!db) return dbRequired();
 
-  let body: { code?: unknown; subtotal?: unknown; phone?: unknown };
+  let body: { code?: unknown; subtotal?: unknown; phone?: unknown; email?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     code: String(body.code ?? ""),
     subtotal: Number(body.subtotal) || 0,
     phone: body.phone ? String(body.phone) : undefined,
+    email: body.email ? String(body.email) : undefined,
   });
   if (!result.ok) return err(result.error ?? "Invalid discount code", 400);
   return ok(result);
