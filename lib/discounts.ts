@@ -5,7 +5,7 @@
  *   generateCode(prefix: string): string
  *   createDiscountCode(db, { code, kind, value, minOrder?, maxUses?, programKey?,
  *     phone?, expiresAt?, isActive? }): Promise<{ code: string }>
- *   validateDiscountCode(db, { code, subtotal, phone? }):
+ *   validateDiscountCode(db, { code, subtotal, phone?, email? }):
  *     Promise<{ ok, error?, kind?, value?, discountAmount? }>
  *   programEnabled(db, key): Promise<{ enabled, config }>
  */
@@ -91,10 +91,12 @@ export async function createDiscountCode(
  * Rules: code exists, isActive, not expired, usedCount < maxUses (if set),
  * subtotal >= minOrder (if set), and if the code is locked to a phone then
  * the caller's phone must normalize to the same number.
+ * First-purchase codes (programKey "first_purchase") are rejected when the
+ * customer already has a prior order (matched by phone or email).
  */
 export async function validateDiscountCode(
   db: any,
-  opts: { code: string; subtotal: number; phone?: string }
+  opts: { code: string; subtotal: number; phone?: string; email?: string }
 ): Promise<{
   ok: boolean;
   error?: string;
@@ -130,6 +132,32 @@ export async function validateDiscountCode(
         ok: false,
         error: "This code is not valid for this phone number.",
       };
+  }
+
+  // First-purchase-only codes: reject when this customer already ordered.
+  if (row.programKey === "first_purchase") {
+    const orConds: any[] = [];
+    if (opts.phone) {
+      const p = normPhone(opts.phone);
+      // Match stored phone in common formats.
+      orConds.push({ phone: p });
+      orConds.push({ phone: "0" + p.slice(2) });
+    }
+    if (opts.email) {
+      orConds.push({ email: String(opts.email).trim().toLowerCase() });
+    }
+    if (orConds.length > 0) {
+      const prior = await db.order.findFirst({
+        where: { OR: orConds },
+        select: { id: true },
+      });
+      if (prior) {
+        return {
+          ok: false,
+          error: "ZULFIRA1 is only valid on your first purchase.",
+        };
+      }
+    }
   }
 
   const subtotal = Number(opts.subtotal) || 0;
