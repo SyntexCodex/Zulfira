@@ -237,7 +237,6 @@ export default function CheckoutPage() {
               <h2 className="font-display text-xl font-semibold">Order summary</h2>
               <div className="mt-5 rounded-2xl bg-coal/[0.03] p-4">
                 <p className="text-sm font-bold">Discount code</p>
-                <p className="mt-1 text-xs text-muted">First order? Use <button type="button" onClick={() => { setCode("ZULFIRA1"); }} className="font-bold text-[#A8821C] underline">ZULFIRA1</button> for 35% off.</p>
                 {appliedCode ? (
                   <div className="mt-2.5 flex items-center justify-between gap-2 rounded-xl border border-[#C9A227]/50 bg-[#C9A227]/10 px-3.5 py-2.5">
                     <span className="text-sm font-bold text-coal">{appliedCode.code}</span>
