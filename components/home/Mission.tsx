@@ -17,6 +17,14 @@ export default function Mission() {
           more radiant hair — naturally.
         </p>
       </Reveal>
+      <Reveal delay={0.16}>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[13px] font-semibold uppercase tracking-widest text-ink/70">
+          <span>✓ 100% Natural Ingredients</span>
+          <span>✓ No Harmful Chemicals</span>
+          <span>✓ For Men & Women</span>
+          <span>✓ All Hair Types</span>
+        </div>
+      </Reveal>
     </section>
   );
 }

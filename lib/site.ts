@@ -279,12 +279,12 @@ export const DRAWER_GROUPS = [
 export const ANNOUNCEMENT_MESSAGES = [
   "Free home delivery on all orders",
   "Cash on Delivery available nationwide",
-  "Flat 15% off bundles — this week only",
+  "Special Offer: up to 50% off — this week only",
 ];
 
 export const FLASH_SALE = {
   title: "Flash Sale",
-  subtitle: "Up to 33% off — hurry, ends in:",
+  subtitle: "Up to 50% off — hurry, ends in:",
 };
 
 export const INSTAGRAM_POSTS = [

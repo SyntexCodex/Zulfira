@@ -59,17 +59,18 @@ export default function PromoPopup() {
               <Image src="/banners/hero-gold-soft.webp" alt="Zulfira offer" fill className="object-cover" />
             </div>
             <div className="p-7 text-center">
-              <p className="eyebrow-red">Limited Time</p>
-              <h3 className="section-title mt-2 text-3xl">Flat 15% Off</h3>
+              <p className="eyebrow-red">Special Offer</p>
+              <h3 className="section-title mt-2 text-3xl">Up to 50% Off</h3>
               <p className="mt-2 text-sm text-muted">
-                Your first ritual bundle — discount applied automatically at checkout.
+                Shampoo Rs 599 (was Rs 999) · Hair Oil Rs 699 (was Rs 1,200) · Ritual
+                Bundle Rs 1,099 (was Rs 2,199) — with free home delivery.
               </p>
               <Link
-                href="/product/complete-ritual-bundle"
+                href="/shop"
                 onClick={close}
                 className="btn-coal mt-5 block rounded-full py-3.5 text-sm font-bold uppercase tracking-widest"
               >
-                Claim Offer
+                Shop the Offer
               </Link>
               <button onClick={close} className="mt-3 text-[13px] font-medium text-muted underline underline-offset-4 hover:text-ink">
                 No, thanks
