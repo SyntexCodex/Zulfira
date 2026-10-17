@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | Zulfira",
   },
   description:
-    "Zulfira crafts honest, botanical hair care in Pakistan. Shop the Revitalizing Hair Oil (Rs 999), Sulphate-Free Shampoo (Rs 999) and Complete Ritual Bundle (Rs 1,700) with free home delivery and Cash on Delivery nationwide.",
+    "Zulfira crafts honest, botanical hair care in Pakistan. Shop the Revitalizing Hair Oil (Rs 699), Sulphate-Free Shampoo (Rs 599) and Complete Ritual Bundle (Rs 1,099) with free home delivery and Cash on Delivery nationwide.",
   keywords: [
     "Zulfira",
     "Zulfira hair oil",
