@@ -79,7 +79,7 @@ export default function Spotlight() {
               )}
             </div>
             <p className="mt-2 flex items-center gap-1.5 text-[13px] text-muted">
-              <Truck className="h-4 w-4" /> Free delivery on orders above Rs 1,900 · Cash on Delivery available
+              <Truck className="h-4 w-4" /> Free home delivery on the Ritual Bundle · Cash on Delivery available
             </p>
           </Reveal>
           <Reveal delay={0.18}>

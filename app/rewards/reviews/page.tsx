@@ -55,7 +55,7 @@ export default function ReviewRewardsPage() {
           },
           {
             title: "Spend it on anything",
-            text: "Credit works on oil, shampoo, bundles — and stacks with free delivery on all orders.",
+            text: "Credit works on oil, shampoo, bundles — and stacks with free delivery on the Ritual Bundle.",
           },
         ]}
       />

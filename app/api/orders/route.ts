@@ -12,8 +12,8 @@ import { generateOrderNo, adjustStock, checkLowStock } from "@/lib/orders";
 import { getSetting } from "@/lib/settings";
 import { sendTelegram, tgEscape } from "@/lib/telegram";
 
-const FREE_SHIPPING_THRESHOLD = 0;
 const FLAT_DELIVERY_CHARGE = 200;
+const BUNDLE_SLUG = "complete-ritual-bundle";
 
 const money = (n: number) => `Rs ${Math.round(n).toLocaleString("en-PK")}`;
 const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -81,6 +81,7 @@ export async function POST(req: NextRequest) {
   // Resolve every line against the DB: unknown/inactive products and
   // insufficient stock are rejected up front.
   const resolved: ResolvedItem[] = [];
+  let hasBundle = false;
   for (const it of rawItems) {
     const qty = Math.floor(Number(it.qty));
     if (!Number.isFinite(qty) || qty <= 0)
@@ -104,12 +105,13 @@ export async function POST(req: NextRequest) {
       unitPrice: Number(product.salePrice),
       subscribe: it.subscribe === true,
     });
+    if (product.slug === BUNDLE_SLUG) hasBundle = true;
   }
 
   const subtotal = round2(
     resolved.reduce((s, it) => s + it.unitPrice * it.qty, 0)
   );
-  const deliveryCharge = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_DELIVERY_CHARGE;
+  const deliveryCharge = subtotal === 0 || hasBundle ? 0 : FLAT_DELIVERY_CHARGE;
   let discount = 0;
   let appliedDiscountCode: string | null = null;
   const rawDiscountCode = String(body.discountCode ?? "").trim();

@@ -15,8 +15,8 @@ import {
 } from "@/lib/site";
 import Reveal, { SectionHeading } from "@/components/Reveal";
 
-const FREE_SHIP_THRESHOLD = 0;
 const SHIP_FEE = 200;
+const BUNDLE_SLUG = "complete-ritual-bundle";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +47,8 @@ export default function CheckoutPage() {
       }, 0)
     : 0;
 
-  const shipping = subtotal >= FREE_SHIP_THRESHOLD || subtotal === 0 ? 0 : SHIP_FEE;
+  const hasBundle = items.some((it) => it.slug === BUNDLE_SLUG);
+  const shipping = subtotal === 0 || hasBundle ? 0 : SHIP_FEE;
   const discount = (appliedCode?.amount ?? 0) + subscribeDiscount;
   const total = subtotal + shipping - discount;
 
@@ -307,7 +308,7 @@ export default function CheckoutPage() {
                   </div>
                 )}
                 {shipping > 0 && (
-                  <p className="text-xs text-muted">Add {formatPKR(FREE_SHIP_THRESHOLD - subtotal)} more for free delivery.</p>
+                  <p className="text-xs text-muted">Free delivery on the Complete Ritual Bundle.</p>
                 )}
                 <div className="flex justify-between pt-2">
                   <span className="font-bold">Total</span>

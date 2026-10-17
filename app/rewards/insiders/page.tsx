@@ -43,7 +43,7 @@ export default function InsidersPage() {
           },
           {
             title: "Unlock member prices",
-            text: "Your personal code takes 15% off your order — unique, one-time use, made just for you. It stacks with free delivery.",
+            text: "Your personal code takes 15% off your order — unique, one-time use, made just for you. It stacks with free delivery on the Ritual Bundle.",
           },
           {
             title: "Enjoy the perks",

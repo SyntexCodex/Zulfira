@@ -5,7 +5,7 @@ import { RewardShell, RewardHero, Steps, DealProducts, CtaBand } from "@/compone
 export const metadata: Metadata = {
   title: "Subscribe & Save 10% — Automatic Delivery | Zulfira",
   description:
-    "Never run out of your ritual. Subscribe and get 10% off every delivery, automatic shipping every 45 days, free delivery, and pause or cancel anytime.",
+    "Never run out of your ritual. Subscribe and get 10% off every delivery, automatic shipping every 45 days, free delivery on the Ritual Bundle, and pause or cancel anytime.",
 };
 
 const telHref = `tel:${CONTACT.phoneIntl.replace(/\s/g, "")}`;
@@ -17,8 +17,8 @@ export default function SubscribeSavePage() {
       <RewardHero
         kicker="Zulfira Loyalty · Subscribe & Save"
         title={<>Set it. Forget it. <span className="text-gold">Save 10%</span> forever.</>}
-        subtitle="Your ritual, on autopilot. We ship your oil and shampoo every 45 days — 10% off every single delivery, free shipping, and you can pause or cancel anytime with one message."
-        badge="10% OFF · Every 45 days · Free delivery"
+        subtitle="Your ritual, on autopilot. We ship your oil and shampoo every 45 days — 10% off every single delivery, free shipping on the Ritual Bundle, and you can pause or cancel anytime with one message."
+        badge="10% OFF · Every 45 days · Free bundle delivery"
         ctaLabel="Start my subscription"
         ctaHref={telHref}
         image="/products/bundle-ritual.webp"

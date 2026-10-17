@@ -50,7 +50,7 @@ export default function ReorderRewardsPage() {
         discountLabel="Reorder reward · 10% off"
         ctaHref="/shop"
         ctaLabel="Start my ritual"
-        note="Reorder codes are personal, single-use, and stack with free delivery on all orders."
+        note="Reorder codes are personal, single-use, and stack with free delivery on the Ritual Bundle."
       />
 
       <CtaBand

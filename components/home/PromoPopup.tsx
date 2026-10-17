@@ -63,7 +63,7 @@ export default function PromoPopup() {
               <h3 className="section-title mt-2 text-3xl">Up to 50% Off</h3>
               <p className="mt-2 text-sm text-muted">
                 Shampoo Rs 599 (was Rs 999) · Hair Oil Rs 699 (was Rs 1,200) · Ritual
-                Bundle Rs 1,099 (was Rs 2,199) — with free home delivery.
+                Bundle Rs 1,099 (was Rs 2,199) — free home delivery on the Ritual Bundle.
               </p>
               <Link
                 href="/shop"

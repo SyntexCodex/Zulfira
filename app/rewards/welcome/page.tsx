@@ -55,7 +55,7 @@ export default function WelcomeGiftPage() {
         discountLabel="Welcome gift · 20% off"
         ctaHref="/shop"
         ctaLabel="Shop with my gift"
-        note="Personal one-time code · 20% off · applies to all products · free delivery still included."
+        note="Personal one-time code · 20% off · applies to all products · free delivery on the Ritual Bundle still included."
       />
 
       <CtaBand

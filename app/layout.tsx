@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | Zulfira",
   },
   description:
-    "Zulfira crafts honest, botanical hair care in Pakistan. Shop the Revitalizing Hair Oil (Rs 699), Sulphate-Free Shampoo (Rs 599) and Complete Ritual Bundle (Rs 1,099) with free home delivery and Cash on Delivery nationwide.",
+    "Zulfira crafts honest, botanical hair care in Pakistan. Shop the Revitalizing Hair Oil (Rs 699), Sulphate-Free Shampoo (Rs 599) and Complete Ritual Bundle (Rs 1,099) with free home delivery on the Ritual Bundle and Cash on Delivery nationwide.",
   keywords: [
     "Zulfira",
     "Zulfira hair oil",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Zulfira — Natural Hair Care",
     description:
-      "Revitalizing Hair Oil & Sulphate-Free Shampoo. Free home delivery and Cash on Delivery across Pakistan.",
+      "Revitalizing Hair Oil & Sulphate-Free Shampoo. Free home delivery on the Ritual Bundle and Cash on Delivery across Pakistan.",
     url: "/",
     siteName: "Zulfira",
     type: "website",
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Zulfira — Natural Hair Care",
     description:
-      "Revitalizing Hair Oil & Sulphate-Free Shampoo. Free home delivery and Cash on Delivery across Pakistan.",
+      "Revitalizing Hair Oil & Sulphate-Free Shampoo. Free home delivery on the Ritual Bundle and Cash on Delivery across Pakistan.",
     images: ["/banners/hero-duo.webp"],
   },
   robots: {

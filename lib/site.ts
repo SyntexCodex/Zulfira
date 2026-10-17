@@ -6,8 +6,8 @@ export const SITE_URL = "https://zulfira.shop";
 
 export const CONTACT = {
   email: "hello@zulfira.shop",
-  phoneDisplay: "0302-8487658",
-  phoneIntl: "+92 302 8487658",
+  phoneDisplay: "0330-6799735",
+  phoneIntl: "+92 330 6799735",
   hours: "Mon–Sat · 9am–9pm PKT",
   address: "Lahore, Pakistan",
 };
@@ -277,7 +277,7 @@ export const DRAWER_GROUPS = [
 ];
 
 export const ANNOUNCEMENT_MESSAGES = [
-  "Free home delivery on all orders",
+  "Free home delivery on the Ritual Bundle",
   "Cash on Delivery available nationwide",
   "Special Offer: up to 50% off — this week only",
 ];
@@ -326,7 +326,7 @@ export const POLICIES: Record<string, { title: string; updated: string; body: st
     updated: "Last updated October 2026",
     body: [
       "Orders are dispatched within 24 hours, Monday to Saturday. Delivery takes 2–4 working days anywhere in Pakistan.",
-      "Delivery is FREE on all orders across Pakistan. Cash on Delivery is available nationwide.",
+      "Delivery is FREE on Complete Ritual Bundle orders — a Rs 200 delivery fee applies to all other orders. Cash on Delivery is available nationwide.",
       "You will receive an email confirmation with tracking details as soon as your parcel ships. If your parcel is delayed beyond 5 working days, contact us and we will trace it for you.",
     ],
   },
